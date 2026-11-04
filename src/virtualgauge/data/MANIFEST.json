@@ -1,5 +1,29 @@
 {
  "files": {
+  "atl13_amazon_manaus.parquet": {
+   "bytes": 308565,
+   "downloaded_utc": "2026-11-04T14:03:12+00:00",
+   "sha256": "876a89e7b8a658802ca43b8f6579f2247bf9b0f17b04ee4f5a6c8cfeec575ddd",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_brahmaputra_bahadurabad.parquet": {
+   "bytes": 889821,
+   "downloaded_utc": "2026-11-04T14:00:24+00:00",
+   "sha256": "d4980d910316a555ff48ba29ba3fca96af09eebaac1d1a8ab387310d4a7d2e64",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_chobe_kasane.parquet": {
+   "bytes": 220923,
+   "downloaded_utc": "2026-11-04T13:46:10+00:00",
+   "sha256": "512fa79469b3d7bd7888827f66b5c9259509bd22d7f385052025ca9597206df1",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_cimanuk_rentang.parquet": {
+   "bytes": 182005,
+   "downloaded_utc": "2026-11-04T14:17:46+00:00",
+   "sha256": "46f3bcfb5a9a7d3f068f72eb2a0e4ff27d1483be69f86f4c543c32dcba64518f",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
   "atl13_congo_kinshasa.parquet": {
    "bytes": 354552,
    "downloaded_utc": "2026-11-03T17:52:31+00:00",
@@ -18,16 +42,94 @@
    "sha256": "7c1f54114005e90b8143950c5c5ffad0d674f69c537844b031adac34df86da91",
    "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
   },
+  "atl13_danube_bezdan.parquet": {
+   "bytes": 299207,
+   "downloaded_utc": "2026-11-04T13:58:30+00:00",
+   "sha256": "d6c7826d9cb76f773e0451943c7b8aa7647cc792deaf46440cde54b30e5a369d",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_fly_obo.parquet": {
+   "bytes": 160841,
+   "downloaded_utc": "2026-11-04T14:01:55+00:00",
+   "sha256": "d93ed6ea2381e7f55e9a69a4f3e2617bb5396a5e5106d6dad239e0415c4f79a2",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_karnali_chisapani.parquet": {
+   "bytes": 172777,
+   "downloaded_utc": "2026-11-04T14:14:53+00:00",
+   "sha256": "950b6bd95014f9c529e1e4766543afb06bad4fe3461524744fbbf9027fe2242e",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
   "atl13_kasai_kwamouth.parquet": {
    "bytes": 296156,
    "downloaded_utc": "2026-11-04T09:48:52+00:00",
    "sha256": "63e76997efe7cfdeb3015d32ae6702b3c50293eeb723fc7c0ead8341c7b15433",
    "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
   },
+  "atl13_limpopo_pontdrift.parquet": {
+   "bytes": 213832,
+   "downloaded_utc": "2026-11-04T13:47:21+00:00",
+   "sha256": "8ce0d4cbfb8927cb57694b775990bbe066ea65910b86af375ff2506db79e9253",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
   "atl13_lualaba_kindu.parquet": {
    "bytes": 120239,
    "downloaded_utc": "2026-11-04T09:49:21+00:00",
    "sha256": "51bcdf3ad8770054fce8cbd35286cb3208920c9047bc63dc18eec052d073a515",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_mekong_kratie.parquet": {
+   "bytes": 158760,
+   "downloaded_utc": "2026-11-04T13:59:42+00:00",
+   "sha256": "13df628643758206b25583031b809cb9616bfa563a5d01284ba6f0da2479185f",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_mississippi_vicksburg.parquet": {
+   "bytes": 193935,
+   "downloaded_utc": "2026-11-04T13:57:45+00:00",
+   "sha256": "008e1fd8b65ca2623b626a777ecdab11f033cc9fa12a9c58ab16b33bd4eab738",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_niger_niamey.parquet": {
+   "bytes": 261960,
+   "downloaded_utc": "2026-11-04T13:52:37+00:00",
+   "sha256": "16b5b02232cf8883bccdc09e645d0f3f7ee3dc82d1955c1259af520cedff4323",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_nile_malakal.parquet": {
+   "bytes": 269481,
+   "downloaded_utc": "2026-11-04T13:54:41+00:00",
+   "sha256": "b323939d5e239455eada480392282491f014b830418b2631e28c5546f7735931",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_ogooue_lambarene.parquet": {
+   "bytes": 188195,
+   "downloaded_utc": "2026-11-04T13:53:58+00:00",
+   "sha256": "313682eb8a74e73b34d683a488cf9d98de543a7e982545a2cb61f7176d5e6c5e",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_okavango_mohembo.parquet": {
+   "bytes": 199814,
+   "downloaded_utc": "2026-11-04T13:45:19+00:00",
+   "sha256": "5a235abc02f7e1bb88c172a44fcace0a0a808a95bf9d7baf1a662eec682a5da9",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_okavango_seronga.parquet": {
+   "bytes": 144484,
+   "downloaded_utc": "2026-11-04T13:45:53+00:00",
+   "sha256": "fc963f146dd29d1f2bb7245172c2d350513541127613234a6fe956e81a96b57e",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_orinoco_ciudad_bolivar.parquet": {
+   "bytes": 384041,
+   "downloaded_utc": "2026-11-04T13:56:20+00:00",
+   "sha256": "70d178c0db9ea4d39f21d7348c9b922ec1b5afb0dd36b38e0b13021acf620b71",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_parana_corrientes.parquet": {
+   "bytes": 305261,
+   "downloaded_utc": "2026-11-04T13:57:03+00:00",
+   "sha256": "4d780c70dedefeeacdbca729d0fbe1a4307f2fa3afdf76ed88163d1b0ca4320f",
    "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
   },
   "atl13_rewa_fiji.parquet": {
@@ -42,11 +144,35 @@
    "sha256": "5c2fb117f7412774f5088fccd7b9fb58916b94645e1e876537a172eec4376d61",
    "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
   },
+  "atl13_senegal_bakel.parquet": {
+   "bytes": 221170,
+   "downloaded_utc": "2026-11-04T13:53:18+00:00",
+   "sha256": "4595c0686ffd225c62242b8ab56d6d7d84462de93c357e4bb573bad5dadca6eb",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
   "atl13_ubangi_bangui.parquet": {
    "bytes": 112670,
    "downloaded_utc": "2026-11-04T09:48:18+00:00",
    "sha256": "d643596769ad8ff48b53faf8e148a2dfb261292893fe6a3a31de2aa059feae88",
    "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "atl13_zambezi_kazungula.parquet": {
+   "bytes": 272106,
+   "downloaded_utc": "2026-11-04T13:46:44+00:00",
+   "sha256": "a4d59dbe2c2a362610ec60eb98df389157472579fa8e4184576caacb17d1a781",
+   "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
+  },
+  "geoglows_120797655.csv": {
+   "bytes": 141723,
+   "downloaded_utc": "2026-11-04T13:45:07+00:00",
+   "sha256": "e80a593cd944f498c36d92ac17797edf4035ba9d7b6086bb2252f9d3c32c01a8",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/120797655"
+  },
+  "geoglows_120837562.csv": {
+   "bytes": 145191,
+   "downloaded_utc": "2026-11-04T13:46:32+00:00",
+   "sha256": "cb8ef8dfe35f091147a50990e9935dc2c97b7cefcc539a4ab6abf1f11a4190f3",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/120837562"
   },
   "geoglows_130742067.csv": {
    "bytes": 148006,
@@ -65,6 +191,12 @@
    "downloaded_utc": "2026-11-04T09:49:39+00:00",
    "sha256": "cfae915f0a869ed71688f19135b7df5cb004b176ae17b13bf104b6d54f98b1f2",
    "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/130758906"
+  },
+  "geoglows_130760757.csv": {
+   "bytes": 146297,
+   "downloaded_utc": "2026-11-04T13:53:46+00:00",
+   "sha256": "b66f2af5d7783385d5b37d5ded60664bea531666c521b2638a0711a73ab09665",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/130760757"
   },
   "geoglows_130774372.csv": {
    "bytes": 148616,
@@ -90,11 +222,233 @@
    "sha256": "fe4be7bb7f6a559d5f5969cbf689a1c3b902a77e7d4b86118ec69922d31e2283",
    "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/130798640"
   },
+  "geoglows_140567153.csv": {
+   "bytes": 143816,
+   "downloaded_utc": "2026-11-04T13:52:20+00:00",
+   "sha256": "5d622f1d1fdfed11edb0cd60b5692dff2246f67c5a258b26346e8ae4a31dcca8",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/140567153"
+  },
+  "geoglows_140705377.csv": {
+   "bytes": 141172,
+   "downloaded_utc": "2026-11-04T13:53:04+00:00",
+   "sha256": "a5ec92ee1da18545dcd49690514f0bfd6f9a7534c8d5ee2e768dbf0edd3d551a",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/140705377"
+  },
+  "geoglows_160744734.csv": {
+   "bytes": 147201,
+   "downloaded_utc": "2026-11-04T13:54:28+00:00",
+   "sha256": "3f29440cc17377c0f7a058275be3e59e46eb5f6f868d8f8197941faf6bce7ba1",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/160744734"
+  },
+  "geoglows_220588285.csv": {
+   "bytes": 145358,
+   "downloaded_utc": "2026-11-04T13:58:18+00:00",
+   "sha256": "465e4393f6cc47ba2dd5a9f1f15bd63510dcd6ad3704fa5bdc0edc599d572a1f",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/220588285"
+  },
+  "geoglows_430372387.csv": {
+   "bytes": 147774,
+   "downloaded_utc": "2026-11-04T13:58:59+00:00",
+   "sha256": "274d721daa843ca63726e80d123d0bde4a8cdad8b34f0403c48f8e425161e2a9",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/430372387"
+  },
+  "geoglows_441079303.csv": {
+   "bytes": 148693,
+   "downloaded_utc": "2026-11-04T14:00:09+00:00",
+   "sha256": "64b1ab436bffd127cab18f6ef84d0d7c193959c4f2c249cf648b1cc8ec98628f",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/441079303"
+  },
+  "geoglows_441190616.csv": {
+   "bytes": 143488,
+   "downloaded_utc": "2026-11-04T14:14:35+00:00",
+   "sha256": "42a900528c431ca8276765758767b78740d64026d4a52d849cb5c94047c3976b",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/441190616"
+  },
+  "geoglows_530161972.csv": {
+   "bytes": 146207,
+   "downloaded_utc": "2026-11-04T14:01:37+00:00",
+   "sha256": "1d6f23ea0a65e90a459a6e6deeadb841b824d4280604d8948c9757d70204957b",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/530161972"
+  },
+  "geoglows_610331282.csv": {
+   "bytes": 149150,
+   "downloaded_utc": "2026-11-04T13:55:52+00:00",
+   "sha256": "179ff6c7881e7754db0c4f4796669030ceb594ced64182a4685bb27c66db3bd8",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/610331282"
+  },
+  "geoglows_621010431.csv": {
+   "bytes": 152890,
+   "downloaded_utc": "2026-11-04T14:02:53+00:00",
+   "sha256": "117fbe695cb6a105d457379482bb8ba0456132cb7425d95c1ba5092d82845149",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/621010431"
+  },
+  "geoglows_640561740.csv": {
+   "bytes": 148311,
+   "downloaded_utc": "2026-11-04T13:56:50+00:00",
+   "sha256": "57666d40d3e43cddde416609e667b3dcc5e579e970a03f8b48396deafed9f239",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/640561740"
+  },
+  "geoglows_760102920.csv": {
+   "bytes": 148527,
+   "downloaded_utc": "2026-11-04T13:57:32+00:00",
+   "sha256": "19466d5d57d2934858f772a30056e0e1ba991b4bc1fb2901bed4a668c02d9c8f",
+   "source": "https://geoglows.ecmwf.int/api/v2/retrospectivedaily/760102920"
+  },
   "geoglows_lookup_-4.270_15.336.json": {
    "bytes": 55,
    "downloaded_utc": "2026-11-03T21:18:53+00:00",
    "sha256": "e655837ec9c43b26ca6b1ca1b37d2270d2431cf5d7379b3beb8c6a4e03ae1a9b",
    "source": "https://geoglows.ecmwf.int/api/v2/retrospectivemonthly/130594908"
+  },
+  "swot_reach_12279000211.csv": {
+   "bytes": 25954,
+   "downloaded_utc": "2026-11-04T13:46:46+00:00",
+   "sha256": "715a84acb74275c243868f7e7c2307bab46f4dd0fdfd3e9219e25dd819e15d32",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12279000211&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12279000221.csv": {
+   "bytes": 40033,
+   "downloaded_utc": "2026-11-04T13:46:46+00:00",
+   "sha256": "288cf7a037f7a50625f117b326ff8e1e7c5c87d560cf2d3db425aa7389371953",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12279000221&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12279000221_info.csv": {
+   "bytes": 35171,
+   "downloaded_utc": "2026-11-04T13:46:15+00:00",
+   "sha256": "371484aa5e3ad4528cc4c9939ba3a3a159a22ec0a11ef9d9f54c51f3e540e1dc",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12279000221&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12279000221_line.geojson": {
+   "bytes": 8840,
+   "downloaded_utc": "2026-11-04T13:46:34+00:00",
+   "sha256": "bba8880c929325e6dd694a1fb553659980be1ddcda2a5ffe6422251a39bfdb6c",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12279000221&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12281000011.csv": {
+   "bytes": 54630,
+   "downloaded_utc": "2026-11-04T13:46:14+00:00",
+   "sha256": "b8b2264c797c8e16af8047059b1a6bf22479f6c6470b18ea1c7d6595b2e9ad16",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12281000011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12281000021.csv": {
+   "bytes": 54571,
+   "downloaded_utc": "2026-11-04T13:46:11+00:00",
+   "sha256": "2535db9f8b1825693fcd20908ba4a12b87ba1d63d3b5f657e45f44b149147d2e",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12281000021&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12281000021_info.csv": {
+   "bytes": 46515,
+   "downloaded_utc": "2026-11-04T13:45:58+00:00",
+   "sha256": "cc9446200ff1e60891f1b84145e9ccceaa5a05b7d52e8f8945675b5382141b72",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12281000021&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12281000021_line.geojson": {
+   "bytes": 11257,
+   "downloaded_utc": "2026-11-04T13:46:00+00:00",
+   "sha256": "3c89bd3f965fd0689e67859b43aba4e30d489f1be9cda56f61b612610e9db5e2",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12281000021&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12281000031.csv": {
+   "bytes": 56183,
+   "downloaded_utc": "2026-11-04T13:46:13+00:00",
+   "sha256": "545ea4529145c0a8bd7792b1243f2d2c1d56918994babc9615c31b560ffed33e",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12281000031&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12291100011.csv": {
+   "bytes": 53421,
+   "downloaded_utc": "2026-11-04T13:51:47+00:00",
+   "sha256": "cbbab3fa7aed1f19a52957eb45cfe082af27185840f171e4e8712211385c5baf",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12291100011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12450900061.csv": {
+   "bytes": 52970,
+   "downloaded_utc": "2026-11-04T13:47:25+00:00",
+   "sha256": "e871990f57f6fa6b82e90528eabe7031668572181a4975f0e055ef4d67616c15",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12450900061&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12470000011.csv": {
+   "bytes": 38903,
+   "downloaded_utc": "2026-11-04T13:47:22+00:00",
+   "sha256": "80ce68316bbb9d7d1895e5f2b9c4e84d57a139fd4e50fc5095835151ff9a0c21",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12470000011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12470000011_info.csv": {
+   "bytes": 35854,
+   "downloaded_utc": "2026-11-04T13:46:48+00:00",
+   "sha256": "0db6fb5eedac2a8641a7ae8908db9154f95276a6edd70c88b0b543ca64dd7168",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12470000011&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12470000011_line.geojson": {
+   "bytes": 15845,
+   "downloaded_utc": "2026-11-04T13:47:09+00:00",
+   "sha256": "c2a989ade285b287ea545d323739abbf3a6c74caff4a11c6b8ec432e0c5e18fb",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12470000011&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12470000041.csv": {
+   "bytes": 38894,
+   "downloaded_utc": "2026-11-04T13:47:23+00:00",
+   "sha256": "5825e3dbfef0a692f376f9272145423fc19883c4df6b79af2e037c0e1b5a8f42",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12470000041&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950300031.csv": {
+   "bytes": 41403,
+   "downloaded_utc": "2026-11-04T13:45:56+00:00",
+   "sha256": "9f71579883425780e9b9b8834a80fbadc27ad8929253158a884e62dc78d44002",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950300031&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950300041.csv": {
+   "bytes": 41209,
+   "downloaded_utc": "2026-11-04T13:45:54+00:00",
+   "sha256": "6cb10e2e541830ef4a871257430d3e9f65f0ace6b3404b18f34d6befcdcbc56a",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950300041&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950300041_info.csv": {
+   "bytes": 34885,
+   "downloaded_utc": "2026-11-04T13:45:24+00:00",
+   "sha256": "a7aaba7fa02f7731fef0bc6de00ef6c0ffff6c43a1ccbd1323905200833058f8",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950300041&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950300041_line.geojson": {
+   "bytes": 8764,
+   "downloaded_utc": "2026-11-04T13:45:45+00:00",
+   "sha256": "6d21b8e66d825916c81ec2ca45e3af0d4faa792f25e0c634731315a01be6ad0c",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950300041&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950300051.csv": {
+   "bytes": 25820,
+   "downloaded_utc": "2026-11-04T13:45:55+00:00",
+   "sha256": "acbd112d3085415e3cd2307c0cf6668433354608c225650c60ac585e10e49141",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950300051&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950500061.csv": {
+   "bytes": 25923,
+   "downloaded_utc": "2026-11-04T13:45:22+00:00",
+   "sha256": "3f92210ef6e70c370323ea346d84c6246672f3a0b0b6e7295d9e7ef98f91f2de",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950500061&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950500071.csv": {
+   "bytes": 25807,
+   "downloaded_utc": "2026-11-04T13:45:20+00:00",
+   "sha256": "840bc2053b0f0a482039269e3a0a5c03d3f58a36ee2bd8cd78533153eb8d5bf0",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950500071&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950500071_info.csv": {
+   "bytes": 23142,
+   "downloaded_utc": "2026-11-04T13:44:43+00:00",
+   "sha256": "a9727ad3edf103c6aa49b152f446ba6276a7a34a2f4d67e1c86da8291920a3a3",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950500071&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950500071_line.geojson": {
+   "bytes": 15012,
+   "downloaded_utc": "2026-11-04T13:45:09+00:00",
+   "sha256": "362ac568eaa228a7c24c32b8a44229a31323161fb79e87ccf6d42d163ea2a2ee",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950500071&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_12950700011.csv": {
+   "bytes": 26235,
+   "downloaded_utc": "2026-11-04T13:45:21+00:00",
+   "sha256": "deed9f18105580caaa94fccf6f30aeb7805c9149c693b7006012dd1663ca10ac",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=12950700011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
   },
   "swot_reach_13217000071.csv": {
    "bytes": 25536,
@@ -300,6 +654,306 @@
    "sha256": "0193fb99346eaba639b0aeb1256b7c35234899a23e6a0d15fc7661edc800e6e3",
    "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=13279900061&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
   },
+  "swot_reach_13341000161.csv": {
+   "bytes": 43043,
+   "downloaded_utc": "2026-11-04T13:54:02+00:00",
+   "sha256": "951b429800f58154185e71cf328b9f5dfb538cbbe19f56eb013401cddbe4b992",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=13341000161&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_13341000171.csv": {
+   "bytes": 43105,
+   "downloaded_utc": "2026-11-04T13:54:00+00:00",
+   "sha256": "de8f00e604e14d8faa6d8c7fe3d9ea610ade1fd8b68c01b312ad033112b0922a",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=13341000171&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_13341000171_info.csv": {
+   "bytes": 36612,
+   "downloaded_utc": "2026-11-04T13:53:29+00:00",
+   "sha256": "eebec43f595e829e39ec5a57e5e95b62faa7a80ce91bbb84e52e045c72470339",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=13341000171&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_13341000171_line.geojson": {
+   "bytes": 8175,
+   "downloaded_utc": "2026-11-04T13:53:48+00:00",
+   "sha256": "c3f0a82d0e9f20b12319eb38231c2ae6f1ee7ea25ec05ff9254b2a892c96d01a",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=13341000171&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_13341000181.csv": {
+   "bytes": 28671,
+   "downloaded_utc": "2026-11-04T13:54:01+00:00",
+   "sha256": "4ac7221b26f529a74baa00387404c093483042ab986e46582ff91029dd1db8bc",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=13341000181&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14271900041.csv": {
+   "bytes": 26490,
+   "downloaded_utc": "2026-11-04T13:52:41+00:00",
+   "sha256": "148864fa09f4e98066e3f3744620624b296b926ce541af9122fcda7b4852fc61",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14271900041&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14271900051.csv": {
+   "bytes": 41321,
+   "downloaded_utc": "2026-11-04T13:52:38+00:00",
+   "sha256": "9cc1bede788cc2158c61631d5111e3805c9733a41b7dbc8283b675de764c0551",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14271900051&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14271900051_info.csv": {
+   "bytes": 35121,
+   "downloaded_utc": "2026-11-04T13:52:04+00:00",
+   "sha256": "9eaf98319893fcdab552467d0904401315ef977aaf043349d1ccaf27dc24168d",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14271900051&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14271900051_line.geojson": {
+   "bytes": 9006,
+   "downloaded_utc": "2026-11-04T13:52:22+00:00",
+   "sha256": "763c10de13f64f94d7ef2dd50c92cc250652de646aec8ea04a54b4f3c6816659",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14271900051&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14271900061.csv": {
+   "bytes": 40203,
+   "downloaded_utc": "2026-11-04T13:52:40+00:00",
+   "sha256": "25abb986b8f2589d5574dce4f26e1838ae54b0525a83eca886aa3f5dec5706f3",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14271900061&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14637000101.csv": {
+   "bytes": 25594,
+   "downloaded_utc": "2026-11-04T13:53:22+00:00",
+   "sha256": "7c3cf6e987ad6ff5b5e244351fb94ec40653a817506d5aef2512453e3e6fadcf",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14637000101&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14637000111.csv": {
+   "bytes": 25490,
+   "downloaded_utc": "2026-11-04T13:53:19+00:00",
+   "sha256": "ae013935d121e88adcd979d1d1db8225c56f236c702f8cbcf3641ccde52ace98",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14637000111&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14637000111_info.csv": {
+   "bytes": 23155,
+   "downloaded_utc": "2026-11-04T13:52:46+00:00",
+   "sha256": "b6ac14ce5c3eb1034ff426bc3dc641ca5a5348c45669729af176bf4909603346",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14637000111&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14637000111_line.geojson": {
+   "bytes": 7663,
+   "downloaded_utc": "2026-11-04T13:53:05+00:00",
+   "sha256": "853588480cad8783040d8ee1141215786b3a9d06bf506f069b1aead14aa1e841",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14637000111&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_14638000011.csv": {
+   "bytes": 26154,
+   "downloaded_utc": "2026-11-04T13:53:21+00:00",
+   "sha256": "5367202ab342d43a2c910b442c9f8b480f93be20f24d9621070ef1955d43dd42",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=14638000011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_17259000091.csv": {
+   "bytes": 55979,
+   "downloaded_utc": "2026-11-04T13:54:45+00:00",
+   "sha256": "4a0482f55280a8359e18fbbbad59d9bd26d7f0b0eab063371c91ad08b2fb3f0a",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=17259000091&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_17259000101.csv": {
+   "bytes": 39022,
+   "downloaded_utc": "2026-11-04T13:54:43+00:00",
+   "sha256": "b3562e1d9f05552f7779042bda6ea29b77ed3d5cfaa0449318acbb0255c7e3d5",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=17259000101&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_17259000101_info.csv": {
+   "bytes": 34961,
+   "downloaded_utc": "2026-11-04T13:54:10+00:00",
+   "sha256": "5a486cb9ecfecdf6af641e4632f655bd5fb088d885bd1f888ebda5540d85f5cf",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=17259000101&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_17259000101_line.geojson": {
+   "bytes": 13253,
+   "downloaded_utc": "2026-11-04T13:54:30+00:00",
+   "sha256": "c78fd0e27b4399e0f4119238e7748b2400f4af16014f02a095dcf830f5d276fd",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=17259000101&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_17259000111.csv": {
+   "bytes": 40720,
+   "downloaded_utc": "2026-11-04T13:54:44+00:00",
+   "sha256": "0fc7dea50149619bc443df60a8fc5b93f8339a5c84ee8b9ea5fd839a7a0ff2c4",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=17259000111&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_22791100031.csv": {
+   "bytes": 51370,
+   "downloaded_utc": "2026-11-04T13:58:35+00:00",
+   "sha256": "29c62fde066c1bcda30d1bd75fcd39b60c7ee80f6649171d5160cd34fe90b7c6",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=22791100031&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_22791100041.csv": {
+   "bytes": 51743,
+   "downloaded_utc": "2026-11-04T13:58:32+00:00",
+   "sha256": "6d47d7e6a3e8814901580afd4c73f1c89a5cd1f538858986955b88a6f04736b3",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=22791100041&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_22791100041_info.csv": {
+   "bytes": 45868,
+   "downloaded_utc": "2026-11-04T13:57:57+00:00",
+   "sha256": "3c40a48d3f1239455015ba63fa907e48f6302ed964ef4ea4e18f75662cddd7fb",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=22791100041&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_22791100041_line.geojson": {
+   "bytes": 14189,
+   "downloaded_utc": "2026-11-04T13:58:21+00:00",
+   "sha256": "18f855ff73d04e6617d203d7d5f72f80e1968502aedebd459c1472da219d67ac",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=22791100041&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_22791100051.csv": {
+   "bytes": 51230,
+   "downloaded_utc": "2026-11-04T13:58:34+00:00",
+   "sha256": "95df91d092d48eba6f0da207ebe606c97c0fe4e59ff9a13dd0299843f27e2f30",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=22791100051&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_44230000171.csv": {
+   "bytes": 23709,
+   "downloaded_utc": "2026-11-04T13:59:46+00:00",
+   "sha256": "7475439fa061c633ad6e37c4813138ed4a087b69d84c9fa1314ccafedbdf797f",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=44230000171&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_44230000391.csv": {
+   "bytes": 23788,
+   "downloaded_utc": "2026-11-04T13:59:43+00:00",
+   "sha256": "fce2f3eddc61186c2dcd40d67d2a88f1fce7aa5da7fd2c2254303d4954009188",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=44230000391&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_44230000391_info.csv": {
+   "bytes": 22034,
+   "downloaded_utc": "2026-11-04T13:58:42+00:00",
+   "sha256": "106d49b9d74043a9bcd4d083b5c3a185dbb191fd5502903be657fcf4b3ab4363",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=44230000391&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_44230000391_line.geojson": {
+   "bytes": 2101,
+   "downloaded_utc": "2026-11-04T13:59:00+00:00",
+   "sha256": "588e8d591bddd230e45c847402c6dc36366fcbe9270183b1131b1556181b395a",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=44230000391&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_44230000401.csv": {
+   "bytes": 23588,
+   "downloaded_utc": "2026-11-04T13:59:44+00:00",
+   "sha256": "6fdb7830b2ed8952b1ce1b640c33d0644dbe99c86b36c04a9524443256bcbb69",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=44230000401&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45244500251.csv": {
+   "bytes": 28141,
+   "downloaded_utc": "2026-11-04T14:14:54+00:00",
+   "sha256": "30065e245d81bbdc1477d07c9b1ed046cc28215cbd3a38312d52e6807d4ec512",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45244500251&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45244500251_info.csv": {
+   "bytes": 25759,
+   "downloaded_utc": "2026-11-04T14:14:20+00:00",
+   "sha256": "a9d7ef4ff833a13c544d79c81084bb378a598bfa1711af0dfbb80ff4d283e427",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45244500251&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45244500251_line.geojson": {
+   "bytes": 2929,
+   "downloaded_utc": "2026-11-04T14:14:36+00:00",
+   "sha256": "152ba916a2b349f295728115d0d34d529b06e63d32de81e874a1ec842dd6f2e9",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45244500251&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45244500261.csv": {
+   "bytes": 28840,
+   "downloaded_utc": "2026-11-04T14:14:55+00:00",
+   "sha256": "4f96c81b30470597fcc76c9536770e129d7fa9f8c24315b4727b335aff8e5ffe",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45244500261&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45244501141.csv": {
+   "bytes": 29061,
+   "downloaded_utc": "2026-11-04T14:14:56+00:00",
+   "sha256": "3af84b9b3639cecb630319d2ddb18eb107af148f9dde0585c61872c71102971f",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45244501141&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45253000151.csv": {
+   "bytes": 40741,
+   "downloaded_utc": "2026-11-04T14:00:30+00:00",
+   "sha256": "008969c712d36f70be48c2abeac209566ef8ab9637c5903076e20e327f6a52bd",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45253000151&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45253000171.csv": {
+   "bytes": 40076,
+   "downloaded_utc": "2026-11-04T14:00:27+00:00",
+   "sha256": "2b6e50ba926ed7aaf24a87419c01491ed88ec279eeb4a34c7aaae08a39fc8441",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45253000171&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45253000171_info.csv": {
+   "bytes": 34996,
+   "downloaded_utc": "2026-11-04T13:59:50+00:00",
+   "sha256": "40f08ac0a18d5eabe77e589738bc8054f045c964010c56110fdb1df9cd5f7013",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45253000171&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45253000171_line.geojson": {
+   "bytes": 8591,
+   "downloaded_utc": "2026-11-04T14:00:11+00:00",
+   "sha256": "b49d78f5babb6eb81b565ea05830c29b31c0e4bf78ca1c8b0963ac6c3d29b4ab",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45253000171&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_45253000181.csv": {
+   "bytes": 38344,
+   "downloaded_utc": "2026-11-04T14:00:29+00:00",
+   "sha256": "b9e1402e823d47295ffa11e827ed95e9ab2d361fe8403ea1e2127df2a62c9332",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=45253000181&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_51501500174.csv": {
+   "bytes": 28594,
+   "downloaded_utc": "2026-11-04T14:17:49+00:00",
+   "sha256": "a085c036d780cf50a39f211387691482ade9816ff7362f64a79ce32791602ba8",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=51501500174&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_51501500181.csv": {
+   "bytes": 26207,
+   "downloaded_utc": "2026-11-04T14:17:47+00:00",
+   "sha256": "7bf326c70dc2b7ac464e3be61f58beb435ae172857b6979de69dbe184a1782dc",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=51501500181&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_51501500181_info.csv": {
+   "bytes": 23052,
+   "downloaded_utc": "2026-11-04T14:17:17+00:00",
+   "sha256": "c7d912f7cbda0ec524b892ff6c2c4bdf73d151ade7530abeed01889e86e93141",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=51501500181&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_51501500181_line.geojson": {
+   "bytes": 14536,
+   "downloaded_utc": "2026-11-04T14:17:35+00:00",
+   "sha256": "4cc526cecc9ae1b3b8ababe726caa404ec63da3efaada9e6dbb07be2ba981dc3",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=51501500181&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_51501500191.csv": {
+   "bytes": 25341,
+   "downloaded_utc": "2026-11-04T14:17:49+00:00",
+   "sha256": "8c78ecaa697eb7fa543f84f049f83f27f62cb4126e83a4a1686012d492deecd7",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=51501500191&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_53140100131.csv": {
+   "bytes": 39713,
+   "downloaded_utc": "2026-11-04T14:01:58+00:00",
+   "sha256": "24c066ef4daa809faab9fafe15990bc1e02631f07c47f5de52d26eff5cf941cc",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=53140100131&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_53140100141.csv": {
+   "bytes": 37979,
+   "downloaded_utc": "2026-11-04T14:01:56+00:00",
+   "sha256": "804b0fe7291b114957d3accb818c1b0cf8b20ebb14b42d33e543201d5348b434",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=53140100141&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_53140100141_info.csv": {
+   "bytes": 33233,
+   "downloaded_utc": "2026-11-04T14:01:14+00:00",
+   "sha256": "8a01419e104ea02d0c8ab2c2656b292d1f186d13d7d8d2fd127dc1047cf836d7",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=53140100141&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_53140100141_line.geojson": {
+   "bytes": 9132,
+   "downloaded_utc": "2026-11-04T14:01:39+00:00",
+   "sha256": "da7bb3a29e0aa5968f2052bbe501c5ce90a6cab7c751a2f8418bd8d65fbd9329",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=53140100141&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_53140100151.csv": {
+   "bytes": 39562,
+   "downloaded_utc": "2026-11-04T14:01:57+00:00",
+   "sha256": "db5c14633a64087db6d8fcb773c35b92040e5203e160408658ba823117297836",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=53140100151&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
   "swot_reach_55200000031.csv": {
    "bytes": 26316,
    "downloaded_utc": "2026-11-03T17:53:46+00:00",
@@ -329,6 +983,126 @@
    "downloaded_utc": "2026-11-03T17:53:44+00:00",
    "sha256": "0da28acb1246bbdb20907c6392faa9dc46862529f4d8bb2b6be2ffccd6199360",
    "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=55200000061&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-03T23%3A59%3A59Z"
+  },
+  "swot_reach_61531000071.csv": {
+   "bytes": 40663,
+   "downloaded_utc": "2026-11-04T13:56:24+00:00",
+   "sha256": "24df6b86e880eb14de6e99f5ff1553667a47399b0aeb91e2cf0aa8bc57841655",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=61531000071&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_61531000081.csv": {
+   "bytes": 38784,
+   "downloaded_utc": "2026-11-04T13:56:21+00:00",
+   "sha256": "fd65d9bf86486664f3b9590df1c8843f79ca0c8aa3996f09622b9be014fdd6ba",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=61531000081&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_61531000081_info.csv": {
+   "bytes": 34053,
+   "downloaded_utc": "2026-11-04T13:55:33+00:00",
+   "sha256": "96c1e1d0d51f97026929fdc7ac2bc5acb71da0d60eae0f8668c2438a8fdb7e9c",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=61531000081&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_61531000081_line.geojson": {
+   "bytes": 10027,
+   "downloaded_utc": "2026-11-04T13:55:54+00:00",
+   "sha256": "41e5939ba161aabf76f0509eadc3a600c5b9e28f447803c524f3b9c88af9fe86",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=61531000081&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_61531000091.csv": {
+   "bytes": 39722,
+   "downloaded_utc": "2026-11-04T13:56:22+00:00",
+   "sha256": "ea325f9603942c3b2ff02e8ca1e2695140e726d53ae08cc41026bbaf51d6939f",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=61531000091&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_62270000481.csv": {
+   "bytes": 25808,
+   "downloaded_utc": "2026-11-04T14:03:15+00:00",
+   "sha256": "0730cc6feff88b1a7cceb46bdac8819cafe39fc8b122ff2a1f1432f50b1c0534",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=62270000481&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_62270000491.csv": {
+   "bytes": 26676,
+   "downloaded_utc": "2026-11-04T14:03:13+00:00",
+   "sha256": "0fda22641a666a4d689f8dd7670b1ebb5cfd79d12b1eda185bccd3c5136a8c28",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=62270000491&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_62270000491_info.csv": {
+   "bytes": 24104,
+   "downloaded_utc": "2026-11-04T14:02:37+00:00",
+   "sha256": "cd6cfd0e2b75cafe966a5b72a533ceb92e57a3079a4385e392e7691b6591b7f8",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=62270000491&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_62270000491_line.geojson": {
+   "bytes": 3491,
+   "downloaded_utc": "2026-11-04T14:02:54+00:00",
+   "sha256": "a62877bc70f6167e04b16a4c782e75615cf228098ea1c858cbcbac8442d3a7b2",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=62270000491&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_62281100011.csv": {
+   "bytes": 26512,
+   "downloaded_utc": "2026-11-04T14:03:14+00:00",
+   "sha256": "22a3d1cce8c3d9e6dc20ffa3cab8fad48b28a4f522d5ddffff4a8929a78d0f4c",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=62281100011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_64235700071.csv": {
+   "bytes": 27333,
+   "downloaded_utc": "2026-11-04T13:57:06+00:00",
+   "sha256": "6340c4af97b644d75e523a9f02fcc47a2690f27b9358a4e4ee34c41ee1842bff",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=64235700071&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_64236000011.csv": {
+   "bytes": 27326,
+   "downloaded_utc": "2026-11-04T13:57:05+00:00",
+   "sha256": "54d16438deb86af96b7e2df29e6490022344629b9c92a9262241ec4207ab2f43",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=64236000011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_64236000011_info.csv": {
+   "bytes": 24440,
+   "downloaded_utc": "2026-11-04T13:56:30+00:00",
+   "sha256": "b055f6a248dd920c7e3733857fa3072fa2fa241c416ebc268535792ac8e6cc29",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=64236000011&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_64236000011_line.geojson": {
+   "bytes": 9201,
+   "downloaded_utc": "2026-11-04T13:56:51+00:00",
+   "sha256": "43b55b0863aa7405783405c311b6fa7ef5af441df0007e822de6e09c5700b83f",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=64236000011&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_64236000021.csv": {
+   "bytes": 27592,
+   "downloaded_utc": "2026-11-04T13:57:05+00:00",
+   "sha256": "f35eea25072e92ad441176bd5f3b7b8c0258f34eefa6ea4ea0814ec69bb01fe5",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=64236000021&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_74230700011.csv": {
+   "bytes": 42115,
+   "downloaded_utc": "2026-11-04T13:57:48+00:00",
+   "sha256": "e7a04b1bc3b62483a806fd55630b1d0a18f4f544e994754b2b0b064ae3e96bf4",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=74230700011&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_74230700021.csv": {
+   "bytes": 41374,
+   "downloaded_utc": "2026-11-04T13:57:46+00:00",
+   "sha256": "f69f2ca757b7e0cad4a9f703d0d549a12676a3852dfbc77e7ac22956cc008f7c",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=74230700021&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_74230700021_info.csv": {
+   "bytes": 37143,
+   "downloaded_utc": "2026-11-04T13:57:14+00:00",
+   "sha256": "5d7ab3ab04ca2036d3abe9bfbf81a7cc118d4b80bfdb710e03984b86e44c61d8",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=74230700021&output=csv&fields=reach_id%2Ctime_str%2Cwse%2Cwidth%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Crch_id_up%2Crch_id_dn&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_74230700021_line.geojson": {
+   "bytes": 6304,
+   "downloaded_utc": "2026-11-04T13:57:34+00:00",
+   "sha256": "1e54414613fa8209aff87e5d7c99598914e848607534961e3903a24419dfb7c7",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=74230700021&output=geojson&fields=reach_id%2Ctime_str%2Criver_name%2Cp_width%2Cp_length%2Cgeometry&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
+  },
+  "swot_reach_74230700031.csv": {
+   "bytes": 42005,
+   "downloaded_utc": "2026-11-04T13:57:47+00:00",
+   "sha256": "f1e3ec490b444f454d3c96ed1f10418420a08f2fb40e8ac8f95d357196044be6",
+   "source": "https://soto.podaac.earthdatacloud.nasa.gov/hydrocron/v1/timeseries?feature=Reach&feature_id=74230700031&output=csv&fields=reach_id%2Ctime_str%2Ccycle_id%2Cpass_id%2Cwse%2Cwse_u%2Cwse_r_u%2Cwidth%2Cslope%2Creach_q%2Creach_q_b%2Cdark_frac%2Cxovr_cal_q%2Cice_clim_f%2Cpartial_f%2Cn_good_nod%2Cobs_frac_n%2Cxtrk_dist%2Cp_lat%2Cp_lon%2Cp_width%2Criver_name%2Ccrid&start_time=2023-07-01T00%3A00%3A00Z&end_time=2026-11-04T23%3A59%3A59Z"
   }
  }
 }

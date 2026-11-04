@@ -36,7 +36,7 @@ cells.append(nbf.v4.new_markdown_cell(r"""
 # Virtual river gauges from satellites — student notebook
 # Stations hydrométriques virtuelles par satellite — notebook étudiant
 
-**Congo (DR Congo) · Rewa (Fiji) · and any river in the world** — **Congo (RD Congo) · Rewa (Fidji) · et toute rivière du monde**
+**Congo (DR Congo) · Rewa (Fiji) · Botswana · and any river in the world** — **Congo (RD Congo) · Rewa (Fidji) · Botswana · et toute rivière du monde**
 
 **Start here · Commencez ici :** menu **Run ▸ Run all** (Colab: **Runtime ▸ Run all**), then read from the top.
 Menu **Run ▸ Run all** (Colab : **Exécution ▸ Tout exécuter**), puis lisez depuis le début.
@@ -193,31 +193,81 @@ code("vg.explore()")
 
 # ------------------------------------------------------------------------------------------------------------------
 md("Part 5 — Explore more locations · Partie 5 — Explorer d'autres lieux",
-   "Every dot is a SWOT river reach on the Congo and its large tributaries — a possible virtual station. Darker dots are seen more often by SWOT. Click a dot to get its ID and the line of code to build it. Orange markers are stations shipped with the package.",
-   "Chaque point est un tronçon SWOT du Congo et de ses grands affluents — une station virtuelle possible. Les points foncés sont vus plus souvent par SWOT. Cliquez sur un point pour son identifiant et la ligne de code. Les marqueurs orange sont des stations fournies avec le package.")
-code("vg.congo_map()")
-code("vg.sites()")
+   """
+Every dot is a SWOT river reach on the Congo and its large tributaries — a possible virtual station. Darker dots have
+more good SWOT levels. **Click a dot**: the station is built and its graphs appear underneath, in tabs, with the
+settings and an export button. No code to copy. Orange pins are stations shipped with the package (instant); other
+dots download their data (internet, 20–60 s).
+""",
+   """
+Chaque point est un tronçon SWOT du Congo et de ses grands affluents — une station virtuelle possible. Les points
+foncés ont plus de niveaux SWOT valides. **Cliquez sur un point** : la station est construite et ses graphiques
+s'affichent en dessous, dans des onglets, avec les réglages et un bouton d'export. Aucun code à copier. Les épingles
+orange sont des stations fournies avec le package (immédiat) ; les autres points téléchargent leurs données
+(internet, 20 à 60 s).
+""")
+code("vg.explore_map()")
+ask(["Click the orange pins from Kindu down to Kinshasa. How does the range of water levels change downstream?",
+     "Open the Discharge tab for the Ubangi at Bangui. Which reference is used, and how well does the curve fit?",
+     "In the Settings tab, switch the water-flows-downhill check off. What changes?"],
+    ["Cliquez sur les épingles orange de Kindu jusqu'à Kinshasa. Comment l'amplitude des niveaux change-t-elle vers l'aval ?",
+     "Ouvrez l'onglet Débit pour l'Oubangui à Bangui. Quelle référence est utilisée, et la courbe est-elle bien ajustée ?",
+     "Dans l'onglet Réglages, désactivez le contrôle amont/aval. Qu'est-ce qui change ?"])
 md("Down the river · Le long du fleuve",
    "Water levels at seven stations, from the upper Congo (Lualaba at Kindu) to Kinshasa. Each panel shows the level minus its median.",
    "Les niveaux de sept stations, du haut Congo (Lualaba à Kindu) jusqu'à Kinshasa. Chaque panneau montre le niveau moins sa médiane.", level=3)
 code('vg.compare_stations(["lualaba_kindu", "congo_kisangani", "congo_mbandaka", "ubangi_bangui",\n                     "sangha_ouesso", "kasai_kwamouth", "congo_kinshasa"])')
 ask(["Which rivers peak in October–December, and which in April–May?", "Kinshasa has two high-water seasons each year. Which tributaries explain each one?", "Which river has the biggest seasonal range?"],
     ["Quelles rivières culminent en octobre–décembre, et lesquelles en avril–mai ?", "Kinshasa a deux saisons de hautes eaux par an. Quels affluents expliquent chacune ?", "Quelle rivière a la plus grande amplitude saisonnière ?"])
-md(None, "🧪 Try it: build any station from the list above and fit its rating curve, e.g. the Ubangi at Bangui.",
-   "🧪 À vous : construisez n'importe quelle station de la liste et ajustez sa courbe de tarage, par ex. l'Oubangui à Bangui.")
-code('ubangi = vg.build_station("ubangi_bangui")   # ✏️\nubangi.rating()')
 
-md("The whole world · Le monde entier",
-   "Large rivers of the world (darker = wider). Then zoom to a region by giving a point and a radius — here the Rewa in Fiji. Change the numbers to look at your own river.",
-   "Les grands fleuves du monde (plus foncé = plus large). Puis zoomez sur une région avec un point et un rayon — ici la Rewa aux Fidji. Changez les nombres pour voir votre propre rivière.", level=3)
-code("vg.world_map()")
-code("vg.world_map(lat=-17.96, lon=178.43, radius_km=150)   # ✏️ your region · votre région")
-code("vg.reaches_near(lat=-17.96, lon=178.43)   # ✏️")
-md("Any river · N'importe quelle rivière",
-   "Paste a reach ID from a map or table into the line below. Reaches not shipped with the package need internet (20–60 s). Or use the box underneath.",
-   "Collez un identifiant de tronçon d'une carte ou d'un tableau dans la ligne ci-dessous. Les tronçons non fournis demandent internet (20 à 60 s). Ou utilisez la boîte en dessous.", level=3)
-code('my = vg.build_station("PASTE-A-REACH-ID")   # ✏️ e.g. · ex. "13279300031"\nmy.levels()')
-code("vg.explore_locations()")
+md("Botswana",
+   """
+Botswana's large rivers are mostly on its borders — the Chobe, the Zambezi and the Limpopo — except the Okavango,
+which flows in from Angola and Namibia and spreads out into its delta. Five ready-made stations (orange) work
+offline. The white dashed line is the border; dots up to 25 km outside it are included, so the border rivers appear.
+""",
+   """
+Les grands fleuves du Botswana sont surtout à ses frontières — le Chobe, le Zambèze et le Limpopo — sauf l'Okavango,
+qui arrive de l'Angola et de la Namibie et s'étale dans son delta. Cinq stations prêtes (orange) fonctionnent hors
+ligne. La ligne blanche en tirets est la frontière ; les points jusqu'à 25 km au-delà sont inclus, pour montrer les
+fleuves frontaliers.
+""", level=3)
+code('vg.explore_map("botswana")')
+ask(["Open the Okavango at Mohembo, then its Discharge tab. How does the model's mean flow compare with the mean measured at Mohembo? What would you tell a water manager who used these discharges?",
+     "The Chobe at Kasane has no Discharge curve. Read the explanation, then compare its Levels tab with the Zambezi at Kazungula, 10 km away.",
+     "Most Botswana dots are dark, even on narrow rivers. Does many SWOT levels always mean good levels? (Look at the Limpopo.)"],
+    ["Ouvrez l'Okavango à Mohembo, puis son onglet Débit. Comment le débit moyen du modèle se compare-t-il à la moyenne mesurée à Mohembo ? Que diriez-vous à un gestionnaire de l'eau qui utiliserait ces débits ?",
+     "Le Chobe à Kasane n'a pas de courbe de débit. Lisez l'explication, puis comparez son onglet Niveaux avec le Zambèze à Kazungula, à 10 km.",
+     "La plupart des points du Botswana sont foncés, même sur des rivières étroites. Beaucoup de niveaux SWOT veut-il toujours dire de bons niveaux ? (Regardez le Limpopo.)"])
+md("Five Botswana stations side by side · Cinq stations du Botswana côte à côte",
+   "The Okavango as it enters Botswana (Mohembo) and at the end of the Panhandle (Seronga), the Zambezi and the Chobe where they meet, and the Limpopo on the border with South Africa.",
+   "L'Okavango à son entrée au Botswana (Mohembo) et au bout du Panhandle (Seronga), le Zambèze et le Chobe à leur rencontre, et le Limpopo à la frontière sud-africaine.", level=4)
+code('vg.compare_stations(["okavango_mohembo", "okavango_seronga", "zambezi_kazungula", "chobe_kasane",\n                     "limpopo_pontdrift"])')
+ask(["Which year had almost no flood on the Zambezi and the Chobe? What happened in southern Africa that year?",
+     "The Okavango peaks in April at Mohembo and in May at Seronga, with a smoother curve. What slows and flattens the flood in the Panhandle?",
+     "The Chobe stays flat while the Zambezi is low, then rises with it. What does that mean for a rating curve at Kasane?",
+     "The Limpopo jumps by metres from one pass to the next. Open its Agreement tab on the map above: how far apart are the two satellites? Is it all water?"],
+    ["Quelle année le Zambèze et le Chobe n'ont-ils presque pas eu de crue ? Que s'est-il passé en Afrique australe cette année-là ?",
+     "L'Okavango culmine en avril à Mohembo et en mai à Seronga, avec une courbe plus lisse. Qu'est-ce qui ralentit et aplatit la crue dans le Panhandle ?",
+     "Le Chobe reste plat quand le Zambèze est bas, puis monte avec lui. Qu'est-ce que cela implique pour une courbe de tarage à Kasane ?",
+     "Le Limpopo saute de plusieurs mètres d'un passage à l'autre. Ouvrez son onglet Accord sur la carte ci-dessus : quel écart entre les deux satellites ? Est-ce toujours de l'eau ?"])
+
+md("Any river in the world · N'importe quelle rivière du monde",
+   "Give a point and a radius to see every SWOT reach in a region — here the Rewa in Fiji. Change the numbers to your own river, then click a dot.",
+   "Donnez un point et un rayon pour voir tous les tronçons SWOT d'une région — ici la Rewa aux Fidji. Mettez les nombres de votre propre rivière, puis cliquez sur un point.", level=3)
+code("vg.explore_map(lat=-17.96, lon=178.43, radius_km=150)   # ✏️ your region · votre région")
+md(None,
+   "The world map shows the largest rivers. Orange dots are ready-made examples on every continent — from the Niger and the Amazon to the Karnali in Nepal, the Cimanuk in West Java and the Mississippi. They open instantly, offline.",
+   "La carte du monde montre les plus grands fleuves. Les points orange sont des exemples prêts sur tous les continents — du Niger et de l'Amazone à la Karnali au Népal, à la Cimanuk à Java occidental et au Mississippi. Ils s'ouvrent tout de suite, hors ligne.")
+code('vg.explore_map("world")')
+ask(["Open two examples on different continents. Which has the biggest seasonal range, and in which months does each peak?",
+     "Which example does SWOT see most often (Levels tab)? Why might rivers far from the equator be seen more often?",
+     "For an example with a Discharge tab, is the curve good enough to replace a ground gauge? What would you check first?",
+     "Open the Karnali (Nepal) and the Cimanuk (West Java). When is each river highest, and why? Why does the Cimanuk stay near 24 m in the dry season — and what happened at the end of 2023?"],
+    ["Ouvrez deux exemples sur des continents différents. Lequel a la plus grande amplitude saisonnière, et en quels mois chacun culmine-t-il ?",
+     "Quel exemple SWOT voit-il le plus souvent (onglet Niveaux) ? Pourquoi les rivières loin de l'équateur seraient-elles vues plus souvent ?",
+     "Pour un exemple avec un onglet Débit, la courbe suffit-elle pour remplacer une station au sol ? Que vérifieriez-vous d'abord ?",
+     "Ouvrez la Karnali (Népal) et la Cimanuk (Java occidental). Quand chaque rivière est-elle au plus haut, et pourquoi ? Pourquoi la Cimanuk reste-t-elle vers 24 m en saison sèche — et que s'est-il passé fin 2023 ?"])
 
 # ------------------------------------------------------------------------------------------------------------------
 md("Summary · Résumé",

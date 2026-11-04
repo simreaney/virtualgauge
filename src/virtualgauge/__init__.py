@@ -11,7 +11,7 @@ virtualgauge — des stations hydrométriques virtuelles par altimétrie satelli
 import pandas as pd
 
 from . import settings, store
-from .explore import explore, explore_locations
+from .explore import explore, explore_locations, explore_map
 from .i18n import get_language, set_language, t
 from .local_files import load_gauge, load_grdc_daily
 from .locations import compare_stations, congo_map, reaches_near, world_map
@@ -24,7 +24,7 @@ from .style import use_style
 __version__ = "0.1.0"
 
 __all__ = ["build_station", "Station", "Site", "Params", "sites", "flood_catch", "compare_stations", "congo_map",
-           "world_map", "reaches_near", "explore", "explore_locations", "set_language", "get_language", "configure",
+           "world_map", "reaches_near", "explore", "explore_map", "explore_locations", "set_language", "get_language", "configure",
            "status", "credits", "load_gauge", "load_grdc_daily", "use_style", "Result"]
 
 

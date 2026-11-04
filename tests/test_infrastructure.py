@@ -105,3 +105,48 @@ def test_widgets_build_and_update_quickly():
     cr = st.current_rating
     plots.fig_dashboard(st, cr["p"], residuals_by_month(cr["pairs"], cr["p"]), cr["use"], cr["excluded"], cr["boot"])
     assert time.time() - t0 < 2.0
+
+
+def test_explore_map_click_builds_station_and_every_tab():
+    vg.set_language("both")
+    ex = vg.explore_map().explorer
+    assert len(ex.data) == 1355 and ex.map is not None
+    gj = [layer for layer in ex.map.layers if type(layer).__name__ == "GeoJSON"][0]
+    f = next(ft for ft in gj.data["features"] if ft["properties"]["reach_id"] == "13279300031")
+    ex._on_hover(feature=f)
+    assert ex.hover.value.count("good SWOT levels") == 1          # nested message translated once
+    t0 = time.time()
+    ex._on_click(feature=f, event="click")                        # the reach of a ready-made station → its preset
+    assert ex.selected.site.key == "congo_kisangani" and not ex.selected.error
+    for i in range(len(ex.panel.TABS)):
+        ex.panel.render(i)
+    ex.panel._export(None)
+    assert time.time() - t0 < 15
+    st = ex.select("14410300131")                                 # not shipped, offline → explanation, no exception
+    assert st.error and ex.panel.body.layout.display == "none"
+    fiji = vg.explore_map(lat=-17.96, lon=178.43, radius_km=150).explorer
+    assert len(fiji.data) > 10 and fiji.map.zoom >= 7
+    assert vg.explore_map("world").explorer.map.zoom == 2
+
+
+def test_botswana_and_world_examples():
+    vg.set_language("both")
+    bw = vg.sites(region="botswana")
+    assert len(bw) >= 3 and len(vg.sites(region="world")) >= 8
+    ex = vg.explore_map("botswana").explorer
+    assert len(ex.data) == len(vg.locations.region_reaches("botswana")) and ex.data.good_obs.notna().all()
+    assert {k for _, k in ex.dd.options if k} == set(bw.index)          # the list shows this region's stations
+    assert any(type(layer).__name__ == "GeoJSON" and layer.name == "Botswana" for layer in ex.map.layers)
+    assert "not counted" not in ex.legend                               # every Botswana reach has a count
+    world = vg.explore_map("world").explorer
+    pins = [layer for layer in world.map.layers if type(layer).__name__ == "GeoJSON" and len(layer.data["features"]) == len(vg.PRESETS)]
+    assert pins and len(world.dd.options) == len(vg.PRESETS) + 1
+    st = world.select("amazon_manaus" if "amazon_manaus" in vg.PRESETS else vg.sites(region="world").index[0])
+    assert not st.error and len(st.data.vs) >= 10
+    with pytest.raises(ValueError, match="Unknown region"):
+        vg.explore_map("atlantis")
+
+
+def test_reach_id_of_ready_made_station_uses_its_settings():
+    assert vg.build_station("13217000081").site.key == "congo_kinshasa"
+    assert vg.explore("13279300031") is not None

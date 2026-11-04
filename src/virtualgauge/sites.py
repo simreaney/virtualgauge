@@ -20,6 +20,9 @@ class Site:
     mask_width_m   typical water width (m) · largeur typique du plan d'eau (m)
     mask_frac      share of the width used on each side of the centre-line · part de la largeur
     h_range        possible water levels (m, EGM2008) · niveaux possibles
+    published_mean_m3s, published_mean_at
+                   long-term mean flow measured nearby, used to warn when the model is far from it ·
+                   débit moyen mesuré à proximité, pour avertir quand le modèle s'en écarte
     """
     key: str
     name: str
@@ -39,6 +42,9 @@ class Site:
     compare: dict = field(default_factory=dict)          # label -> reach ID, for compare_reaches()
     recommended_exclude_months: list = field(default_factory=list)
     river: str = ""
+    region: str = ""                                     # congo, botswana, fiji or world (for maps and lists)
+    published_mean_m3s: list = None                      # [low, high] long-term mean measured nearby (m³/s)
+    published_mean_at: str = ""                          # where it was measured (a place name)
 
     def __post_init__(self):
         self.short = self.short or self.name.split(" · ")[0]
@@ -110,7 +116,7 @@ PRESETS = {
         geoglows_id=130798640, dahiti_ids=[12153, 13227],
         compare={"Downstream · Aval (071)": "13217000071", "Kinshasa (081)": "13217000081",
                  "Pool Malebo (101)": "13217000101"},
-        recommended_exclude_months=[3, 4, 5, 6]),
+        recommended_exclude_months=[3, 4, 5, 6], region="congo"),
     "rewa_fiji": Site(
         key="rewa_fiji",
         name="Rewa River, Viti Levu (Fiji) · Rivière Rewa, Viti Levu (Fidji)",
@@ -118,12 +124,12 @@ PRESETS = {
         swot_reach="55200000051", swot_up="55200000061", swot_down="55200000041",
         mask_width_m=150, mask_frac=0.6, h_range=(-3, 20), slope_correction=True, geoglows_id=None,
         compare={"Nausori (tidal · marée)": "55200000031", "Main · Principal (051)": "55200000051",
-                 "Upstream · Amont (061)": "55200000061"}),
+                 "Upstream · Amont (061)": "55200000061"}, region="fiji"),
 }
 
 
 def _load_curated():
-    """Extra Congo sites shipped with the package · Sites supplémentaires du Congo fournis avec le package"""
+    """Example sites shipped with the package (Congo, Botswana, world) · Sites d'exemple fournis avec le package"""
     p = store.bundle_dir() / "locations" / "sites.json"
     if p.exists():
         for d in json.loads(p.read_text()):
@@ -133,11 +139,20 @@ def _load_curated():
 _load_curated()
 
 
-def sites():
-    """Table of ready-made sites · Tableau des sites prêts à l'emploi"""
+def sites(region=None):
+    """Table of ready-made sites, optionally for one region · Tableau des sites prêts, éventuellement d'une région
+
+    region: "congo", "botswana", "fiji" or "world" (None = all · tous)"""
     import pandas as pd
-    return pd.DataFrame([dict(key=s.key, name=s.short, river=s.river, lat=s.lat, lon=s.lon, swot_reach=s.swot_reach,
-                              discharge_model=bool(s.geoglows_id)) for s in PRESETS.values()]).set_index("key")
+    return pd.DataFrame([dict(key=s.key, name=s.short, region=s.region, river=s.river, lat=s.lat, lon=s.lon,
+                              swot_reach=s.swot_reach, discharge_model=bool(s.geoglows_id))
+                         for s in PRESETS.values() if region in (None, s.region)]).set_index("key")
+
+
+def preset_for_reach(reach_id):
+    """The ready-made station on this SWOT reach, if there is one · La station prête sur ce tronçon, s'il y en a une"""
+    rid = str(reach_id).strip()
+    return next((s for s in PRESETS.values() if s.swot_reach == rid), None)
 
 
 def resolve(site, **kw):
@@ -152,7 +167,7 @@ def resolve(site, **kw):
     elif str(site) in PRESETS:
         s = PRESETS[str(site)]
     elif str(site).strip().isdigit() and len(str(site).strip()) == 11:
-        s = Site.from_reach(str(site).strip())
+        s = preset_for_reach(site) or Site.from_reach(str(site).strip())   # a ready-made station's reach → its settings
     else:
         raise ValueError(f"Unknown site · Site inconnu : {site!r}. Known · Connus : {sorted(PRESETS)}")
     if site_kw:

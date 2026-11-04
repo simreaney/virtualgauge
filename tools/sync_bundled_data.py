@@ -1,6 +1,7 @@
 """Copy real downloaded data from a cache folder into the package, with a manifest.
 
 Usage: python tools/sync_bundled_data.py <cache folder> [<cache folder> ...]
+(tools/build_curated_sites.py calls main() with `only`, the files of the stations it keeps)
 Only open data are copied (SWOT, ICESat-2, GEOGloWS). Never GRDC, DAHITI or agency gauge files.
 """
 import hashlib
@@ -19,14 +20,14 @@ def allowed(name):
     return any(re.match(p, name) for p in ALLOWED)
 
 
-def main(caches):
+def main(caches, only=None):
     DEST.mkdir(parents=True, exist_ok=True)
     man_path = DEST / "MANIFEST.json"
     man = json.loads(man_path.read_text()) if man_path.exists() else {"files": {}}
     for cache in map(Path, caches):
         log = json.loads((cache / "download_log.json").read_text()) if (cache / "download_log.json").exists() else {}
         for f in sorted(cache.iterdir()):
-            if not f.is_file() or not allowed(f.name):
+            if not f.is_file() or not allowed(f.name) or (only is not None and f.name not in only):
                 continue
             shutil.copy2(f, DEST / f.name)
             man["files"][f.name] = {"sha256": hashlib.sha256(f.read_bytes()).hexdigest(),

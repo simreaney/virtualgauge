@@ -58,7 +58,8 @@ class Station:
     def xlim(self):
         times = [self.data.raw.index.min(), self.data.vs.time.min() if len(self.data.vs) else None,
                  self.data.vs.time.max() if len(self.data.vs) else None]
-        times = [pd.Timestamp(x).tz_localize(None) if getattr(x, "tzinfo", None) else x for x in times if x is not None]
+        times = [pd.Timestamp(x).tz_localize(None) if getattr(x, "tzinfo", None) else x
+                 for x in times if x is not None and not pd.isna(x)]          # no ICESat-2 points → NaT
         if not times:
             return None
         pad = pd.Timedelta(days=45)
@@ -211,6 +212,18 @@ class Station:
         self._ref[reference] = (q, src)
         return q, src
 
+    def _bias_warning(self, q, src):
+        """Warn when the model's mean flow is far from the published long-term mean · Modèle loin de la mesure"""
+        pm = self.site.published_mean_m3s
+        if src != "geoglows" or not pm:
+            return None
+        lo, hi = pm
+        ratio = float(q.mean()) / ((lo + hi) / 2)
+        if 1 / 1.5 <= ratio <= 1.5:
+            return None
+        return ("warn_model_bias", dict(model=fmt_int(round(float(q.mean()))), ratio=f"{ratio:.1f}",
+                                        at=self.site.published_mean_at, lo=fmt_int(lo), hi=fmt_int(hi), key=self.site.key))
+
     @staticmethod
     def _src_label(src):
         return M("src_gauge") if src == "gauge" else M("src_geoglows")
@@ -231,6 +244,9 @@ class Station:
                 pass
             lines.append(("ref_manual", dict(rid=self.site.geoglows_id, mean=fmt_num(q.mean()))))
             warnings.append(("ref_model_warning", {}))
+            bias = self._bias_warning(q, src)
+            if bias:
+                warnings.append(bias)
         start = self.data.vs.time.min() - pd.Timedelta(days=60)
         return Result(("h_reference", {}), lines, warnings=warnings,
                       figure=lambda: plots.fig_reference(q, start, self._src_label(src)),
@@ -245,12 +261,17 @@ class Station:
             self.current_rating = None
             return Result(("h_rating", {}), [("msg_no_reference", dict(key=self.site.key))])
         pairs = pair_with_reference(self.data.vs, q)
+        dry = int((pairs.Q_ref <= 0).sum())
+        pairs = pairs[pairs.Q_ref > 0]                       # a power curve cannot pass through zero flow
         excl = sorted(int(m) for m in (exclude_months or []))
         use, excluded = pairs[~pairs.month.isin(excl)], pairs[pairs.month.isin(excl)]
         if len(use) < 8:
             self.current_rating = None
             return Result(("h_rating", {}), [("msg_few_pairs", dict(n=len(use)))])
         p = fit_rating(use.wse_m, use.Q_ref)
+        if not all(np.isfinite([p["a"], p["b"], p["h0"]])):
+            self.current_rating = None
+            return Result(("h_rating", {}), [("msg_fit_failed", dict(n=len(use)))])
         boot = bootstrap_rating(use.wse_m, use.Q_ref, n_boot=n_boot or self.params.n_boot, seed=self.params.seed)
         sk = skill(use.Q_ref, rating_q(use.wse_m, p))
         if excl:
@@ -266,6 +287,8 @@ class Station:
             lines.append(("rating_b_band", dict(lo=boot.b.quantile(0.025), hi=boot.b.quantile(0.975))))
         if excl:
             lines.append(("rating_excluded", dict(months=_months(excl))))
+        if dry:
+            lines.append(("rating_dry", dict(n=dry)))
         warnings = []
         if p["b_at_bound"]:
             warnings.append(("warn_b_bound", {}))
@@ -274,6 +297,9 @@ class Station:
         rec = self.site.recommended_exclude_months
         if src == "geoglows" and rec and not set(rec) <= set(excl):
             warnings.append(("warn_months", dict(months=rec)))
+        bias = self._bias_warning(q, src)
+        if bias:
+            warnings.append(bias)
         return Result(("h_rating", {}), lines, warnings=warnings,
                       figure=lambda: plots.fig_rating(use, excluded, p, boot), table=table.round(3),
                       values=dict(p, nse=float(sk["NSE"]), kge=float(sk["KGE"]), source=src, exclude_months=excl))
@@ -336,7 +362,8 @@ class Station:
         lines = [("discharge_line", dict(n=len(flow), mean=fmt_int(round(flow.Q_m3s.mean())),
                                          lo=fmt_int(round(flow.Q_m3s.min())), hi=fmt_int(round(flow.Q_m3s.max())))),
                  ("discharge_which", dict(src=self._src_label(cr["src"]), months=_months(cr["exclude"])))]
-        return Result(("h_discharge", {}), lines,
+        bias = self._bias_warning(cr["q"], cr["src"])
+        return Result(("h_discharge", {}), lines, warnings=[bias] if bias else [],
                       figure=lambda: plots.fig_discharge(flow, q_span, self._src_label(cr["src"]), self.site.short),
                       table=flow[["wse_m", "Q_m3s"]].describe().round(1).T,
                       values=dict(mean_m3s=float(flow.Q_m3s.mean())))
@@ -353,6 +380,10 @@ class Station:
             flow = self._flow()
             notes.update({"reference_discharge": cr["src"], "excluded_months": cr["exclude"],
                           "Q_band": "2.5–97.5 % bootstrap of the rating curve only"})
+            bias = self._bias_warning(cr["q"], cr["src"])
+            if bias:
+                from .i18n import _pair
+                notes["warning"] = _pair(*bias)[0]
             f, mf = export_virtual_gauge(self.site, flow, cr["p"], extra=notes)
         else:
             f, mf = export_virtual_gauge(self.site, d.vs, None, extra=notes)
@@ -411,7 +442,7 @@ def build_station(site, verbose=False, **settings_):
     except EXPECTED_ERRORS as e:
         from .sites import Site
         s = Site(key=str(site), name=str(site), lat=0, lon=0, swot_reach=str(site))
-        return Station(s, None, error=str(e))
+        return Station(s, None, error=getattr(e, "msg", None) or str(e))
     if verbose:
         say("msg_building", site=s.short)
     loaders = dict(reach_line=download.reach_line, fetch_atl13=download.fetch_atl13,
@@ -419,7 +450,7 @@ def build_station(site, verbose=False, **settings_):
     try:
         data = build_virtual_station(s, params, loaders)
     except EXPECTED_ERRORS as e:
-        return Station(s, params, error=str(e))
+        return Station(s, params, error=getattr(e, "msg", None) or str(e))
     origin = store.ORIGINS.get(f"atl13_{s.key}.parquet", {})
     return Station(s, params, data, origin=origin)
 

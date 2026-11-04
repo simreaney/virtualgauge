@@ -10,7 +10,7 @@ from importlib import resources
 from pathlib import Path
 
 from . import settings
-from .i18n import t
+from .i18n import t, M
 
 ORIGINS = {}          # name -> dict(origin, path, date)
 _MEMO = {}            # (path, mtime) -> object, so the widgets re-use files already read
@@ -87,7 +87,9 @@ def load_or_fetch(name, read, fetch, write, source="", refresh=None):
                 ORIGINS[name] = dict(origin=origin, path=str(path), date=_date_of(name, origin))
                 return obj
     if settings.offline():
-        raise OfflineError(t("msg_offline_missing", name=name))
+        err = OfflineError(t("msg_offline_missing", name=name))
+        err.msg = M("msg_offline_missing", name=name)       # shown later in the reader's language, once
+        raise err
     try:
         obj, src = fetch()
     except Exception as e:

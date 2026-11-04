@@ -22,10 +22,27 @@ def reach_index():
     return _CACHE["index"]
 
 
+REGIONS = ("congo", "botswana")         # regions with a bundled table of reaches and their good-SWOT counts
+
+
+def region_reaches(region):
+    """Reaches of a region with their number of good SWOT levels (bundled) · Tronçons d'une région"""
+    if region not in REGIONS:
+        raise ValueError(f"Unknown region · Région inconnue : {region!r}. Known · Connues : {list(REGIONS)} + 'world'")
+    if region not in _CACHE:
+        _CACHE[region] = pd.read_parquet(store.bundle_dir() / "locations" / f"{region}_reaches.parquet")
+    return _CACHE[region]
+
+
+def region_outline(region):
+    """Country outline as GeoJSON, if bundled (Natural Earth, public domain) · Contour du pays, s'il est fourni"""
+    import json
+    p = store.bundle_dir() / "locations" / f"{region}_outline.geojson"
+    return json.loads(p.read_text()) if p.exists() else None
+
+
 def congo_reaches():
-    if "congo" not in _CACHE:
-        _CACHE["congo"] = pd.read_parquet(store.bundle_dir() / "locations" / "congo_reaches.parquet")
-    return _CACHE["congo"]
+    return region_reaches("congo")
 
 
 def _km(lat, lon, lats, lons):

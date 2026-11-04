@@ -175,6 +175,14 @@ def catch_probability(times, start, end, durations=(1, 2, 3, 5, 10, 30)):
 
 
 # --- Steps 0–5 together (trainer Part C) ----------------------------------------------------------------------
+def _empty_atl13():
+    """An ICESat-2 table with no points (narrow or new reaches) · Une table ICESat-2 sans point"""
+    idx = pd.DatetimeIndex([], name="time_ns")
+    cols = {c: pd.Series([], dtype=float, index=idx) for c in
+            ["ht_ortho", "rgt", "inland_water_body_type", "cloud_flag_asr_atl09"]}
+    return gpd.GeoDataFrame(cols, geometry=gpd.GeoSeries([], crs=4326, index=idx), crs=4326)
+
+
 def build_virtual_station(site, params, loaders):
     """Steps 0–5 for one site: mask, ICESat-2, SWOT, checks, combined levels.
     Étapes 0 à 5 pour un site : masque, ICESat-2, SWOT, contrôles, niveaux combinés.
@@ -184,6 +192,8 @@ def build_virtual_station(site, params, loaders):
     line = loaders["reach_line"](site.swot_reach)
     geo = channel_mask(line, site.mask_width_m, site.mask_frac)
     raw = loaders["fetch_atl13"](site.key, geo["mask_ll"], site.t0)
+    if raw is None or len(raw) == 0 or "ht_ortho" not in raw:      # no ICESat-2 crossing: SWOT only
+        raw = _empty_atl13()
     pts = prepare_atl13(raw, geo, h_range=site.h_range, max_cloud=params.max_cloud, k_mad=params.k_mad,
                         min_spread=params.min_spread)
     slopes = estimate_slope(pts, params.min_points_slope, params.min_span_km)
