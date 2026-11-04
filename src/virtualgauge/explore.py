@@ -235,19 +235,16 @@ def _view(bounds, width_px=900, height_px=460):
 
 def _region_view(region, lat, lon, radius_km):
     """Reaches to draw, map bounds and colouring for a region · Tronçons, limites et couleurs d'une région"""
-    from .locations import REGIONS, _near, reach_index, region_outline, region_reaches
+    from .locations import REGIONS, region_outline, region_reaches
     width_legend = (["< 300 m", "300–1000 m", "1–3 km", "> 3 km"], "map_legend_title_world")
-    if lat is not None and lon is not None:
-        d = _near(lat, lon, radius_km, 0).sort_values("width_m", ascending=False).head(MAX_POINTS)
+    if lat is not None and lon is not None:                  # a region: every reach in view, reloaded on pan/zoom
         dlat = radius_km / 111.32
         dlon = radius_km / (111.32 * max(math.cos(math.radians(lat)), 0.1))
-        return d, [[lat - dlat, lon - dlon], [lat + dlat, lon + dlon]], "width_m", [300, 1000, 3000, 10000], \
-            "osm", width_legend
+        bounds = [[lat - dlat, lon - dlon], [lat + dlat, lon + dlon]]
+        return None, bounds, "width_m", [300, 1000, 3000, 10000], "osm", width_legend
     region = str(region).strip().lower()
-    if region == "world":
-        idx = reach_index()
-        d = idx[(idx.type == 1) & (idx.width_m >= 2000)].sort_values("width_m", ascending=False).head(MAX_POINTS)
-        return d, [[-45.0, -150.0], [65.0, 170.0]], "width_m", [300, 1000, 3000, 10000], "satellite", width_legend
+    if region == "world":                                    # the largest rivers; zoom in to see every reach
+        return None, [[-45.0, -150.0], [65.0, 170.0]], "width_m", [300, 1000, 3000, 10000], "satellite", width_legend
     if region not in REGIONS:
         raise ValueError(t("w_unknown_region", region=region, known=", ".join(list(REGIONS) + ["world"])))
     d = region_reaches(region)
@@ -287,12 +284,14 @@ class _MapExplorer:
         self.btn = W.Button(description=t("w_build"), button_style="primary")
         self.btn.on_click(lambda _: self.select(self.txt.value.strip() or self.dd.value))
         self.dd.observe(lambda ch: self.select(ch["new"]) if ch["new"] else None, names="value")
-        self.data = None
+        self.data, self.dynamic, self.loaded = None, view is not None and view[0] is None, None
+        self.count = W.HTML("")
         parts = []
         if with_map:
             self.map = self._make_map(view, region, lat, lon)
             if self.map is not None:
-                parts += [W.HTML(f"<b>{t('w_map_hint')}</b>"), self.map, W.HTML(self.legend), self.hover]
+                hint = t("w_map_hint") + (" " + t("w_zoom_hint", n=fmt_int(MAX_POINTS)) if self.dynamic else "")
+                parts += [W.HTML(f"<b>{hint}</b>"), self.map, W.HTML(self.legend), self.count, self.hover]
             else:
                 parts += [W.HTML(f"<i>{t('w_no_map')}</i>")]
         else:
@@ -313,20 +312,13 @@ class _MapExplorer:
         d, bounds, col, bins, base, legend = view
         basemap = L.basemaps.OpenStreetMap.Mapnik if base == "osm" else L.basemaps.Esri.WorldImagery
         legend = dict(zip(legend[0], RAMP if col == "good_obs" else RAMP[1:])), legend[1]
-        self.data = d
         lon0 = lon if (lat is not None and lon is not None) else None
-        feats = []
-        for r in d.itertuples(index=False):
-            x = float(r.lon) if lon0 is None else lon0 + ((float(r.lon) - lon0 + 180) % 360) - 180   # across 180° (Fiji)
-            v = getattr(r, col)
-            obs = getattr(r, "good_obs", None)
-            feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [x, float(r.lat)]},
-                          "properties": {"reach_id": str(r.reach_id),
-                                         "river": r.river_name if isinstance(r.river_name, str) and r.river_name else "—",
-                                         "width_m": int(round(float(r.width_m))),
-                                         "good_obs": None if obs is None or pd.isna(obs) else int(obs),
-                                         "_c": _colour(None if pd.isna(v) else float(v), bins)}})
+        self._style = (col, bins)
         center, zoom = _view(bounds)
+        if self.dynamic:
+            d = self._load(bounds, zoom)
+        else:
+            self.data = d
         m = L.Map(center=center, zoom=zoom, basemap=L.basemap_to_tiles(basemap), scroll_wheel_zoom=True,
                   zoom_snap=0.25, zoom_delta=0.5)
         m.layout.height = "460px"
@@ -335,13 +327,16 @@ class _MapExplorer:
         if outline:                                          # the country border, for orientation
             add(L.GeoJSON(data=outline, name=outline["properties"]["name"],
                           style={"color": "#ffffff", "weight": 1.5, "opacity": 0.8, "fill": False, "dashArray": "4 4"}))
-        gj = L.GeoJSON(data={"type": "FeatureCollection", "features": feats}, name=t("map_reaches"),
+        gj = L.GeoJSON(data=self._features(d, lon0), name=t("map_reaches"),
                        point_style={"radius": 5, "weight": 1, "color": "#ffffff", "opacity": 0.9, "fillOpacity": 0.9},
                        style_callback=lambda f: {"fillColor": f["properties"]["_c"]},
                        hover_style={"weight": 3, "color": "#EB6834"})
         gj.on_click(self._on_click)
         gj.on_hover(self._on_hover)
         add(gj)
+        self.gj = gj
+        if self.dynamic:
+            m.observe(self._on_bounds, names="bounds")       # reload the reaches each time the view changes
         pins = [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [
                     s.lon if lon0 is None else lon0 + ((s.lon - lon0 + 180) % 360) - 180, s.lat]},
                  "properties": {"key": k, "short": s.short}} for k, s in PRESETS.items()]
@@ -364,6 +359,50 @@ class _MapExplorer:
                f'{t("map_sites")}</span>')
         self.legend = f"<small>{t(title_key)}: {dots} {pin}</small>"
         return m
+
+    def _features(self, d, lon0=None):
+        from .locations import _colour
+        col, bins = self._style
+        feats = []
+        for r in d.itertuples(index=False):
+            if hasattr(r, "x"):
+                x = float(r.x)
+            else:                                            # across 180° (Fiji)
+                x = float(r.lon) if lon0 is None else lon0 + ((float(r.lon) - lon0 + 180) % 360) - 180
+            v = getattr(r, col)
+            obs = getattr(r, "good_obs", None)
+            feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [x, float(r.lat)]},
+                          "properties": {"reach_id": str(r.reach_id),
+                                         "river": r.river_name if isinstance(r.river_name, str) and r.river_name else "—",
+                                         "width_m": int(round(float(r.width_m))),
+                                         "good_obs": None if obs is None or pd.isna(obs) else int(obs),
+                                         "_c": _colour(None if pd.isna(v) else float(v), bins)}})
+        return {"type": "FeatureCollection", "features": feats}
+
+    def _load(self, bounds, zoom):
+        """The reaches of this view (the widest MAX_POINTS) and the line that says how many · Les tronçons de la vue"""
+        from .locations import reaches_in_view
+        rivers_only = zoom < 5                               # far out: rivers only, so lakes do not crowd the map
+        d, total = reaches_in_view(bounds, MAX_POINTS, rivers_only=rivers_only)
+        self.data, self.loaded = d, (bounds, total <= MAX_POINTS and not rivers_only)
+        key = "w_view_all" if total <= MAX_POINTS else "w_view_some"
+        self.count.value = "<small>" + t(key, n=fmt_int(len(d)), total=fmt_int(total)) + "</small>"
+        return d
+
+    def show_view(self, bounds, zoom):
+        """Show every reach in bounds [[south, west], [north, east]] (what a pan or zoom does) · Afficher une vue"""
+        if self.loaded and self.loaded[1]:                   # already showing everything around this view?
+            (s0, w0), (n0, e0) = self.loaded[0]
+            (s, w), (n, e) = bounds
+            if s >= s0 and n <= n0 and w >= w0 and e <= e0:
+                return
+        d = self._load([list(b) for b in bounds], zoom)
+        self.gj.data = self._features(d)
+
+    def _on_bounds(self, change):
+        b = change.get("new")
+        if b and len(b) == 2 and not self.busy:
+            self.show_view(b, self.map.zoom)
 
     def _on_hover(self, feature=None, **_):
         if not feature:
@@ -414,7 +453,7 @@ def explore_map(region="congo", lat=None, lon=None, radius_km=150):
 
     explore_map()                                    the Congo basin · le bassin du Congo
     explore_map("botswana")                          Botswana and its border rivers · le Botswana et ses fleuves frontaliers
-    explore_map("world")                             the world's largest rivers · les plus grands fleuves
+    explore_map("world")                             the world: zoom in to see every reach · le monde : zoomez
     explore_map(lat=-17.96, lon=178.43, radius_km=150)  any region · toute région
     """
     return _MapExplorer(region, lat, lon, radius_km).ui

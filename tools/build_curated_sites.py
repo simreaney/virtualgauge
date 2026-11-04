@@ -57,6 +57,11 @@ GROUPS = {
         T("okavango_seronga", "Okavango – Seronga", "Okavango", -18.82, 22.42,
           "Okavango Panhandle near Seronga (Botswana)", "Okavango (Panhandle) près de Seronga (Botswana)",
           match="okavango", radius_km=15, geoglows=False),      # water spreads into the swamps: one channel ≠ all the flow
+        T("okavango_gunotsoga", "Okavango – Gunotsoga", "Okavango", -18.96, 22.57,
+          "Okavango Delta near Gunotsoga, where the Panhandle opens out (Botswana)",
+          "Delta de l'Okavango près de Gunotsoga, à la sortie du Panhandle (Botswana)",
+          reaches=["12950200021"], geoglows=False,
+          swot_down=None),                                      # SWORD's next reach down has no SWOT data at all
         T("chobe_kasane", "Chobe – Kasane", "Chobe", -17.80, 25.15,
           "Chobe River at Kasane (Botswana / Namibia)", "Rivière Chobe à Kasane (Botswana / Namibie)",
           match="chobe", radius_km=15, geoglows=False),         # the Zambezi is 5 km away: no automatic model
@@ -65,6 +70,21 @@ GROUPS = {
           reaches=["12279000211", "12279000221"],                # below the Chobe confluence
           swot_up="12291100011",                                 # the Zambezi, not the Chobe (SWORD lists both)
           published_mean_m3s=[1066, 1088], published_mean_at="Victoria Falls"),   # 70 km downstream, 1971–2000
+        # 2026-11-04: names checked against OpenStreetMap (SWORD leaves most Limpopo reaches unnamed); the Motloutse
+        # and other Limpopo reaches were tried and left out because their SWOT levels jump by metres from pass to pass.
+        T("shashe_tuli", "Shashe – Tuli", "Shashe", -21.82, 29.09,
+          "Shashe River in the Tuli area (Botswana / Zimbabwe)", "Rivière Shashe dans la région du Tuli (Botswana / Zimbabwe)",
+          reaches=["12460000081"], geoglows=False),
+        # The upper Limpopo near Ramotlabaki (12497000041) was also built and left out: its 5–8 m "floods" came in the
+        # 2023–24 drought year and none in the wetter 2025–26 season, so they are most likely artefacts.
+        T("limpopo_martinsdrift", "Limpopo – Martin's Drift", "Limpopo", -22.92, 28.02,
+          "Limpopo River near Martin's Drift (Botswana / South Africa)",
+          "Fleuve Limpopo près de Martin's Drift (Botswana / Afrique du Sud)",
+          reaches=["12493300141"], geoglows=False),
+        T("limpopo_zanzibar", "Limpopo – Zanzibar", "Limpopo", -22.57, 28.55,
+          "Limpopo River near the Zanzibar border post (Botswana / South Africa)",
+          "Fleuve Limpopo près du poste frontière de Zanzibar (Botswana / Afrique du Sud)",
+          reaches=["12493100071"], geoglows=False),
         T("limpopo_pontdrift", "Limpopo – Pont Drift", "Limpopo", -22.22, 29.13,
           "Limpopo River near Pont Drift (Botswana / South Africa)",
           "Fleuve Limpopo près de Pont Drift (Botswana / Afrique du Sud)", match="limpopo", radius_km=25,

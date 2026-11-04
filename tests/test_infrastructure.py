@@ -147,6 +147,21 @@ def test_botswana_and_world_examples():
         vg.explore_map("atlantis")
 
 
+def test_world_map_shows_every_reach_when_zoomed_in():
+    ex = vg.explore_map("world").explorer
+    assert ex.dynamic and len(ex.data) == 3000 and "widest" in ex.count.value      # far out: the widest rivers only
+    ex.map.zoom = 8
+    ex._on_bounds({"new": ((-4.6, 15.0), (-4.0, 15.7))})                           # Kinshasa, as a pan/zoom does
+    assert "13217000081" in set(ex.data.reach_id.astype(str)) and "All" in ex.count.value
+    assert len(ex.gj.data["features"]) == len(ex.data) < 3000
+    ex.show_view(((-19.0, 176.0), (-16.0, 182.0)), 8)                              # across the 180° meridian
+    assert "55200000051" in set(ex.data.reach_id.astype(str)) and ex.data.x.between(176, 182).all()
+    n = len(ex.data)
+    ex.show_view(((-18.5, 177.0), (-17.0, 179.0)), 9)                              # inside a complete view: no reload
+    assert len(ex.data) == n
+    assert not vg.explore_map().explorer.dynamic                                    # the Congo map keeps its table
+
+
 def test_reach_id_of_ready_made_station_uses_its_settings():
     assert vg.build_station("13217000081").site.key == "congo_kinshasa"
     assert vg.explore("13279300031") is not None

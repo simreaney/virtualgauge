@@ -2,9 +2,9 @@
 
 [![Open in Colab · Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/simreaney/virtualgauge/blob/main/Virtual_River_Gauges_Student.ipynb)
 
-Bilingual (English / French) teaching material for hydrologists in national services: build virtual river gauges from real ICESat-2 and SWOT satellite data, with worked examples on the **Congo at Kinshasa–Brazzaville (DR Congo)** and the **Rewa River (Fiji)**, six more Congo-basin stations, five stations in **Botswana**, ready-made examples on every continent, and any river in the world.
+Bilingual (English / French) teaching material for hydrologists in national services: build virtual river gauges from real ICESat-2 and SWOT satellite data, with worked examples on the **Congo at Kinshasa–Brazzaville (DR Congo)** and the **Rewa River (Fiji)**, six more Congo-basin stations, nine stations in **Botswana**, ready-made examples on every continent, and any river in the world.
 
-Matériel pédagogique bilingue (anglais / français) pour les hydrologues des services nationaux : construire des stations hydrométriques virtuelles à partir de vraies données ICESat-2 et SWOT, avec des exemples sur le **Congo à Kinshasa–Brazzaville (RD Congo)** et la **rivière Rewa (Fidji)**, six autres stations du bassin du Congo, cinq stations au **Botswana**, des exemples prêts sur tous les continents, et toute rivière du monde.
+Matériel pédagogique bilingue (anglais / français) pour les hydrologues des services nationaux : construire des stations hydrométriques virtuelles à partir de vraies données ICESat-2 et SWOT, avec des exemples sur le **Congo à Kinshasa–Brazzaville (RD Congo)** et la **rivière Rewa (Fidji)**, six autres stations du bassin du Congo, neuf stations au **Botswana**, des exemples prêts sur tous les continents, et toute rivière du monde.
 
 ## Two notebooks · Deux notebooks
 
@@ -26,14 +26,14 @@ congo.export()
 vg.explore()                                 # sliders · curseurs
 vg.explore_map()                             # click a dot → graphs · cliquez sur un point → graphiques
 vg.explore_map("botswana")                   # Botswana and its border rivers · le Botswana
-vg.explore_map("world")                      # examples on every continent · exemples sur tous les continents
+vg.explore_map("world")                      # zoom in: every reach in view · zoomez : chaque tronçon de la vue
 vg.explore_map(lat=-17.96, lon=178.43, radius_km=150)   # any region · toute région
 vg.sites(region="botswana")                  # ready-made stations · stations prêtes
 ```
 
-It ships the real data (downloaded 3–4 November 2026) for 27 stations — the Congo basin, Botswana, Fiji and fourteen rivers on other continents, including the Karnali (Nepal) and the Cimanuk (West Java) — and an index of all 248,673 SWOT river reaches, so the student notebook works **offline**. Other reaches are downloaded on demand (no account needed). Ready-made stations: `vg.sites()`.
+It ships the real data (downloaded 3–4 November 2026) for 31 stations — the Congo basin, Botswana, Fiji and fourteen rivers on other continents, including the Karnali (Nepal) and the Cimanuk (West Java) — and an index of all 248,673 SWOT river reaches, so the student notebook works **offline**. Other reaches are downloaded on demand (no account needed). Ready-made stations: `vg.sites()`.
 
-Il contient les vraies données (téléchargées les 3 et 4 novembre 2026) de 27 stations — bassin du Congo, Botswana, Fidji et quatorze fleuves d'autres continents, dont la Karnali (Népal) et la Cimanuk (Java occidental) — et l'index des 248 673 tronçons SWOT du monde : le notebook étudiant fonctionne **hors ligne**. Les autres tronçons sont téléchargés à la demande (sans compte).
+Il contient les vraies données (téléchargées les 3 et 4 novembre 2026) de 31 stations — bassin du Congo, Botswana, Fidji et quatorze fleuves d'autres continents, dont la Karnali (Népal) et la Cimanuk (Java occidental) — et l'index des 248 673 tronçons SWOT du monde : le notebook étudiant fonctionne **hors ligne**. Les autres tronçons sont téléchargés à la demande (sans compte).
 
 ## Install · Installation
 

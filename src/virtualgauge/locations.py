@@ -63,6 +63,24 @@ def _near(lat, lon, radius_km, min_width_m=0):
     return box[box.km <= radius_km].sort_values("km")
 
 
+def reaches_in_view(bounds, n=3000, rivers_only=False):
+    """The n widest reaches inside bounds [[south, west], [north, east]] and how many there are in all.
+    Longitudes may run past ±180 (a map panned across the date line). · Les n tronçons les plus larges d'une vue.
+    Column x is the longitude to draw at, inside the view."""
+    idx = reach_index()
+    (s, w), (nn, e) = bounds
+    span = e - w
+    keep = idx.lat.between(s, nn) & ((idx.type == 1) if rivers_only else (idx.type != 6))
+    if span < 360:
+        keep &= ((idx.lon - w) % 360) <= span
+    d = idx[keep]
+    total = len(d)
+    if total > n:
+        d = d.nlargest(n, "width_m")
+    d = d.assign(x=(w + ((d.lon - w) % 360)) if span < 360 else d.lon)
+    return d, total
+
+
 def reaches_near(lat, lon, radius_km=25, min_width_m=0, n=15):
     """SWOT reaches near a point, nearest first · Tronçons SWOT proches d'un point, du plus proche au plus loin"""
     d = _near(lat, lon, radius_km, min_width_m).head(n)
