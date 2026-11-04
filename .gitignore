@@ -1,0 +1,13 @@
+# downloaded data and results (the package ships its own copy of the open data)
+cache/
+outputs/
+# your own gauge and GRDC files must never be shared
+data/gauge_*
+data/grdc_*
+# build products (attach the wheel to a GitHub release instead)
+dist/
+build/
+*.egg-info/
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/

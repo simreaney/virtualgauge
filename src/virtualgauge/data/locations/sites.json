@@ -1,0 +1,140 @@
+[
+ {
+  "key": "congo_kisangani",
+  "name": "Congo River near Kisangani (DR Congo) \u00b7 Fleuve Congo pr\u00e8s de Kisangani (RD Congo)",
+  "lat": 0.4873609,
+  "lon": 25.2101045,
+  "swot_reach": "13279300031",
+  "swot_up": "13279300041",
+  "swot_down": "13279300024",
+  "mask_width_m": 1069,
+  "mask_frac": 0.45,
+  "h_range": [
+   371.0,
+   394.0
+  ],
+  "slope_correction": true,
+  "geoglows_id": 130774372,
+  "short": "Congo \u2013 Kisangani",
+  "t0": "2018-10-14",
+  "dahiti_ids": [],
+  "compare": {},
+  "recommended_exclude_months": [],
+  "river": "Congo"
+ },
+ {
+  "key": "congo_mbandaka",
+  "name": "Congo River near Mbandaka (DR Congo) \u00b7 Fleuve Congo pr\u00e8s de Mbandaka (RD Congo)",
+  "lat": 0.13826221,
+  "lon": 18.2384208,
+  "swot_reach": "13273000011",
+  "swot_up": "13273000021",
+  "swot_down": "13271000091",
+  "mask_width_m": 1432,
+  "mask_frac": 0.45,
+  "h_range": [
+   288.0,
+   318.0
+  ],
+  "slope_correction": true,
+  "geoglows_id": 130774393,
+  "short": "Congo \u2013 Mbandaka",
+  "t0": "2018-10-14",
+  "dahiti_ids": [],
+  "compare": {},
+  "recommended_exclude_months": [],
+  "river": "Congo"
+ },
+ {
+  "key": "ubangi_bangui",
+  "name": "Ubangi River at Bangui (CAR / DR Congo) \u00b7 Rivi\u00e8re Oubangui \u00e0 Bangui (RCA / RD Congo)",
+  "lat": 4.15401532,
+  "lon": 18.62265,
+  "swot_reach": "13263100051",
+  "swot_up": "13263100061",
+  "swot_down": "13263100041",
+  "mask_width_m": 1103,
+  "mask_frac": 0.45,
+  "h_range": [
+   324.0,
+   352.0
+  ],
+  "slope_correction": true,
+  "geoglows_id": 130787841,
+  "short": "Ubangi \u2013 Bangui",
+  "t0": "2018-10-14",
+  "dahiti_ids": [],
+  "compare": {},
+  "recommended_exclude_months": [],
+  "river": "Ubangi"
+ },
+ {
+  "key": "kasai_kwamouth",
+  "name": "Kasai River near Kwamouth (DR Congo) \u00b7 Rivi\u00e8re Kasa\u00ef pr\u00e8s de Kwamouth (RD Congo)",
+  "lat": -3.08923638,
+  "lon": 16.3639621,
+  "swot_reach": "13221000021",
+  "swot_up": "13221000031",
+  "swot_down": "13221000011",
+  "mask_width_m": 766,
+  "mask_frac": 0.45,
+  "h_range": [
+   266.0,
+   296.0
+  ],
+  "slope_correction": true,
+  "geoglows_id": 130743782,
+  "short": "Kasai \u2013 Kwamouth",
+  "t0": "2018-10-14",
+  "dahiti_ids": [],
+  "compare": {},
+  "recommended_exclude_months": [],
+  "river": "Kasai"
+ },
+ {
+  "key": "lualaba_kindu",
+  "name": "Lualaba (upper Congo) at Kindu (DR Congo) \u00b7 Lualaba (haut Congo) \u00e0 Kindu (RD Congo)",
+  "lat": -3.11433871,
+  "lon": 25.9407761,
+  "swot_reach": "13279900051",
+  "swot_up": "13279900061",
+  "swot_down": "13279900041",
+  "mask_width_m": 945,
+  "mask_frac": 0.45,
+  "h_range": [
+   436.0,
+   468.0
+  ],
+  "slope_correction": true,
+  "geoglows_id": 130742067,
+  "short": "Lualaba \u2013 Kindu",
+  "t0": "2018-10-14",
+  "dahiti_ids": [],
+  "compare": {},
+  "recommended_exclude_months": [],
+  "river": "Lualaba"
+ },
+ {
+  "key": "sangha_ouesso",
+  "name": "Sangha River near Ouesso (Rep. Congo) \u00b7 Rivi\u00e8re Sangha pr\u00e8s de Ouesso (R\u00e9p. du Congo)",
+  "lat": 1.45027909,
+  "lon": 16.176239,
+  "swot_reach": "13245000311",
+  "swot_up": "13245000321",
+  "swot_down": "13245000301",
+  "mask_width_m": 629,
+  "mask_frac": 0.45,
+  "h_range": [
+   314.0,
+   339.0
+  ],
+  "slope_correction": true,
+  "geoglows_id": 130758906,
+  "short": "Sangha \u2013 Ouesso",
+  "t0": "2018-10-14",
+  "dahiti_ids": [],
+  "compare": {},
+  "recommended_exclude_months": [],
+  "river": "Sangha"
+ }
+]

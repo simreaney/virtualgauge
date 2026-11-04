@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "virtualgauge"
+version = "0.1.0"
+description = "Virtual river gauges from satellite altimetry (ICESat-2, SWOT) — a simple bilingual (EN/FR) teaching toolkit"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "geopandas>=0.14",
+    "shapely>=2.0",
+    "pyproj>=3.4",
+    "pyogrio>=0.7",
+    "pyarrow>=12",
+    "folium>=0.15",
+    "requests>=2.28",
+    "ipywidgets>=7.6",
+    "sliderule>=5.8,<6",
+]
+
+[project.urls]
+Homepage = "https://github.com/simreaney/virtualgauge"
+
+[project.optional-dependencies]
+dev = ["pytest", "nbclient", "nbformat", "ipykernel", "build"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+virtualgauge = ["data/*", "data/locations/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["online: needs internet (run by hand before a course)"]
