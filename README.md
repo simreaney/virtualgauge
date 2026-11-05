@@ -44,7 +44,7 @@ pip install -e .              # the package (from this folder) · le package
 jupyter lab Virtual_River_Gauges_Student.ipynb
 ```
 
-**Google Colab:** click the *Open in Colab* badge above, then *Runtime ▸ Run all*. The hidden setup cell installs the package from GitHub (`pip install git+https://github.com/simreaney/virtualgauge`). If Colab cannot install from GitHub, download `virtualgauge-0.1.0-py3-none-any.whl` from the [Releases page](https://github.com/simreaney/virtualgauge/releases) and upload it to Colab together with the notebook.
+**Google Colab:** click the *Open in Colab* badge above, then *Runtime ▸ Run all*. The hidden setup cell installs the package from GitHub (`pip install git+https://github.com/simreaney/virtualgauge`). If Colab cannot install from GitHub, download `virtualgauge-0.1.1-py3-none-any.whl` from the [Releases page](https://github.com/simreaney/virtualgauge/releases) and upload it to Colab together with the notebook.
 **Google Colab :** cliquez sur le badge *Open in Colab* ci-dessus, puis *Exécution ▸ Tout exécuter*. La cellule cachée installe le package depuis GitHub. Si Colab ne peut pas installer depuis GitHub, téléchargez le fichier `.whl` depuis la page [Releases](https://github.com/simreaney/virtualgauge/releases) et téléversez-le dans Colab avec le notebook.
 
 **Anywhere else · Ailleurs :** `pip install git+https://github.com/simreaney/virtualgauge`

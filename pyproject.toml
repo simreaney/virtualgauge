@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "virtualgauge"
-version = "0.1.0"
+version = "0.1.1"
 description = "Virtual river gauges from satellite altimetry (ICESat-2, SWOT) — a simple bilingual (EN/FR) teaching toolkit"
 readme = "README.md"
 license = "GPL-3.0-or-later"

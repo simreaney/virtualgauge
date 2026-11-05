@@ -21,7 +21,7 @@ from .sites import PRESETS, Params, Site, sites
 from .station import Station, build_station, flood_catch
 from .style import use_style
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = ["build_station", "Station", "Site", "Params", "sites", "flood_catch", "compare_stations", "congo_map",
            "world_map", "reaches_near", "explore", "explore_map", "explore_locations", "set_language", "get_language", "configure",
