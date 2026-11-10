@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/banner_dark.png">
+  <img alt="virtualgauge: world map drawn from the 248,673 SWOT river reaches, with the 31 ready-made stations · carte du monde des 248 673 tronçons SWOT et des 31 stations prêtes" src="docs/images/banner_light.png" width="100%">
+</picture>
+
 # Virtual river gauges from satellite altimetry · Stations hydrométriques virtuelles par altimétrie satellitaire
 
 [![Open in Colab · Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/simreaney/virtualgauge/blob/main/Virtual_River_Gauges_Student.ipynb)
@@ -5,6 +10,34 @@
 Bilingual (English / French) teaching material for hydrologists in national services: build virtual river gauges from real ICESat-2 and SWOT satellite data, with worked examples on the **Congo at Kinshasa–Brazzaville (DR Congo)** and the **Rewa River (Fiji)**, six more Congo-basin stations, nine stations in **Botswana**, ready-made examples on every continent, and any river in the world.
 
 Matériel pédagogique bilingue (anglais / français) pour les hydrologues des services nationaux : construire des stations hydrométriques virtuelles à partir de vraies données ICESat-2 et SWOT, avec des exemples sur le **Congo à Kinshasa–Brazzaville (RD Congo)** et la **rivière Rewa (Fidji)**, six autres stations du bassin du Congo, neuf stations au **Botswana**, des exemples prêts sur tous les continents, et toute rivière du monde.
+
+## From satellite to discharge · Du satellite au débit
+
+The Congo at Kinshasa–Brazzaville, drawn from the bundled data with no internet connection. · Le Congo à Kinshasa–Brazzaville, tracé avec les données fournies, sans connexion internet.
+
+**1. Water levels · Niveaux d'eau** — `congo.levels()`\
+SWOT (blue, from 2023) and ICESat-2 (orange, from 2019) combined into one record of the river's level.\
+SWOT (bleu, depuis 2023) et ICESat-2 (orange, depuis 2019) réunis en une seule série de niveaux du fleuve.
+
+![Congo at Kinshasa: water levels from SWOT and ICESat-2 · Congo à Kinshasa : niveaux SWOT et ICESat-2](docs/images/congo_levels.png)
+
+**2. Rating curve · Courbe de tarage** — `congo.rating(exclude_months=[3, 4, 5, 6])`\
+Each satellite level is paired with the GEOGloWS model discharge on the same day, and a curve Q = a·(h − h₀)ᵇ is fitted (NSE 0.88). March–June are left out (grey crosses) because the model is inconsistent with the river in those months. The grey band is the 95 % range of the curve.\
+Chaque niveau satellitaire est associé au débit du modèle GEOGloWS du même jour, puis on ajuste une courbe Q = a·(h − h₀)ᵇ (NSE 0,88). Les mois de mars à juin sont exclus (croix grises) car le modèle est incohérent ces mois-là. La bande grise est l'intervalle à 95 % de la courbe.
+
+<img alt="Rating curve for the Congo at Kinshasa · Courbe de tarage du Congo à Kinshasa" src="docs/images/congo_rating.png" width="80%">
+
+**3. Virtual discharge · Débit virtuel** — `congo.discharge()`\
+The curve turns every satellite level into a discharge (dots, with bars from the 95 % range), shown against the model (green line).\
+La courbe transforme chaque niveau satellitaire en débit (points, avec barres tirées de l'intervalle à 95 %), comparé au modèle (ligne verte).
+
+![Congo at Kinshasa: virtual discharge against the GEOGloWS model · Congo à Kinshasa : débit virtuel et modèle GEOGloWS](docs/images/congo_discharge.png)
+
+**Compare stations · Comparer des stations** — `vg.compare_stations(["okavango_mohembo", "okavango_seronga", "chobe_kasane", "zambezi_kazungula"])`\
+The Okavango's flood peaks at Mohembo in April and reaches Seronga, smaller, a month later; the Chobe and the Zambezi peak in May.\
+La crue de l'Okavango culmine à Mohembo en avril et atteint Seronga, plus faible, un mois plus tard ; le Chobe et le Zambèze culminent en mai.
+
+![Water levels on the Okavango, Chobe and Zambezi in Botswana · Niveaux de l'Okavango, du Chobe et du Zambèze au Botswana](docs/images/botswana_levels.png)
 
 ## Two notebooks · Deux notebooks
 
@@ -58,7 +91,8 @@ The trainer notebook only needs `pip install -r requirements.txt` · Le notebook
 | `src/virtualgauge/` | The package; `messages.py` holds every English/French text (for the francophone review) · tous les textes EN/FR |
 | `src/virtualgauge/data/` | Bundled real data + `MANIFEST.json` (checksums, sources, dates) · données fournies |
 | `tests/` | `pytest` — offline checks, including exact agreement with the trainer notebook · contrôles hors ligne |
-| `tools/` | Rebuild the student notebook, the bundled data, the location data; `check_wheel.sh` · outils |
+| `tools/` | Rebuild the student notebook, the bundled data, the location data, the README figures (`make_readme_figures.py`); `check_wheel.sh` · outils |
+| `docs/images/` | README banner and figures, drawn offline from the bundled data · bannière et figures du README |
 | `cache/`, `outputs/`, `data/` | Downloads, results, your own gauge files (see `data/README.md`) · téléchargements, résultats, vos fichiers |
 
 ## Data and credits · Données et remerciements
