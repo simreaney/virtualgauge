@@ -186,6 +186,30 @@
    "sha256": "a4d59dbe2c2a362610ec60eb98df389157472579fa8e4184576caacb17d1a781",
    "source": "SlideRule atl13x \u2014 ICESat-2 ATL13 v007"
   },
+  "flood_kinshasa_2024_dem.parquet": {
+   "bytes": 217280,
+   "downloaded_utc": "2026-11-11T08:53:56+00:00",
+   "sha256": "72955ed4d98fc6275c018f4b3be86ce5dc2ed3d9a11fb55bb1a9ba6f17e1b16a",
+   "source": "Copernicus DEM GLO-30 (AWS open data): Copernicus_DSM_COG_10_S05_00_E015_00_DEM.tif"
+  },
+  "flood_kinshasa_2024_search.json": {
+   "bytes": 10659,
+   "downloaded_utc": "2026-11-11T08:52:54+00:00",
+   "sha256": "c575527d610f1970b0cd493cdad4b346366be300b183a0a95eef53122902f007",
+   "source": "NASA CMR SWOT_L2_HR_Raster_100m_D 2023-07-26..2024-03-31"
+  },
+  "flood_okavango_2025_dem.parquet": {
+   "bytes": 155319,
+   "downloaded_utc": "2026-11-11T08:55:40+00:00",
+   "sha256": "c11974e72eaad38177d0178fc8bdc544aabcf0048d22947e83cdbb6d69467911",
+   "source": "Copernicus DEM GLO-30 (AWS open data): Copernicus_DSM_COG_10_S20_00_E022_00_DEM.tif, Copernicus_DSM_COG_10_S19_00_E022_00_DEM.tif"
+  },
+  "flood_okavango_2025_search.json": {
+   "bytes": 23819,
+   "downloaded_utc": "2026-11-11T08:53:56+00:00",
+   "sha256": "03bfa14a7ed71a3d2d8e78c5cb8f1c97065d9a6c0f1aae6b7a55ece34ff03252",
+   "source": "NASA CMR SWOT_L2_HR_Raster_100m_D 2024-09-01..2025-08-31"
+  },
   "geoglows_120797655.csv": {
    "bytes": 141723,
    "downloaded_utc": "2026-11-04T13:45:07+00:00",
@@ -323,6 +347,18 @@
    "downloaded_utc": "2026-11-03T21:18:53+00:00",
    "sha256": "e655837ec9c43b26ca6b1ca1b37d2270d2431cf5d7379b3beb8c6a4e03ae1a9b",
    "source": "https://geoglows.ecmwf.int/api/v2/retrospectivemonthly/130594908"
+  },
+  "survey_congo_levels.parquet": {
+   "bytes": 3074798,
+   "downloaded_utc": "2026-11-16T13:38:47+00:00",
+   "sha256": "fb958cf49cee4d4befa556fa93396cddd338d220b03dd5ad7243a7d6a47632e9",
+   "source": "Hydrocron \u2014 SWOT RiverSP reach (Version D), 4444 reaches"
+  },
+  "survey_congo_reaches.parquet": {
+   "bytes": 131864,
+   "downloaded_utc": "2026-11-16T13:38:47+00:00",
+   "sha256": "bfe9d543d95f68aa6e05bf219e536653c82531fbe3afbde98d101351a6a2889a",
+   "source": "Hydrocron \u2014 SWOT RiverSP reach (Version D), 4444 reaches"
   },
   "swot_reach_12279000211.csv": {
    "bytes": 25954,

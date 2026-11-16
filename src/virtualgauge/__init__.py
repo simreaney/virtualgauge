@@ -7,25 +7,37 @@ virtualgauge — des stations hydrométriques virtuelles par altimétrie satelli
     congo.levels()
     congo.rating(exclude_months=[3, 4, 5, 6])
     congo.discharge()
+
+    area = vg.flood_area("kinshasa_2024")      # flood extent and depth from SWOT (English only)
+    flood = vg.flood_event("kinshasa_2024")
+    flood.depth()
+
+    congo = vg.river_survey("congo")           # every SWOT reach of the Congo basin, and its navigability (English only)
+    congo.navigability(); congo.map()
 """
 import pandas as pd
 
 from . import settings, store
 from .explore import explore, explore_locations, explore_map
+from .flood import FloodParams, earthdata_login, flood_area, flood_event, flood_examples
+from .flood_explorer import flood_explorer
 from .i18n import get_language, set_language, t
 from .local_files import load_gauge, load_grdc_daily
 from .locations import compare_stations, congo_map, reaches_near, world_map
+from .navigation import RiverSurvey, SurveyParams, river_survey
 from .results import Result
 from .settings import configure
 from .sites import PRESETS, Params, Site, sites
 from .station import Station, build_station, flood_catch
 from .style import use_style
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 __all__ = ["build_station", "Station", "Site", "Params", "sites", "flood_catch", "compare_stations", "congo_map",
            "world_map", "reaches_near", "explore", "explore_map", "explore_locations", "set_language", "get_language", "configure",
-           "status", "credits", "load_gauge", "load_grdc_daily", "use_style", "Result"]
+           "status", "credits", "load_gauge", "load_grdc_daily", "use_style", "Result",
+           "flood_area", "flood_event", "flood_examples", "flood_explorer", "earthdata_login", "FloodParams",
+           "river_survey", "RiverSurvey", "SurveyParams"]
 
 
 def status():

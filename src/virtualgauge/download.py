@@ -9,6 +9,7 @@ import logging
 import os
 import re
 import time
+from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
@@ -207,3 +208,194 @@ def dahiti_levels(dahiti_id, api_key=None, refresh=None):
         return df, f"DAHITI API v2 download-water-level {dahiti_id}"
     return store.load_or_fetch(f"dahiti_{dahiti_id}.csv", lambda p: pd.read_csv(p, parse_dates=["time"]), fetch,
                                lambda d, p: d.to_csv(p, index=False), refresh=refresh)
+
+
+# --- SWOT raster (flood mapping) -----------------------------------------------------------------------------
+# English only for now. Search: NASA CMR (no login). Download: PO.DAAC, free NASA Earthdata login (earthaccess).
+CMR_GRANULES = "https://cmr.earthdata.nasa.gov/search/granules.json"
+RASTER_SHORT = "SWOT_L2_HR_Raster_100m_D"
+RASTER_VARS = {"wse": "wse", "wse_qual": "wse_qual", "wse_uncert": "wse_uncert", "water_frac": "water_frac",
+               "dark_frac": "dark_frac", "layover": "layover_impact"}
+_RASTER_ID = re.compile(r"_x_x_x_(\d{3})_(\d{3})_(\d{3})([FP])_(\d{8}T\d{6})_")
+
+
+class NeedLogin(RuntimeError):
+    """Raised when a SWOT raster download needs a NASA Earthdata login."""
+
+
+class MissingExtras(RuntimeError):
+    """Raised when the optional flood libraries (earthaccess, xarray, h5netcdf, rasterio) are not installed."""
+
+
+def earthaccess_session(interactive=False, persist=False):
+    """Log in to NASA Earthdata without prompting (environment, then ~/.netrc), or with a prompt if interactive.
+    Returns the earthaccess module, or raises NeedLogin / MissingExtras."""
+    try:
+        import earthaccess
+    except ImportError as e:
+        raise MissingExtras(str(e)) from e
+    auth = getattr(earthaccess, "__auth__", None)
+    if auth is not None and auth.authenticated:
+        return earthaccess
+    for strategy in ("environment", "netrc") + (("interactive",) if interactive else ()):
+        try:
+            earthaccess.login(strategy=strategy, persist=persist and strategy == "interactive")
+        except Exception:
+            continue
+        if earthaccess.__auth__.authenticated:
+            return earthaccess
+    raise NeedLogin("NASA Earthdata login needed")
+
+
+def _ring(poly_str):
+    """CMR polygon string 'lat lon lat lon …' -> [(lon, lat), …]"""
+    v = list(map(float, poly_str.split()))
+    return list(zip(v[1::2], v[0::2]))
+
+
+def _unwrap(coords, lon0):
+    return [(lon0 + ((x - lon0 + 180) % 360) - 180, y) for x, y in coords]
+
+
+def raster_scenes(entries, polygon_ll):
+    """CMR entries -> one row per SWOT raster scene that touches the polygon (duplicates and false matches removed).
+    CMR matches scenes that cross the 180° meridian to every search box, so the real footprint is tested here."""
+    from shapely.geometry import Polygon
+    lon0 = polygon_ll.centroid.x
+    rows = []
+    for e in entries:
+        m = _RASTER_ID.search(e.get("title", ""))
+        if not m or not e.get("polygons"):
+            continue
+        foot = Polygon(_unwrap(_ring(e["polygons"][0][0]), lon0))
+        if not foot.is_valid or not foot.intersects(polygon_ll):
+            continue
+        cycle, pass_, scene, _, start = m.groups()
+        rows.append(dict(cycle=cycle, pass_id=pass_, scene=scene, time=pd.Timestamp(e["time_start"]).tz_convert(None),
+                         footprint=foot.wkt, url=e["url"], updated=e.get("updated", ""), title=e["title"],
+                         mb=float(e.get("granule_size") or 0)))
+    cols = ["cycle", "pass_id", "scene", "time", "footprint", "url", "updated", "title", "mb"]
+    d = pd.DataFrame(rows, columns=cols)
+    if d.empty:
+        return d
+    d = d.sort_values("updated").drop_duplicates(["cycle", "pass_id", "scene"], keep="last")
+    return d.sort_values(["time", "scene"]).reset_index(drop=True)
+
+
+def swot_raster_search(name, polygon_ll, start, end, refresh=None):
+    """SWOT raster scenes over a polygon between two dates (NASA CMR, no login) · cached as `name`."""
+    lon0 = polygon_ll.centroid.x
+    w, s, e, n = polygon_ll.bounds
+
+    def fetch():
+        entries, page = [], 1
+        while True:
+            r = http_get(CMR_GRANULES, dict(short_name=RASTER_SHORT, bounding_box=f"{w:.5f},{s:.5f},{e:.5f},{n:.5f}",
+                                            temporal=f"{start}T00:00:00Z,{end}T23:59:59Z", page_size=2000,
+                                            page_num=page), timeout=120)
+            r.raise_for_status()
+            feed = r.json()["feed"]["entry"]
+            for x in feed:
+                url = next((lk["href"] for lk in x.get("links", []) if lk["href"].endswith(".nc")
+                            and lk["href"].startswith("https://")), None)
+                if url:
+                    entries.append(dict(title=x["title"], time_start=x["time_start"], updated=x.get("updated", ""),
+                                        polygons=x.get("polygons"), granule_size=x.get("granule_size"), url=url))
+            if len(feed) < 2000:
+                break
+            page += 1
+        kept = raster_scenes(entries, polygon_ll)                 # save only the scenes that touch the polygon
+        titles = set(kept.title)
+        return [en for en in entries if en["title"] in titles], f"NASA CMR {RASTER_SHORT} {start}..{end}"
+    entries = store.load_or_fetch(name, lambda p: json.loads(p.read_text()), fetch,
+                                  lambda d, p: p.write_text(json.dumps(d)), refresh=refresh)
+    return raster_scenes(entries, polygon_ll)
+
+
+def swot_raster_pass(name, grid, scenes, refresh=None):
+    """Download the scenes of one SWOT pass, keep the cells of `grid`, and save them as a small table `name`.
+    Needs a NASA Earthdata login. The large original files are deleted once clipped."""
+    def fetch():
+        ea = earthaccess_session()
+        try:
+            import xarray  # noqa: F401
+        except ImportError as e:
+            raise MissingExtras(str(e)) from e
+        from .flood import clip_scene
+        tmp = store.settings.cache_dir() / "swot_raster_tmp"
+        tmp.mkdir(parents=True, exist_ok=True)
+        frames = []
+        for sc in scenes.itertuples():
+            files = ea.download([sc.url], local_path=str(tmp), show_progress=False)
+            if not files:
+                raise RuntimeError(f"download failed: {sc.url}")
+            try:
+                frames.append(clip_scene(files[0], grid, sc.footprint))
+            finally:
+                for f in files:
+                    Path(f).unlink(missing_ok=True)
+        from .flood import merge_scenes
+        return merge_scenes(frames), f"PO.DAAC {RASTER_SHORT}: " + ", ".join(scenes.title)
+    return store.load_or_fetch(name, pd.read_parquet, fetch, lambda d, p: d.to_parquet(p, index=False, compression="zstd"),
+                               refresh=refresh)
+
+
+def _dem_tile(lat, lon):
+    ns, ew = ("N" if lat >= 0 else "S"), ("E" if lon >= 0 else "W")
+    n = f"Copernicus_DSM_COG_10_{ns}{abs(lat):02d}_00_{ew}{abs(lon):03d}_00_DEM"
+    return f"https://copernicus-dem-30m.s3.amazonaws.com/{n}/{n}.tif"
+
+
+def copernicus_dem(name, grid, refresh=None):
+    """Copernicus GLO-30 ground heights (EGM2008) averaged onto `grid` (AWS open data, no login)."""
+    def fetch():
+        try:
+            import rasterio
+            from rasterio.warp import Resampling, reproject
+            from rasterio.windows import from_bounds
+        except ImportError as e:
+            raise MissingExtras(str(e)) from e
+        import math
+        import numpy as np
+        w, s, e, n = grid.bounds_ll(pad_deg=0.01)
+        out = np.full((grid.ny, grid.nx), np.nan, dtype="float32")
+        # A stalled or cut HTTP range request must fail and be retried, never hang the notebook; no in-memory cache,
+        # so a retry fetches the bytes again instead of re-reading a truncated block.
+        env = dict(GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR", CPL_VSIL_CURL_ALLOWED_EXTENSIONS=".tif",
+                   GDAL_HTTP_TIMEOUT="30", GDAL_HTTP_CONNECTTIMEOUT="20", GDAL_HTTP_VERSION="1.1",
+                   GDAL_HTTP_MULTIPLEX="NO", GDAL_HTTP_MAX_RETRY="3", GDAL_HTTP_RETRY_DELAY="2",
+                   CPL_VSIL_CURL_NON_CACHED="/vsicurl/https://copernicus-dem-30m.s3.amazonaws.com/")
+
+        def read(url, bounds):
+            for attempt in range(3):
+                try:
+                    with rasterio.open("/vsicurl/" + url) as src:
+                        win = from_bounds(*bounds, src.transform).round_offsets().round_lengths()
+                        arr = src.read(1, window=win, boundless=True, fill_value=np.nan).astype("float32")
+                        return arr, src.window_transform(win)
+                except rasterio.errors.RasterioIOError:
+                    if attempt == 2:
+                        raise
+                    time.sleep(3 * (attempt + 1))
+
+        urls = []
+        with rasterio.Env(**env):
+            for lat in range(math.floor(s), math.floor(n) + 1):
+                for lon in range(math.floor(w), math.floor(e) + 1):
+                    url = _dem_tile(lat, lon)
+                    if requests.head(url, timeout=30).status_code in (403, 404):   # no tile here = open sea
+                        continue
+                    arr, tr = read(url, (max(w, lon), max(s, lat), min(e, lon + 1), min(n, lat + 1)))
+                    part = np.full_like(out, np.nan)
+                    reproject(arr, part, src_transform=tr, src_crs="EPSG:4326", dst_transform=grid.transform(),
+                              dst_crs=grid.crs, resampling=Resampling.average, src_nodata=np.nan, dst_nodata=np.nan)
+                    out = np.where(np.isnan(out), part, out)
+                    urls.append(url)
+        if not urls:
+            raise RuntimeError("no Copernicus DEM tile here")
+        r, c = np.nonzero(np.isfinite(out))
+        dem = np.round(out[r, c], 1).astype("float32")      # 0.1 m is plenty (the DEM is good to a few metres)
+        return (pd.DataFrame({"r": r.astype("int32"), "c": c.astype("int32"), "dem": dem}),
+                "Copernicus DEM GLO-30 (AWS open data): " + ", ".join(u.rsplit("/", 1)[1] for u in urls))
+    return store.load_or_fetch(name, pd.read_parquet, fetch, lambda d, p: d.to_parquet(p, index=False, compression="zstd"),
+                               refresh=refresh)

@@ -1,0 +1,45 @@
+{
+ "note": "NASA CMR granules.json for SWOT_L2_HR_Raster_100m_D over Kinshasa, 15-20 Dec 2023, trimmed as download.swot_raster_search stores them. The last entry is a copy of the Kinshasa scene with an older 'updated' date (a duplicate). The UTM60/UTM01 scenes cross the 180\u00b0 meridian and are wrongly matched by CMR to every search box.",
+ "entries": [
+  {
+   "title": "SWOT_L2_HR_Raster_100m_UTM60W_N_x_x_x_008_073_140F_20231216T211956_20231216T212013_PGD0_01_swot",
+   "time_start": "2023-12-16T21:19:56.071Z",
+   "updated": "2025-11-25T00:56:52.471Z",
+   "polygons": null,
+   "granule_size": "49.03408622741699",
+   "url": "https://archive.swot.podaac.earthdata.nasa.gov/podaac-swot-ops-cumulus-protected/SWOT_L2_HR_Raster_D/SWOT_L2_HR_Raster_100m_UTM60W_N_x_x_x_008_073_140F_20231216T211956_20231216T212013_PGD0_01.nc"
+  },
+  {
+   "title": "SWOT_L2_HR_Raster_100m_UTM33M_N_x_x_x_008_111_074F_20231218T053255_20231218T053316_PGD0_01_swot",
+   "time_start": "2023-12-18T05:32:55.677Z",
+   "updated": "2025-11-24T20:09:01.056Z",
+   "polygons": [
+    [
+     "-4.496588 14.9595556 -4.6652875 16.1007436 -3.5199236 16.2678563 -3.3516832 15.1281871 -4.496588 14.9595556"
+    ]
+   ],
+   "granule_size": "31.084275245666504",
+   "url": "https://archive.swot.podaac.earthdata.nasa.gov/podaac-swot-ops-cumulus-protected/SWOT_L2_HR_Raster_D/SWOT_L2_HR_Raster_100m_UTM33M_N_x_x_x_008_111_074F_20231218T053255_20231218T053316_PGD0_01.nc"
+  },
+  {
+   "title": "SWOT_L2_HR_Raster_100m_UTM01W_N_x_x_x_008_138_018F_20231219T042315_20231219T042337_PGD0_01_swot",
+   "time_start": "2023-12-19T04:23:15.910Z",
+   "updated": "2025-11-24T18:43:51.118Z",
+   "polygons": null,
+   "granule_size": "66.33048248291016",
+   "url": "https://archive.swot.podaac.earthdata.nasa.gov/podaac-swot-ops-cumulus-protected/SWOT_L2_HR_Raster_D/SWOT_L2_HR_Raster_100m_UTM01W_N_x_x_x_008_138_018F_20231219T042315_20231219T042337_PGD0_01.nc"
+  },
+  {
+   "title": "SWOT_L2_HR_Raster_100m_UTM33M_N_x_x_x_008_111_074F_20231218T053255_20231218T053316_PGD0_01_swot",
+   "time_start": "2023-12-18T05:32:55.677Z",
+   "updated": "2024-01-01T00:00:00.000Z",
+   "polygons": [
+    [
+     "-4.496588 14.9595556 -4.6652875 16.1007436 -3.5199236 16.2678563 -3.3516832 15.1281871 -4.496588 14.9595556"
+    ]
+   ],
+   "granule_size": "31.084275245666504",
+   "url": "https://archive.swot.podaac.earthdata.nasa.gov/podaac-swot-ops-cumulus-protected/SWOT_L2_HR_Raster_D/SWOT_L2_HR_Raster_100m_UTM33M_N_x_x_x_008_111_074F_20231218T053255_20231218T053316_PGD0_01.nc"
+  }
+ ]
+}

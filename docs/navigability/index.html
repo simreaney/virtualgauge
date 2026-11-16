@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Congo basin navigability — live from SWOT</title>
+<meta name="description" content="How navigable are the rivers of the Congo basin today? A navigability index for 4,444 river reaches, updated in your browser from the latest SWOT satellite water levels.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231c5cab'/%3E%3Cpath d='M5 21c4-6 7-6 11 0s7 6 11 0' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M5 13c4-6 7-6 11 0s7 6 11 0' fill='none' stroke='%2386b6ef' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="Navigability summary">
+    <header class="head">
+      <p class="eyebrow">Congo basin · SWOT satellite</p>
+      <h1>Navigability index</h1>
+      <p class="date" id="date">&nbsp;</p>
+      <p class="lede">0 = the lowest level SWOT has recorded on the reach since July 2023, 100 = the highest.</p>
+    </header>
+
+    <section class="status" id="status" aria-live="polite">
+      <div class="status-row">
+        <span class="dot" id="status-dot"></span>
+        <span class="status-text" id="status-text">Loading the river network…</span>
+        <button class="link" id="status-action" hidden></button>
+      </div>
+      <div class="progress" id="progress" hidden><span id="progress-bar"></span></div>
+      <p class="status-note" id="status-note" hidden></p>
+    </section>
+
+    <section class="block" id="reach" aria-labelledby="h-reach" hidden>
+      <div class="block-head">
+        <h2 id="h-reach">Selected reach</h2>
+        <button class="link" id="reach-close">Clear</button>
+      </div>
+      <div id="reach-body"></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-basin">
+      <h2 id="h-basin">The basin today</h2>
+      <div class="stats">
+        <div class="stat stat-main">
+          <span class="stat-value" id="s-median">–</span>
+          <span class="stat-label">median index</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="s-low">–</span>
+          <span class="stat-label">of river length at low water <span class="soft">(below 40)</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="s-high">–</span>
+          <span class="stat-label">at high water <span class="soft">(above 60)</span></span>
+        </div>
+      </div>
+      <div class="share" id="share" role="img" aria-label="Share of river length in each band"></div>
+      <table class="bands" id="bands">
+        <thead><tr><th scope="col">Index</th><th scope="col" class="num">Reaches</th><th scope="col" class="num">River length</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="block" aria-labelledby="h-ports">
+      <h2 id="h-ports">River ports</h2>
+      <ul class="ports" id="ports"></ul>
+      <p class="hint">Select a port, or any river on the map, for its levels.</p>
+    </section>
+
+    <section class="block about" aria-labelledby="h-about">
+      <h2 id="h-about">How to read it</h2>
+      <p class="formula">index = 100 × (latest level − lowest level) ÷ (highest level − lowest level)</p>
+      <p>Each reach is compared with its own record of water levels from the SWOT satellite. The index says where
+        the river stands between its lowest and highest recorded level. It is not a depth of water and does not
+        show whether a particular boat can pass.</p>
+      <p id="about-data"></p>
+      <p>Levels: SWOT L2 HR RiverSP reach product, Version D (NASA/CNES, PO.DAAC), through
+        <a href="https://podaac.github.io/hydrocron/" rel="noopener">Hydrocron</a>. River network: SWORD v17b.
+        Made with <a href="https://github.com/simreaney/virtualgauge" rel="noopener">virtualgauge</a>.</p>
+    </section>
+  </aside>
+
+  <main class="stage">
+    <div id="map" aria-label="Map of the navigability index of the Congo basin"></div>
+    <div class="basemap" role="group" aria-label="Background map">
+      <button data-base="plain" aria-pressed="true">Plain</button>
+      <button data-base="streets" aria-pressed="false">Streets</button>
+      <button data-base="satellite" aria-pressed="false">Satellite</button>
+    </div>
+    <div class="scale" aria-hidden="true">
+      <div class="scale-bar" id="scale-bar"></div>
+      <div class="scale-ends"><span>0 · low water</span><span>high water · 100</span></div>
+    </div>
+  </main>
+</div>
+<noscript><p class="noscript">This map needs JavaScript to draw the rivers and fetch the SWOT levels.</p></noscript>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
