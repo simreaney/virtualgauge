@@ -103,10 +103,18 @@ def figures():
         OUT / "botswana_levels.png", dpi=DPI)
 
 
+def navigability():
+    """The navigability map of the Congo basin, from the bundled survey (English only)"""
+    vg.set_language("en")
+    vg.river_survey("congo").navigability().save(OUT / "congo_navigability.png", dpi=DPI)
+    vg.set_language("both")
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     for theme in THEMES:
         banner(theme)
     figures()
+    navigability()
     for f in sorted(OUT.glob("*.png")):
         print(f"{f.relative_to(ROOT)}  {f.stat().st_size // 1024} KB")

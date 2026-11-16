@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the wheel, install it (with the flood extras) in a fresh environment, and run both student notebooks
+# Build the wheel, install it (with the flood extras) in a fresh environment, and run the three student notebooks
 # OFFLINE in an empty folder.
 # Proves the bundled data are used and nothing depends on this project folder.
 # Usage: tools/check_wheel.sh [work folder]   (PYTHON=python3.12 tools/check_wheel.sh to choose the interpreter)
@@ -16,7 +16,7 @@ echo "wheel: $WHEEL ($(du -h "$WHEEL" | cut -f1))"
 if [ -n "${EXTRA_PINS:-}" ]; then "$WORK/env/bin/pip" install -q $EXTRA_PINS; fi
 "$WORK/env/bin/pip" install -q "$WHEEL[flood]" nbclient nbformat ipykernel
 rm -rf "$WORK/run" && mkdir -p "$WORK/run"
-cp "$ROOT/Virtual_River_Gauges_Student.ipynb" "$ROOT/SWOT_Flood_Depth_Student.ipynb" "$WORK/run/"
+cp "$ROOT/Virtual_River_Gauges_Student.ipynb" "$ROOT/SWOT_Flood_Depth_Student.ipynb" "$ROOT/Congo_Navigability_Student.ipynb" "$WORK/run/"
 cd "$WORK/run"
 VG_OFFLINE=1 "$WORK/env/bin/python" - <<'EOF'
 import nbformat, nbclient, sys, virtualgauge as vg, pandas, numpy, geopandas, ipywidgets
@@ -24,7 +24,7 @@ print("python", sys.version.split()[0], "| pandas", pandas.__version__, "| numpy
       "| geopandas", geopandas.__version__, "| ipywidgets", ipywidgets.__version__)
 assert "site-packages" in vg.__file__, vg.__file__
 failed = 0
-for name in ["Virtual_River_Gauges_Student.ipynb", "SWOT_Flood_Depth_Student.ipynb"]:
+for name in ["Virtual_River_Gauges_Student.ipynb", "SWOT_Flood_Depth_Student.ipynb", "Congo_Navigability_Student.ipynb"]:
     nb = nbformat.read(name, 4)
     for c in nb.cells:
         if c.cell_type == "code":
@@ -37,4 +37,4 @@ for name in ["Virtual_River_Gauges_Student.ipynb", "SWOT_Flood_Depth_Student.ipy
     failed += len(errors)
 sys.exit(1 if failed else 0)
 EOF
-echo "OK — both student notebooks run offline from the installed wheel"
+echo "OK — the three student notebooks run offline from the installed wheel"

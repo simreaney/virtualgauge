@@ -348,6 +348,18 @@
    "sha256": "e655837ec9c43b26ca6b1ca1b37d2270d2431cf5d7379b3beb8c6a4e03ae1a9b",
    "source": "https://geoglows.ecmwf.int/api/v2/retrospectivemonthly/130594908"
   },
+  "survey_congo_levels.parquet": {
+   "bytes": 3074798,
+   "downloaded_utc": "2026-11-16T13:38:47+00:00",
+   "sha256": "fb958cf49cee4d4befa556fa93396cddd338d220b03dd5ad7243a7d6a47632e9",
+   "source": "Hydrocron \u2014 SWOT RiverSP reach (Version D), 4444 reaches"
+  },
+  "survey_congo_reaches.parquet": {
+   "bytes": 131864,
+   "downloaded_utc": "2026-11-16T13:38:47+00:00",
+   "sha256": "bfe9d543d95f68aa6e05bf219e536653c82531fbe3afbde98d101351a6a2889a",
+   "source": "Hydrocron \u2014 SWOT RiverSP reach (Version D), 4444 reaches"
+  },
   "swot_reach_12279000211.csv": {
    "bytes": 25954,
    "downloaded_utc": "2026-11-04T13:46:46+00:00",
