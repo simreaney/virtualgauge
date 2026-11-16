@@ -2,7 +2,7 @@
 
 Usage: python tools/sync_bundled_data.py <cache folder> [<cache folder> ...]
 (tools/build_curated_sites.py calls main() with `only`, the files of the stations it keeps)
-Only open data are copied (SWOT, ICESat-2, GEOGloWS). Never GRDC, DAHITI or agency gauge files.
+Only open data are copied (SWOT, ICESat-2, GEOGloWS, Copernicus DEM for the flood examples). Never GRDC, DAHITI or agency gauge files.
 """
 import hashlib
 import json
@@ -13,7 +13,8 @@ from pathlib import Path
 
 DEST = Path(__file__).resolve().parents[1] / "src" / "virtualgauge" / "data"
 ALLOWED = [r"^atl13_[\w-]+\.parquet$", r"^swot_reach_\d+(_line\.geojson|_info\.csv)?\.?(csv)?$",
-           r"^geoglows_\d+\.csv$", r"^geoglows_lookup_[-\d.]+_[-\d.]+\.json$"]
+           r"^geoglows_\d+\.csv$", r"^geoglows_lookup_[-\d.]+_[-\d.]+\.json$",
+           r"^flood_[a-z]+_\d{4}_(\d{3}_\d{3}|dem)\.parquet$", r"^flood_[a-z]+_\d{4}_search\.json$"]
 
 
 def allowed(name):

@@ -1,5 +1,6 @@
 # downloaded data and results (the package ships its own copy of the open data)
 cache/
+cache_flood_examples/
 outputs/
 # your own gauge and GRDC files must never be shared
 data/gauge_*
