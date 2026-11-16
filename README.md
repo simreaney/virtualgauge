@@ -107,6 +107,14 @@ lists every setting). A reach's index uses its latest good level of the last 30 
 `vg.river_survey(reach_ids=[...])`. A copy of the whole Congo survey (downloaded 16 November 2026, 3 MB) is bundled,
 so the notebook also runs offline; refresh it with `python tools/build_navigability_data.py`.
 
+**As a web page.** `docs/navigability/` is the same map as a static site (plain HTML, CSS and JavaScript, Leaflet
+included — no build step, no server code). It ships each reach's lowest and highest level, draws the map at once, then
+your browser asks Hydrocron for the SWOT levels measured since and updates the index, judging new levels with the same
+rules as the package (`tests/test_navigability_site.py` checks this). To publish it on GitHub Pages: *Settings → Pages →
+Deploy from a branch →* `main`, folder `/docs`; the page is then at `https://<user>.github.io/virtualgauge/navigability/`.
+To try it on your computer: `python -m http.server -d docs`, then open <http://localhost:8000/navigability/>. Rebuild
+its data now and then with `python tools/build_navigability_site.py`, so the ranges include new record levels.
+
 ## The `virtualgauge` package · Le package `virtualgauge`
 
 ```python
