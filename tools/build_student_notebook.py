@@ -75,11 +75,20 @@ Tous les résultats viennent de **vraies** données satellitaires et de modèle 
 
 code(r'''
 #@title Setup · Configuration { display-mode: "form" }
-import glob, importlib.util, subprocess, sys
+import glob, importlib, importlib.util, subprocess, sys
 if importlib.util.find_spec("virtualgauge") is None:          # install once (Colab / new computer)
     REPO_URL = "https://github.com/simreaney/virtualgauge"
     wheel = sorted(glob.glob("virtualgauge-*.whl"))
-    subprocess.run([sys.executable, "-m", "pip", "install", "-q", wheel[-1] if wheel else f"git+{REPO_URL}"])
+    source = wheel[-1] if wheel else f"git+{REPO_URL}"
+    print(f"Installing · Installation : {source}")
+    pip = subprocess.run([sys.executable, "-m", "pip", "install", "-q", source], capture_output=True, text=True)
+    importlib.invalidate_caches()
+    if pip.returncode != 0:
+        print((pip.stderr or pip.stdout)[-1500:])
+        raise RuntimeError(
+            "Could not install virtualgauge. Upload the virtualgauge-*.whl file (Files panel) and run this cell again.\n"
+            "Impossible d'installer virtualgauge. Téléversez le fichier virtualgauge-*.whl (panneau Fichiers) "
+            "et relancez cette cellule.")
 import virtualgauge as vg
 print(f"virtualgauge {vg.__version__} — ready · prêt")
 ''', hidden=True)
