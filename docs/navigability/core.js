@@ -100,3 +100,14 @@ export function indexAt(levels, low, high, now, maxAgeDays) {
   const index = Math.min(Math.max(raw, 0), 100);
   return { ...out, raw, index, band: bandOf(index), why: "" };
 }
+
+/** The reaches of the data file (docs/navigability/data/congo.json, column by column) as one object per reach. */
+export function unpack(d) {
+  const r = d.reaches;
+  return r.id.map((id, i) => ({
+    i, id, river: d.rivers[r.river[i]], lon: r.lon[i], lat: r.lat[i], width: r.width[i], km: r.km[i],
+    why: d.why[r.why[i]], n: r.n[i], low: r.low[i], high: r.high[i], lowT: r.low_t[i], highT: r.high_t[i],
+    median: r.median[i], far: r.far[i], jump: r.jump[i], saved: r.recent[i], levels: r.recent[i], line: r.line[i],
+    live: false, now: null,
+  }));
+}

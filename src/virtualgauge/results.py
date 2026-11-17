@@ -3,6 +3,8 @@
 Un résultat qui s'affiche tout seul dans un notebook : phrases, figure et tableau.
 """
 import base64
+import html as _html
+from urllib.parse import urlsplit
 
 import pandas as pd
 
@@ -25,6 +27,16 @@ def reason_label(code):
     return str(code)
 
 
+def _link_html(text, href, name=None):
+    """A download link, escaped; addresses other than relative or http(s) (e.g. javascript:) are left out"""
+    if urlsplit(str(href)).scheme.lower() not in ("", "http", "https"):
+        return ""
+    esc = lambda v: _html.escape(str(v), quote=True)
+    download = f' download="{esc(name)}"' if name else ""
+    return (f'<div style="margin:0 0 10px 18px"><a href="{esc(href)}"{download} '
+            f'style="font-family:system-ui,sans-serif">⬇ {esc(text)}</a></div>')
+
+
 class Result:
     """What every step returns · Ce que renvoie chaque étape.
 
@@ -32,10 +44,13 @@ class Result:
     .values  key numbers as a dict · chiffres clés
     .figure  the matplotlib figure (drawn in the current language) · la figure
     .save(path) save the figure · enregistrer la figure
+
+    links: download links shown under the sentences, as (text, href, file name or None). They are plain text and a
+    relative or http(s) address — never HTML — and are escaped here, so no caller can put markup into the output.
     """
 
     def __init__(self, heading, lines=(), figure=None, table=None, values=None, warnings=(), table_rows=12,
-                 display_table=None, extra_html=None):
+                 display_table=None, links=()):
         self.heading = heading            # (key, kwargs)
         self.lines = list(lines)          # [(key, kwargs), ...]
         self._figure = figure             # callable -> Figure, or None
@@ -44,7 +59,7 @@ class Result:
         self.warnings = list(warnings)
         self._rows = table_rows
         self._display_table = display_table   # callable -> DataFrame for display (translated labels)
-        self._extra_html = extra_html         # e.g. a download link, shown under the sentences
+        self.links = [l for l in links if l]  # [(text, href, download file name or None), ...]
 
     @property
     def figure(self):
@@ -64,8 +79,8 @@ class Result:
         for k, a in self.warnings:
             parts.append(f'<div style="margin-top:4px;color:#8a3a12">⚠️ {html(k, **a)}</div>')
         parts.append("</div>")
-        if self._extra_html:
-            parts.append(f'<div style="margin:0 0 10px 18px">{self._extra_html}</div>')
+        for text, href, name in self.links:
+            parts.append(_link_html(text, href, name))
         fig = self.figure
         if fig is not None:
             b64 = base64.b64encode(to_png(fig)).decode()

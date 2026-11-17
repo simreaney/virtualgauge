@@ -23,7 +23,6 @@ Data: SWOT L2 HR RiverSP reach product, Version D (NASA/CNES, PO.DAAC), through 
 """
 import gzip
 import hashlib
-import html as html_mod
 import io
 import json
 import math
@@ -33,6 +32,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, fields, replace
 from pathlib import Path
+from urllib.parse import quote
 
 import numpy as np
 import pandas as pd
@@ -933,7 +933,7 @@ class RiverSurvey:
             lines = [("nv_dl_local", dict(path=str(f.resolve()), size=size))]
             link = _link(f)
         layers = "reaches, ports" + (", levels" if levels else "")
-        return Result(("nv_h_download", {}), lines + [("nv_export_qgis", dict(layers=layers))], extra_html=link,
+        return Result(("nv_h_download", {}), lines + [("nv_export_qgis", dict(layers=layers))], links=[link],
                       values=dict(gpkg=str(f)))
 
 
@@ -942,13 +942,12 @@ def _on_colab():
 
 
 def _link(f):
-    """A download link to a file under the notebook's folder (Jupyter serves it), else nothing"""
+    """(text, relative address, file name) of a download link to a file under the notebook's folder (Jupyter serves
+    it), else None. Result escapes all three when it shows the link."""
     rel = os.path.relpath(f.resolve(), Path.cwd())
     if rel.startswith(".."):
         return None
-    href = html_mod.escape(Path(rel).as_posix(), quote=True)
-    return (f'<a href="{href}" download="{html_mod.escape(f.name, quote=True)}" style="font-family:system-ui,sans-serif">'
-            f'⬇ {html_mod.escape(t("nv_dl_link", name=f.name))}</a>')
+    return t("nv_dl_link", name=f.name), quote(Path(rel).as_posix()), f.name
 
 
 def _width_split(tab):

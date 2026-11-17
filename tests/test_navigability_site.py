@@ -59,3 +59,55 @@ def test_page_rules_match_package():
     assert (np.abs(theirs - ours)[both] < 0.5).mean() > 0.995
     print(f"{same}/{len(ids)} reaches keep the same levels; index within 0.5 on "
           f"{(np.abs(theirs - ours)[both] < 0.5).sum()}/{both.sum()}")
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs node")
+@pytest.mark.parametrize("lang", ["en", "fr"])
+def test_page_geopackage_opens_like_the_package(tmp_path, lang):
+    """The page writes its GeoPackage in the browser (gpkg.js, sql.js): GDAL reads it, with the package's index and
+    the package's QGIS style, in the page's language."""
+    import pyogrio
+    import virtualgauge as vg
+    from virtualgauge import navigation
+
+    out = tmp_path / f"page_{lang}.gpkg"
+    subprocess.run(["node", str(ROOT / "tests" / "navigability_gpkg_check.mjs"), str(out), lang], check=True,
+                   capture_output=True, text=True)
+    assert dict(pyogrio.list_layers(out).tolist()) == {"reaches": "MultiLineString", "ports": "Point",
+                                                       "layer_styles": None}
+    reaches = pyogrio.read_dataframe(out, layer="reaches")
+    assert len(reaches) == 4444 and reaches.geometry.notna().sum() >= 4440
+    assert reaches.crs.to_epsg() == 4326 and reaches.total_bounds[0] > 10 and reaches.total_bounds[3] < 10
+
+    vg.set_language(lang)
+    survey = vg.river_survey("congo", download=False)
+    ours = survey.to_dataframe().set_index("reach_id")["index"].reindex(reaches.reach_id).to_numpy()
+    theirs = reaches["index"].to_numpy(dtype=float)
+    assert (np.isnan(theirs) == np.isnan(ours)).mean() > 0.995
+    both = ~np.isnan(theirs) & ~np.isnan(ours)
+    assert (np.abs(theirs - ours)[both] < 0.5).mean() > 0.995
+    band0 = navigation.BANDS[0][1]
+    assert vg.t(band0) in set(reaches.band_name)                    # the band names of the chosen language
+
+    ports = pyogrio.read_dataframe(out, layer="ports")
+    assert {"Kinshasa", "Mbandaka", "Bangui"} <= set(ports.name)
+    styles = pyogrio.read_dataframe(out, layer="layer_styles")
+    assert set(styles.f_table_name) == {"reaches", "ports"} and (styles.f_geometry_column == "geom").all()
+    qml = dict(zip(styles.f_table_name, styles.styleQML))
+    assert 'attr="band"' in qml["reaches"] and vg.t(band0) in qml["reaches"]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs node")
+def test_page_words_in_both_languages():
+    """Every word the page asks for (data-i18n… in index.html, t("…") in app.js) exists in English and French."""
+    import re
+    js = "import('./docs/navigability/i18n.js').then((m) => process.stdout.write(JSON.stringify(m.STRINGS)))"
+    words = json.loads(subprocess.run(["node", "--input-type=module", "-e", js], cwd=ROOT, check=True,
+                                      capture_output=True, text=True).stdout)
+    page = (ROOT / "docs" / "navigability" / "index.html").read_text()
+    app = (ROOT / "docs" / "navigability" / "app.js").read_text()
+    keys = set(re.findall(r'data-i18n(?:-html|-aria)?="([^"]+)"', page)) | set(re.findall(r'\bt\("(\w+)"', app))
+    for lang in ("en", "fr"):
+        assert not keys - set(words[lang]), (lang, keys - set(words[lang]))
+        assert set(words[lang]["why"]) >= {"no SWOT data", "too noisy", "no recent level"}
+    assert set(words["en"]) == set(words["fr"])
