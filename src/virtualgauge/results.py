@@ -27,9 +27,22 @@ def reason_label(code):
     return str(code)
 
 
+def _safe_href(href):
+    """A relative address on this server (outputs/x.gpkg) or an http(s) address with a host. Not javascript: or data:,
+    not protocol-relative (//host/…, which leaves the server), and nothing a browser would read differently from
+    Python: no backslash (browsers read /\\host as //host), space or control character."""
+    h = str(href)
+    if not h or "\\" in h or any(c.isspace() or ord(c) < 32 or ord(c) == 127 for c in h):
+        return False
+    u = urlsplit(h)
+    if u.scheme:
+        return u.scheme.lower() in ("http", "https") and bool(u.netloc)
+    return not u.netloc and not h.startswith("//")
+
+
 def _link_html(text, href, name=None):
-    """A download link, escaped; addresses other than relative or http(s) (e.g. javascript:) are left out"""
-    if urlsplit(str(href)).scheme.lower() not in ("", "http", "https"):
+    """A download link, escaped; an address that is not safe (see _safe_href) is left out"""
+    if not _safe_href(href):
         return ""
     esc = lambda v: _html.escape(str(v), quote=True)
     download = f' download="{esc(name)}"' if name else ""
@@ -46,7 +59,8 @@ class Result:
     .save(path) save the figure · enregistrer la figure
 
     links: download links shown under the sentences, as (text, href, file name or None). They are plain text and a
-    relative or http(s) address — never HTML — and are escaped here, so no caller can put markup into the output.
+    relative or http(s) address — never HTML — and are escaped here, so no caller can put markup into the output;
+    other addresses (javascript:, //other-host/…) are left out.
     """
 
     def __init__(self, heading, lines=(), figure=None, table=None, values=None, warnings=(), table_rows=12,

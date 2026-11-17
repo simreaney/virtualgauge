@@ -111,3 +111,13 @@ def test_page_words_in_both_languages():
         assert not keys - set(words[lang]), (lang, keys - set(words[lang]))
         assert set(words[lang]["why"]) >= {"no SWOT data", "too noisy", "no recent level"}
     assert set(words["en"]) == set(words["fr"])
+
+
+def test_page_escapes_data_put_into_html():
+    """Names and IDs from the data file reach the page's HTML only through esc() (Leaflet tooltips are HTML too)."""
+    import re
+    app = (ROOT / "docs" / "navigability" / "app.js").read_text()
+    raw = re.findall(r"\$\{\s*(?:p|port|r|selected)\.(?:name|river|reach_id|id)\b", app)
+    assert raw == [], raw
+    assert not re.search(r"bindTooltip\(\s*(?:p|port)\.", app)
+    assert not re.search(r"\{\s*id:\s*r\.id\s*\}", app)

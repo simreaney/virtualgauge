@@ -388,3 +388,16 @@ def test_result_links_are_escaped():
     assert "<script>" not in html and "&lt;script&gt;" in html
     assert 'href="out/a&quot;b.gpkg"' in html and 'download="a&quot;b.gpkg"' in html
     assert "javascript:" not in html
+
+
+@pytest.mark.parametrize("href, shown", [
+    ("outputs/navigability_congo_2026-11-16.gpkg", True), ("outputs/a%20b.gpkg", True), ("/files/a.gpkg", True),
+    ("https://example.org/a.gpkg", True), ("http://example.org/a.gpkg", True),
+    ("//example.org/a.gpkg", False), ("/\\example.org/a.gpkg", False), ("\\\\example.org/a.gpkg", False),
+    ("javascript:alert(1)", False), (" javascript:alert(1)", False), ("java\tscript:alert(1)", False),
+    ("JAVASCRIPT:alert(1)", False), ("data:text/html,<b>x</b>", False), ("https:example.org", False),
+    ("ftp://example.org/a", False), ("", False)])
+def test_result_link_addresses(href, shown):
+    from virtualgauge.results import Result
+    html = Result(("h_export", {}), [], links=[("file", href, None)])._repr_html_()
+    assert ("<a href=" in html) == shown
