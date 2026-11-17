@@ -378,3 +378,13 @@ def test_student_notebook_builds(tmp_path):
         assert en.count("#") == fr.count("#") and en.count("\n- ") == fr.count("\n- ")
     assert any("download_geopackage" in c.source for c in nb.cells)
     assert 'vg.set_language(language)' in "\n".join(c.source for c in nb.cells)
+
+
+def test_result_links_are_escaped():
+    from virtualgauge.results import Result
+    r = Result(("h_export", {}), [], links=[('<script>alert(1)</script>', 'out/a"b.gpkg', 'a"b.gpkg'),
+                                           ("click", "javascript:alert(1)", None), None])
+    html = r._repr_html_()
+    assert "<script>" not in html and "&lt;script&gt;" in html
+    assert 'href="out/a&quot;b.gpkg"' in html and 'download="a&quot;b.gpkg"' in html
+    assert "javascript:" not in html
