@@ -35,7 +35,7 @@ class Result:
     """
 
     def __init__(self, heading, lines=(), figure=None, table=None, values=None, warnings=(), table_rows=12,
-                 display_table=None):
+                 display_table=None, extra_html=None):
         self.heading = heading            # (key, kwargs)
         self.lines = list(lines)          # [(key, kwargs), ...]
         self._figure = figure             # callable -> Figure, or None
@@ -44,6 +44,7 @@ class Result:
         self.warnings = list(warnings)
         self._rows = table_rows
         self._display_table = display_table   # callable -> DataFrame for display (translated labels)
+        self._extra_html = extra_html         # e.g. a download link, shown under the sentences
 
     @property
     def figure(self):
@@ -63,6 +64,8 @@ class Result:
         for k, a in self.warnings:
             parts.append(f'<div style="margin-top:4px;color:#8a3a12">⚠️ {html(k, **a)}</div>')
         parts.append("</div>")
+        if self._extra_html:
+            parts.append(f'<div style="margin:0 0 10px 18px">{self._extra_html}</div>')
         fig = self.figure
         if fig is not None:
             b64 = base64.b64encode(to_png(fig)).decode()

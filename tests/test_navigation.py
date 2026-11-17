@@ -257,3 +257,124 @@ def test_own_list_inside_the_congo_works_offline():
     s = vg.river_survey(reach_ids=ids, name="Around Kinshasa")
     assert not s.error and s.origin == "bundled" and len(s.table) == len(set(int(r) for r in ids))
     assert "Around Kinshasa" in s.navigability()._repr_html_()
+
+
+# --- French, and the language of the computer ---------------------------------------------------------------------
+@pytest.mark.parametrize("hints, lang", [(["fr-CD"], "fr"), (["fr_FR.UTF-8"], "fr"), (["French_France"], "fr"),
+                                         (["en-GB", "fr-FR"], "en"), (["", "C.UTF-8", "fr_BE"], "fr"),
+                                         (["POSIX", "C"], "en"), ([], "en")])
+def test_language_of_the_computer(monkeypatch, hints, lang):
+    from virtualgauge import i18n
+    monkeypatch.delenv("VG_LANG", raising=False)
+    monkeypatch.setattr(i18n, "_language_hints", lambda: iter(hints))
+    assert vg.detect_language() == lang
+    vg.set_language("auto")
+    assert vg.get_language() == lang
+    monkeypatch.setenv("VG_LANG", "fr")
+    assert vg.detect_language() == "fr"
+
+
+def test_dates_and_text_in_each_language():
+    from virtualgauge.i18n import Day
+    assert Day(pd.Timestamp("2026-11-01")).pair() == ("1 November 2026", "1er novembre 2026")
+    assert Day(pd.Timestamp("2025-08-16"), month=True).pair() == ("August 2025", "août 2025")
+    assert str(Day(pd.NaT)) == "—"
+    vg.set_language("fr")
+    assert vg.text("Hello", "Bonjour").data == "Bonjour"
+    vg.set_language("both")
+    assert vg.text("Hello", "Bonjour").data == "Hello\n\n> Bonjour"
+
+
+def test_every_navigability_message_is_translated():
+    same = [k for k, (en, fr) in MESSAGES.items() if k.startswith("nv_") and en == fr and k != "nv_col_port"]
+    assert same == []
+
+
+def test_survey_in_french(congo):
+    vg.set_language("fr")
+    card = repr(congo)
+    assert "Bassin du Congo" in card and "novembre 2026" in card
+    nav = congo.navigability("2025-08-01")._repr_html_()
+    assert "Indice de navigabilité" in nav and "1er août 2025" in nav and "classe" in nav
+    assert "très mauvaise" in repr(congo.reach("13273000011")) or "mauvaise" in repr(congo.reach("13273000011"))
+    assert "Le long du Lualaba et du Congo" in repr(congo.profile())
+    assert "port" in congo.ports()._repr_html_() and "rivière" in congo.ports()._repr_html_()
+    assert "Fond gris clair" in congo.map().get_root().render()
+    for r in [congo.coverage(), congo.cleaning(), congo.ranges(), congo.history()]:
+        assert "Not available" not in r._repr_html_() and "Non disponible" not in r._repr_html_()
+    vg.set_language("both")
+    assert "Navigability index · Indice de navigabilité" in repr(congo.navigability()).splitlines()[0] or \
+        " · " in repr(congo.navigability()).splitlines()[0]
+
+
+# --- GeoPackage ---------------------------------------------------------------------------------------------------
+def test_geopackage_opens_styled(congo, isolated):
+    import pyogrio
+    vg.set_language("en")
+    ex = congo.export()
+    gpkg = ex.values["gpkg"]
+    layers = dict(pyogrio.list_layers(gpkg).tolist())
+    assert layers == {"reaches": "MultiLineString", "ports": "Point", "layer_styles": None}
+    reaches = pyogrio.read_dataframe(gpkg, layer="reaches")
+    assert len(reaches) == 4444 and reaches.geometry.notna().sum() >= 4440
+    assert {"reach_id", "river_name", "low_m", "high_m", "range_m", "now_m", "now_date", "index", "band", "band_name",
+            "colour"} <= set(reaches.columns)
+    assert reaches["index"].dropna().between(0, 100).all() and (reaches.band >= -1).all()
+    with_index = reaches[reaches.band >= 0]
+    assert (with_index.colour == [nv.BANDS[b][2] for b in with_index.band]).all()
+    ports = pyogrio.read_dataframe(gpkg, layer="ports")
+    assert {"Kinshasa", "Mbandaka", "Bangui"} <= set(ports.name)
+    styles = pyogrio.read_dataframe(gpkg, layer="layer_styles")
+    assert set(styles.f_table_name) == {"reaches", "ports"} and styles.useAsDefault.all()
+    assert (styles.f_geometry_column == "geom").all() and (styles.f_table_schema == "").all()
+    qml = dict(zip(styles.f_table_name, styles.styleQML))
+    assert 'type="categorizedSymbol"' in qml["reaches"] and 'attr="band"' in qml["reaches"]
+    assert "80–100 very good" in qml["reaches"] and 'labelsEnabled="1"' in qml["ports"]
+    assert pyogrio.read_info(gpkg, layer="reaches")["dataset_metadata"]["date"] == ex.values["csv"][-14:-4]
+    assert "GeoPackage" in repr(ex) and ex.values["gpkg"].endswith(".gpkg")
+
+
+def test_geopackage_with_every_level(congo, isolated):
+    import pyogrio
+    gpkg = congo.export(levels=True).values["gpkg"]
+    assert "levels" in dict(pyogrio.list_layers(gpkg).tolist())
+    lv = pyogrio.read_dataframe(gpkg, layer="levels", max_features=1000)
+    assert {"reach_id", "time", "wse", "reason", "kept"} <= set(lv.columns)
+
+
+def test_download_geopackage_here_and_on_colab(congo, isolated, monkeypatch):
+    import sys
+    import types
+    monkeypatch.chdir(isolated)                       # outputs/ under the notebook's folder: a download link
+    here = congo.download_geopackage()
+    assert "already saved here" in repr(here) and '<a href="outputs/navigability_congo_' in here._repr_html_()
+    sent = []
+    colab = types.ModuleType("google.colab")
+    colab.files = types.SimpleNamespace(download=sent.append)
+    monkeypatch.setitem(sys.modules, "google", types.ModuleType("google"))
+    monkeypatch.setitem(sys.modules, "google.colab", colab)
+    on_colab = congo.download_geopackage()
+    assert sent and sent[0].endswith(".gpkg") and "Downloads folder" in repr(on_colab)
+
+
+def test_student_notebook_builds(tmp_path):
+    import ast
+    import subprocess
+    import sys
+    from pathlib import Path
+    import nbformat
+    root = Path(__file__).resolve().parents[1]
+    out = tmp_path / "nav.ipynb"
+    subprocess.run([sys.executable, str(root / "tools" / "build_navigability_notebook.py"), str(out)], check=True,
+                   capture_output=True)
+    nb = nbformat.read(out, as_version=4)
+    texts = [c for c in nb.cells if c.cell_type == "code" and c.source.startswith("#@title\nvg.text(")]
+    assert len(texts) > 15
+    for c in nb.cells:
+        if c.cell_type == "code":
+            ast.parse("\n".join(l for l in c.source.splitlines() if not l.lstrip().startswith(("%", "!"))))
+    for c in texts:                                    # each text cell: English then French, same headings
+        en, fr = ast.literal_eval(c.source.split("vg.text(", 1)[1].rsplit(")", 1)[0])
+        assert en.count("#") == fr.count("#") and en.count("\n- ") == fr.count("\n- ")
+    assert any("download_geopackage" in c.source for c in nb.cells)
+    assert 'vg.set_language(language)' in "\n".join(c.source for c in nb.cells)

@@ -77,7 +77,7 @@ def build(survey):
         "line": [lines.get(r, []) for r in ids],
     }
     return {
-        "name": survey.name, "region": survey.key,
+        "name": str(survey.name), "region": survey.key,
         "as_of": f"{survey.as_of:%Y-%m-%d}", "as_of_t": int(survey.as_of.timestamp()),
         "first": f"{kept.time.min():%Y-%m-%d}",
         "source": "SWOT L2 HR RiverSP reach, Version D (NASA/CNES, PO.DAAC), via Hydrocron",
