@@ -12,7 +12,8 @@ const FRESH_HOURS = 6;             // a reach checked less than this long ago is
 const FIELDS = "reach_id,time_str,wse,reach_q,xovr_cal_q,dark_frac";
 
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// Every text from the data (river and port names, reach IDs) goes through esc() before it is put into HTML
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const endOfToday = () => Math.floor(Date.now() / 1000 / DAY) * DAY + DAY - 1;
 
@@ -143,7 +144,7 @@ function drawMap(countries) {
   const svg = L.svg({ pane: "ports" });
   for (const p of data.ports) {
     L.circleMarker([p.lat, p.lon], { pane: "ports", renderer: svg, radius: 4.5, className: "port", fillOpacity: 1 })
-      .bindTooltip(p.name, { permanent: true, direction: "right", offset: [6, -1], className: "port-label" })
+      .bindTooltip(esc(p.name), { permanent: true, direction: "right", offset: [6, -1], className: "port-label" })   // Leaflet sets it as HTML
       .on("click", (e) => { L.DomEvent.stopPropagation(e); select(byId.get(p.reach_id), true); })
       .addTo(map);
   }
@@ -218,7 +219,7 @@ function summary() {
   $("ports").innerHTML = data.ports.map((p) => {
     const n = byId.get(p.reach_id).now;
     const meter = n.band >= 0 ? `<i style="left:${n.index}%;background:var(--b${n.band})"></i>` : "";
-    return `<li><button data-reach="${p.reach_id}" aria-current="${selected?.id === p.reach_id}">
+    return `<li><button data-reach="${esc(p.reach_id)}" aria-current="${selected?.id === p.reach_id}">
       <span><span class="port-name">${esc(p.name)}</span><span class="port-river">${esc(p.river)}</span></span>
       <span class="meter">${meter}</span><span class="port-index">${n.band >= 0 ? Math.round(n.index) : "–"}</span></button></li>`;
   }).join("");
@@ -231,8 +232,8 @@ function reachPanel() {
   const r = selected, n = r.now;
   const port = data.ports.find((p) => p.reach_id === r.id);
   const name = riverName(r);
-  const title = port ? `${port.name} <span class="soft">· ${esc(port.river)}</span>` : esc(name);
-  let html = `<p class="reach-title">${title}</p><p class="reach-sub">${t("reachSub", { id: r.id })}${port && port.river !== name ? ` · ${esc(name)}` : ""}</p>`;
+  const title = port ? `${esc(port.name)} <span class="soft">· ${esc(port.river)}</span>` : esc(name);
+  let html = `<p class="reach-title">${title}</p><p class="reach-sub">${t("reachSub", { id: esc(r.id) })}${port && port.river !== name ? ` · ${esc(name)}` : ""}</p>`;
   if (n.band >= 0) {
     html += `<div class="reach-index"><b>${Math.round(n.index)}</b>
       <span class="chip"><i style="background:var(--b${n.band})"></i>${esc(data.bands[n.band].label[lang].replace(/^[\d–]+ /, ""))}</span></div>`;
@@ -268,7 +269,7 @@ function select(r, fly = false) {
   drawHalo();
   reachPanel();
   document.querySelectorAll("#ports button").forEach((b) => b.setAttribute("aria-current", String(b.dataset.reach === selected?.id)));
-  history.replaceState(null, "", selected ? `#reach=${selected.id}` : location.pathname + location.search);
+  history.replaceState(null, "", selected ? `#reach=${encodeURIComponent(selected.id)}` : location.pathname + location.search);
   if (!selected) return;
   update.first(selected);
   if (fly) map.flyTo([selected.lat, selected.lon], Math.max(map.getZoom(), 7.5), { duration: 0.8 });
