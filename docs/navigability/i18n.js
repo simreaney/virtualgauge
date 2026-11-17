@@ -1,5 +1,6 @@
-// The words of the page in English and French. The band names and the basin's name come from the data file
-// (written from src/virtualgauge/messages.py), so they read the same as in the Python package and the notebook.
+// The words of the pages in English and French: STRINGS for every basin, REGION_STRINGS for the words of one. The
+// band names and the basin's name come from the data file (written from src/virtualgauge/messages.py), so they read
+// the same as in the Python package and the notebook.
 //
 // Language: ?lang=fr or ?lang=en in the address, else the reader's last choice on this page, else the language of
 // the web browser: French if it is French, English otherwise.
@@ -7,12 +8,9 @@
 export const STRINGS = {
   en: {
     locale: "en-GB",
-    title: "Congo basin navigability — live from SWOT",
     titleDated: "{name} navigability, {date}",
-    description: "How navigable are the rivers of the Congo basin today? A navigability index for 4,444 river reaches, updated in your browser from the latest SWOT satellite water levels.",
     language: "Language",
     side: "Navigability summary",
-    eyebrow: "Congo basin · SWOT satellite",
     h1: "Navigability index",
     lede: "0 = the lowest level SWOT has recorded on the reach since July 2023, 100 = the highest.",
     loading: "Loading the river network…",
@@ -41,7 +39,6 @@ export const STRINGS = {
     aboutText: "Each reach is compared with its own record of water levels from the SWOT satellite. The index says where the river stands between its lowest and highest recorded level. It is not a depth of water and does not show whether a particular boat can pass.",
     aboutData: "The lowest and highest levels come from every good SWOT level between {first} and {last} ({n} of {total} reaches have a record good enough for an index). Your browser then asks NASA's Hydrocron service for the levels measured since, and judges them with the same quality rules. A reach needs a good level from the last {days} days to be coloured.",
     credits: 'Levels: SWOT L2 HR RiverSP reach product, Version D (NASA/CNES, PO.DAAC), through <a href="https://podaac.github.io/hydrocron/" rel="noopener">Hydrocron</a>. River network: SWORD v17b. Made with <a href="https://github.com/simreaney/virtualgauge" rel="noopener">virtualgauge</a>.',
-    mapLabel: "Map of the navigability index of the Congo basin",
     basemap: "Background map", plain: "Plain", streets: "Streets", satellite: "Satellite",
     lowEnd: "0 · low water", highEnd: "high water · 100",
     attribution: "Levels: SWOT (NASA/CNES) via Hydrocron · rivers: SWORD · borders: Natural Earth",
@@ -79,12 +76,9 @@ export const STRINGS = {
   },
   fr: {
     locale: "fr-FR",
-    title: "Navigabilité du bassin du Congo — en direct depuis SWOT",
     titleDated: "Navigabilité — {name}, {date}",
-    description: "Les rivières du bassin du Congo sont-elles navigables aujourd'hui ? Un indice de navigabilité pour 4 444 tronçons de rivière, mis à jour dans votre navigateur à partir des derniers niveaux d'eau du satellite SWOT.",
     language: "Langue",
     side: "Résumé de la navigabilité",
-    eyebrow: "Bassin du Congo · satellite SWOT",
     h1: "Indice de navigabilité",
     lede: "0 = le niveau le plus bas enregistré par SWOT sur le tronçon depuis juillet 2023, 100 = le plus haut.",
     loading: "Chargement du réseau de rivières…",
@@ -113,7 +107,6 @@ export const STRINGS = {
     aboutText: "Chaque tronçon est comparé à sa propre série de niveaux d'eau du satellite SWOT. L'indice dit où en est la rivière entre son niveau le plus bas et son niveau le plus haut enregistrés. Ce n'est pas une profondeur d'eau, et il ne dit pas si un bateau donné peut passer.",
     aboutData: "Les niveaux le plus bas et le plus haut viennent de tous les niveaux SWOT valides entre le {first} et le {last} ({n} tronçons sur {total} ont une série assez bonne pour un indice). Votre navigateur demande ensuite au service Hydrocron de la NASA les niveaux mesurés depuis, et les juge avec les mêmes règles de qualité. Un tronçon doit avoir un niveau valide des {days} derniers jours pour être coloré.",
     credits: 'Niveaux : produit SWOT L2 HR RiverSP reach, version D (NASA/CNES, PO.DAAC), via <a href="https://podaac.github.io/hydrocron/" rel="noopener">Hydrocron</a>. Réseau de rivières : SWORD v17b. Réalisé avec <a href="https://github.com/simreaney/virtualgauge" rel="noopener">virtualgauge</a>.',
-    mapLabel: "Carte de l'indice de navigabilité du bassin du Congo",
     basemap: "Fond de carte", plain: "Simple", streets: "Rues", satellite: "Satellite",
     lowEnd: "0 · basses eaux", highEnd: "hautes eaux · 100",
     attribution: "Niveaux : SWOT (NASA/CNES) via Hydrocron · rivières : SWORD · frontières : Natural Earth",
@@ -151,6 +144,43 @@ export const STRINGS = {
   },
 };
 
+// The words that differ from basin to basin. Each page names its basin in <html data-region="…">, which is also the
+// name of its data file (data/<region>.json) and its key in src/virtualgauge/navigation.py REGIONS.
+export const REGION_STRINGS = {
+  congo: {
+    en: {
+      title: "Congo basin navigability — live from SWOT",
+      description: "How navigable are the rivers of the Congo basin today? A navigability index for 4,444 river reaches, updated in your browser from the latest SWOT satellite water levels.",
+      eyebrow: "Congo basin · SWOT satellite",
+      mapLabel: "Map of the navigability index of the Congo basin",
+      otherBasin: 'The same map for the <a href="amazon.html">Amazon basin</a>.',
+    },
+    fr: {
+      title: "Navigabilité du bassin du Congo — en direct depuis SWOT",
+      description: "Les rivières du bassin du Congo sont-elles navigables aujourd'hui ? Un indice de navigabilité pour 4 444 tronçons de rivière, mis à jour dans votre navigateur à partir des derniers niveaux d'eau du satellite SWOT.",
+      eyebrow: "Bassin du Congo · satellite SWOT",
+      mapLabel: "Carte de l'indice de navigabilité du bassin du Congo",
+      otherBasin: 'La même carte pour le <a href="amazon.html">bassin de l\'Amazone</a>.',
+    },
+  },
+  amazon: {
+    en: {
+      title: "Amazon basin navigability — live from SWOT",
+      description: "How navigable are the rivers of the Amazon basin today? A navigability index for 16,957 river reaches, updated in your browser from the latest SWOT satellite water levels.",
+      eyebrow: "Amazon basin · SWOT satellite",
+      mapLabel: "Map of the navigability index of the Amazon basin",
+      otherBasin: 'The same map for the <a href="./">Congo basin</a>.',
+    },
+    fr: {
+      title: "Navigabilité du bassin de l'Amazone — en direct depuis SWOT",
+      description: "Les rivières du bassin de l'Amazone sont-elles navigables aujourd'hui ? Un indice de navigabilité pour 16 957 tronçons de rivière, mis à jour dans votre navigateur à partir des derniers niveaux d'eau du satellite SWOT.",
+      eyebrow: "Bassin de l'Amazone · satellite SWOT",
+      mapLabel: "Carte de l'indice de navigabilité du bassin de l'Amazone",
+      otherBasin: 'La même carte pour le <a href="./">bassin du Congo</a>.',
+    },
+  },
+};
+
 const SAVED = "vg-navigability-lang";
 
 /** "fr" or "en" for a list of preferred languages such as navigator.languages: the first one decides. */
@@ -174,13 +204,14 @@ export function saveLanguage(lang) {
   try { localStorage.setItem(SAVED, lang); } catch { /* private window: the choice lasts for this visit */ }
 }
 
-/** A function giving the words of `lang`, with {placeholders} filled in. */
-export function translator(lang) {
-  const words = STRINGS[lang] || STRINGS.en;
+/** A function giving the words of `lang` on the page of `region`, with {placeholders} filled in. */
+export function translator(lang, region) {
+  const both = (l) => ({ ...STRINGS[l], ...REGION_STRINGS[region]?.[l] });
+  const words = both(STRINGS[lang] ? lang : "en"), english = both("en");
   return (key, vars = {}) => {
     const path = key.split(".");
     let s = path.reduce((o, k) => (o == null ? o : o[k]), words);
-    if (s == null) s = path.reduce((o, k) => (o == null ? o : o[k]), STRINGS.en) ?? key;
+    if (s == null) s = path.reduce((o, k) => (o == null ? o : o[k]), english) ?? key;
     return String(s).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
   };
 }

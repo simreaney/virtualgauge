@@ -13,11 +13,13 @@ Usage:
   python tools/build_location_data.py index <folder with *_reaches_slim.parquet>
   python tools/build_location_data.py congo [--counts]
   python tools/build_location_data.py botswana <ne_50m_admin_0_countries.geojson>
+  python tools/build_location_data.py countries amazon <ne_50m_admin_0_countries.geojson>
 """
 import io
 import json
 import sys
 import time
+import warnings
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -118,10 +120,44 @@ def build_botswana(idx, countries_geojson):
           "; ≥10 good:", int((c.good_obs >= 10).sum()))
 
 
+# (west, south, east, north): a few degrees around each basin of the navigability maps
+COUNTRY_BOXES = {"amazon": (-84, -24, -44, 9)}
+
+
+def build_countries(region, countries_geojson):
+    """<region>_countries.geojson: Natural Earth 1:50m countries clipped to the region's box and simplified, for the
+    background of the navigability maps (notebook figures and docs/navigability/)."""
+    import geopandas as gpd
+    from shapely.geometry import box, mapping
+
+    w, s, e, n = COUNTRY_BOXES[region]
+    ne = gpd.read_file(countries_geojson)[["ADMIN", "geometry"]]
+    clipped = ne.clip(box(w, s, e, n)).explode(index_parts=False)
+    with warnings.catch_warnings():                                       # square degrees are fine for this
+        warnings.simplefilter("ignore", UserWarning)
+        clipped = clipped[clipped.area > 0.01].dissolve("ADMIN")          # drop specks and tiny islands
+    feats = []
+    for name, geom in clipped.geometry.simplify(0.02).items():
+        g = json.loads(json.dumps(mapping(geom)), parse_float=lambda x: round(float(x), 3))
+        feats.append({"type": "Feature", "properties": {"name": name}, "geometry": g})
+    out = OUT / f"{region}_countries.geojson"
+    out.write_text(json.dumps({"type": "FeatureCollection", "features": sorted(feats, key=lambda f: f["properties"]["name"]),
+                               "source": f"Natural Earth 1:50m admin-0 countries (public domain), clipped to "
+                                         f"{_deg(w, 'W', 'E')}–{_deg(e, 'W', 'E')}, {_deg(s, 'S', 'N')}–{_deg(n, 'S', 'N')} "
+                                         f"and simplified"}, separators=(",", ":")))
+    print(out.name, len(feats), "countries,", round(out.stat().st_size / 1e3), "kB")
+
+
+def _deg(v, neg, pos):
+    return f"{abs(v)}° {neg if v < 0 else pos}"
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1]
     if cmd == "index":
         build_index(sys.argv[2])
+    elif cmd == "countries":
+        build_countries(sys.argv[2], sys.argv[3])
     else:
         index = pd.read_parquet(OUT / "reach_index.parquet")
         if cmd == "congo":

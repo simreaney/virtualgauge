@@ -29,8 +29,9 @@ def _width_lw(w):
 
 
 def _countries():
-    p = store.bundle_dir() / "locations" / "congo_countries.geojson"
-    return json.loads(p.read_text())["features"] if p.exists() else []
+    """Country outlines around every basin with a bundled outline (Congo, Amazon); a map shows those in its view"""
+    files = sorted((store.bundle_dir() / "locations").glob("*_countries.geojson"))
+    return [f for p in files for f in json.loads(p.read_text())["features"]]
 
 
 def _rings(geom):

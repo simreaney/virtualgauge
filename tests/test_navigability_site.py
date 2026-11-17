@@ -97,20 +97,57 @@ def test_page_geopackage_opens_like_the_package(tmp_path, lang):
     assert 'attr="band"' in qml["reaches"] and vg.t(band0) in qml["reaches"]
 
 
+SITE = ROOT / "docs" / "navigability"
+PAGES = {"index.html": "congo", "amazon.html": "amazon"}
+
+
+def _region(page):
+    """The basin a page shows: its <html data-region="…">"""
+    import re
+    return re.search(r'<html lang="en" data-region="(\w+)">', page).group(1)
+
+
+def test_one_page_per_basin():
+    """Each page is the same page for another basin: the same elements in the same order, a basin of the package,
+    and that basin's data file and country outlines."""
+    import re
+    from virtualgauge import navigation
+    skeleton = {}
+    for name, region in PAGES.items():
+        page = (SITE / name).read_text()
+        assert _region(page) == region and region in navigation.REGIONS
+        skeleton[name] = re.findall(r'\s(?:id|data-i18n(?:-html|-aria)?)="([^"]+)"', page)
+        data = json.loads((SITE / "data" / f"{region}.json").read_text())
+        assert data["region"] == region and len(data["reaches"]["id"]) > 1000
+        assert {p["reach_id"] for p in data["ports"]} <= set(data["reaches"]["id"])
+        outline = json.loads((SITE / "data" / f"{region}_countries.geojson").read_text())
+        assert outline["type"] == "FeatureCollection" and len(outline["features"]) > 5
+    assert len(set(map(tuple, skeleton.values()))) == 1, "the pages differ in more than their basin's words"
+    assert sorted(p.name for p in SITE.glob("*.html")) == sorted(PAGES)
+
+
 @pytest.mark.skipif(shutil.which("node") is None, reason="needs node")
 def test_page_words_in_both_languages():
-    """Every word the page asks for (data-i18n… in index.html, t("…") in app.js) exists in English and French."""
+    """Every word the pages ask for (data-i18n… in the HTML, t("…") in app.js) exists in English and French, for
+    every basin."""
     import re
-    js = "import('./docs/navigability/i18n.js').then((m) => process.stdout.write(JSON.stringify(m.STRINGS)))"
+    js = ("import('./docs/navigability/i18n.js').then((m) => process.stdout.write("
+          "JSON.stringify({all: m.STRINGS, region: m.REGION_STRINGS})))")
     words = json.loads(subprocess.run(["node", "--input-type=module", "-e", js], cwd=ROOT, check=True,
                                       capture_output=True, text=True).stdout)
-    page = (ROOT / "docs" / "navigability" / "index.html").read_text()
-    app = (ROOT / "docs" / "navigability" / "app.js").read_text()
-    keys = set(re.findall(r'data-i18n(?:-html|-aria)?="([^"]+)"', page)) | set(re.findall(r'\bt\("(\w+)"', app))
+    app = (SITE / "app.js").read_text()
+    assert set(words["region"]) == set(PAGES.values())
+    for name, region in PAGES.items():
+        page = (SITE / name).read_text()
+        keys = set(re.findall(r'data-i18n(?:-html|-aria)?="([^"]+)"', page)) | set(re.findall(r'\bt\("(\w+)"', app))
+        for lang in ("en", "fr"):
+            has = set(words["all"][lang]) | set(words["region"][region][lang])
+            assert not keys - has, (name, lang, keys - has)
+            assert set(words["region"][region][lang]) == set(words["region"]["congo"]["en"]), (region, lang)
     for lang in ("en", "fr"):
-        assert not keys - set(words[lang]), (lang, keys - set(words[lang]))
-        assert set(words[lang]["why"]) >= {"no SWOT data", "too noisy", "no recent level"}
-    assert set(words["en"]) == set(words["fr"])
+        assert set(words["all"][lang]["why"]) >= {"no SWOT data", "too noisy", "no recent level"}
+        assert not set(words["all"][lang]) & set(words["region"]["congo"]["en"])   # a word is shared or per basin
+    assert set(words["all"]["en"]) == set(words["all"]["fr"])
 
 
 def test_page_escapes_data_put_into_html():

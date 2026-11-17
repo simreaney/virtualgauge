@@ -68,6 +68,16 @@ REGIONS = {
                       ("Bangui", "Ubangi", 13263100051), ("Ouesso", "Sangha", 13245000311),
                       ("Ilebo", "Kasai", 13227000021), ("Kwamouth", "Kasai", 13221000021),
                       ("Kinshasa", "Congo", 13217000081)]),
+    "amazon": dict(name=M("nv_region_amazon"), basin=622, main_start=62299300841, main_name=M("nv_main_amazon"),
+                   ports=[  # (name, river, SWOT reach): river ports in Ecuador, Peru, Colombia, Bolivia and Brazil, on
+                       # the reach at the town or, where SWOT sees that one less often, the next one on the same
+                       # channel (Óbidos and Parintins are left out: their reaches have fewer than 10 good levels)
+                       ("Coca", "Napo", 62297801491), ("Yurimaguas", "Huallaga", 62298400181),
+                       ("Pucallpa", "Ucayali", 62299300841), ("Iquitos", "Amazon", 62297900071),
+                       ("Leticia–Tabatinga", "Amazon", 62297700011), ("Tefé", "Amazon", 62294100051),
+                       ("Manaus", "Negro", 62281100021), ("Riberalta", "Beni", 62266300021),
+                       ("Porto Velho", "Madeira", 62265300071), ("Itacoatiara", "Amazon", 62259000081),
+                       ("Itaituba", "Tapajós", 62241500081), ("Santarém", "Amazon", 62251000011)]),
 }
 
 
@@ -961,9 +971,10 @@ def river_survey(region="congo", *, reach_ids=None, download=True, update_days=3
                  **settings_):
     """Every SWOT reach of a basin: download (or update) the levels, clean them, find the range and the index.
 
-    region        "congo" (every SWORD reach of the Congo basin), or give reach_ids=[...] for your own list
+    region        "congo" or "amazon" (every SWORD reach of the basin), or give reach_ids=[...] for your own list
     download      True: download every reach not saved in the last `update_days` days (about 10 min for the whole
-                  Congo the first time; an interrupted download continues where it stopped). False: use the saved copy.
+                  Congo the first time, 45 for the Amazon; an interrupted download continues where it stopped).
+                  False: use the saved copy (the Congo's is bundled with the package).
     workers       how many reaches to download at the same time
     name          a title for your own list of reaches
     other keywords change the settings (see vg.SurveyParams), e.g. max_age_days=45, min_levels=20, jump_m=0.5
