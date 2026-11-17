@@ -45,7 +45,7 @@ La crue de l'Okavango culmine à Mohembo en avril et atteint Seronga, plus faibl
 |---|---|
 | `Virtual_River_Gauges_Student.ipynb` | **Students** — results first, one line of code per step, questions to discuss, widgets, maps of the Congo, Botswana and the world. Uses the `virtualgauge` package. · **Étudiants** — résultats d'abord, une ligne de code par étape, questions, widgets, cartes. |
 | `SWOT_Flood_Depth_Student.ipynb` | **Students, English only** — map a flood with SWOT: draw an area, compare a pass before and after the flood, and get the newly flooded area, the rise of the water and the flood depth. Worked examples: the Congo at Kinshasa (2023–24) and the Okavango Delta (2025). · **Étudiants, en anglais uniquement** — cartographier une crue avec SWOT. |
-| `Congo_Navigability_Student.ipynb` | **Students, English only** — download the SWOT levels of all 4,444 river reaches of the Congo basin, find each reach's lowest and highest recorded level, and map how navigable the rivers are today (0 = lowest water recorded, 100 = highest), along the main river, at the ports and through time. · **Étudiants, en anglais uniquement** — la navigabilité de tout le bassin du Congo avec SWOT. |
+| `Congo_Navigability_Student.ipynb` | **Students, English or French** (the language of the computer, or chosen in the notebook) — download the SWOT levels of all 4,444 river reaches of the Congo basin, find each reach's lowest and highest recorded level, and map how navigable the rivers are today (0 = lowest water recorded, 100 = highest), along the main river, at the ports and through time; download the result as a GeoPackage for QGIS. · **Étudiants, en français ou en anglais** (la langue de l'ordinateur, ou au choix dans le notebook) — la navigabilité de tout le bassin du Congo avec SWOT, et le résultat en GeoPackage pour QGIS. |
 | `Virtual_River_Gauges_DRC_Fiji.ipynb` | **Trainers / advanced** — the full method with all the code. · **Formateurs / avancés** — la méthode complète avec tout le code. |
 
 [![Open the flood notebook in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/simreaney/virtualgauge/blob/main/SWOT_Flood_Depth_Student.ipynb) ← flood notebook
@@ -77,7 +77,7 @@ The two worked examples are `vg.flood_event("kinshasa_2024")` and `vg.flood_even
 searches and ground heights are bundled; their four SWOT pass files are added with
 `python tools/build_flood_examples.py` (needs an Earthdata login once), after which the examples run offline.
 
-## Navigability of the whole Congo basin with SWOT (English only)
+## Navigability of the whole Congo basin with SWOT (English or French)
 
 ```python
 import virtualgauge as vg
@@ -92,7 +92,8 @@ congo.reach("13273000011")         # one reach (here Mbandaka): levels, lowest, 
 congo.ports()                      # the index through time at nine river ports
 congo.history()                    # share of the river length in each band, month by month
 congo.navigability("2025-08-01")   # the map on any date since late 2023
-congo.export()                     # CSV + GeoJSON (for QGIS) in outputs/
+congo.export()                     # CSV, GeoPackage (opens styled in QGIS) and GeoJSON in outputs/
+congo.download_geopackage()        # the GeoPackage to your computer (Colab: your Downloads folder)
 ```
 
 <img alt="Navigability index of the Congo basin on 16 November 2026, from the SWOT levels of every river reach" src="docs/images/congo_navigability.png" width="80%">
@@ -106,6 +107,14 @@ levels around them are removed, and reaches whose levels jump from pass to pass 
 lists every setting). A reach's index uses its latest good level of the last 30 days. Any list of reaches works too:
 `vg.river_survey(reach_ids=[...])`. A copy of the whole Congo survey (downloaded 16 November 2026, 3 MB) is bundled,
 so the notebook also runs offline; refresh it with `python tools/build_navigability_data.py`.
+
+**Language.** The notebook's text, messages and figures are in English or French. Its *Language* cell is set to
+`"auto"`: the language of the computer (on Colab, of the web browser), French if it is French and English otherwise;
+`"en"` or `"fr"` choose one. In code: `vg.set_language("auto")`.
+
+**GeoPackage.** `congo.export()` also writes `navigability_congo_<date>.gpkg`: a layer `reaches` (one line per reach
+with its lowest, highest and latest level, range, index and band), a layer `ports`, and a QGIS style, so the rivers
+open in QGIS already coloured by their index. `levels=True` adds a table of every SWOT level (about 30 MB more).
 
 **As a web page.** `docs/navigability/` is the same map as a static site (plain HTML, CSS and JavaScript, Leaflet
 included — no build step, no server code). It ships each reach's lowest and highest level, draws the map at once, then
@@ -132,7 +141,7 @@ vg.explore_map("world")                      # zoom in: every reach in view · z
 vg.explore_map(lat=-17.96, lon=178.43, radius_km=150)   # any region · toute région
 vg.sites(region="botswana")                  # ready-made stations · stations prêtes
 flood = vg.flood_event("kinshasa_2024")      # flood maps from SWOT (English only) · cartes de crue (en anglais)
-congo_nav = vg.river_survey("congo")         # navigability of the whole Congo basin (English only) · navigabilité
+congo_nav = vg.river_survey("congo")         # navigability of the whole Congo basin · navigabilité du bassin du Congo
 ```
 
 It ships the real data (downloaded 3–4 November 2026) for 31 stations — the Congo basin, Botswana, Fiji and fourteen rivers on other continents, including the Karnali (Nepal) and the Cimanuk (West Java) — and an index of all 248,673 SWOT river reaches, so the student notebook works **offline**. Other reaches are downloaded on demand (no account needed). Ready-made stations: `vg.sites()`.
@@ -188,7 +197,7 @@ The trainer notebook only needs `pip install -r requirements.txt` · Le notebook
   Testé le 2026-11-04 : 28 tests hors ligne réussis sous Python 3.13 et sous un Python 3.12 proche de Colab ; le notebook étudiant s'exécute hors ligne depuis le wheel installé. Le package reproduit exactement les résultats du notebook formateur.
 - Not yet checked on real Google Colab, nor in VS Code's handling of the hidden setup cell. · Pas encore vérifié sur Colab ni dans VS Code.
 - Flood maps (0.2.0, English only): 27 offline tests (synthetic rasters, a recorded NASA CMR answer, examples). The SWOT raster reader is written from the product documentation and **not yet checked against a real granule**; the examples' SWOT pass files are not yet bundled (`tools/build_flood_examples.py`, needs an Earthdata login). · Cartes de crue : lecteur raster SWOT pas encore vérifié sur un vrai fichier ; fichiers de passages des exemples pas encore fournis.
-- Navigability (English only): 15 offline tests (synthetic Hydrocron answers, cleaning, index, river network, the bundled Congo survey). The whole Congo basin (4,444 reaches) was downloaded twice on 2026-11-16 in about 9 minutes each, with no failure; 3,436 reaches have an index on that date. Lowest and highest levels are single measurements, so a reach with poor data (e.g. the Congo at Bumba, much dark water) can still have a doubtful range. · Navigabilité : 15 tests hors ligne ; tout le bassin du Congo téléchargé en 9 minutes environ.
+- Navigability (English and French): 29 offline tests (synthetic Hydrocron answers, cleaning, index, river network, the bundled Congo survey, French text, language detection, the GeoPackage and its QGIS style, the notebook builder). The GeoPackage was opened in QGIS 4.3 (rivers coloured by index, ports labelled); the language detection on Colab (the browser's language) has not been tried on Colab itself yet. The whole Congo basin (4,444 reaches) was downloaded twice on 2026-11-16 in about 9 minutes each, with no failure; 3,436 reaches have an index on that date. Lowest and highest levels are single measurements, so a reach with poor data (e.g. the Congo at Bumba, much dark water) can still have a doubtful range. · Navigabilité : 29 tests hors ligne ; tout le bassin du Congo téléchargé en 9 minutes environ.
 - Where GEOGloWS is far from the flow measured nearby (Okavango at Mohembo 2.3×, Zambezi 3.8×, Niger 3×, White Nile 8×) the package warns in the Discharge tab; Botswana's own gauge records would make those curves usable. · Quand GEOGloWS s'écarte fortement du débit mesuré, le package le signale.
 - The optional DAHITI and GRDC functions are untested without a real key or file. · Les fonctions DAHITI et GRDC ne sont pas testées sans vraie clé ou fichier.
 - The French text should be reviewed by a francophone hydrologist (`src/virtualgauge/messages.py` and the notebooks). · Le texte français doit être relu par un hydrologue francophone.

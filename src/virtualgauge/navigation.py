@@ -1,4 +1,4 @@
-"""River navigability for a whole basin from SWOT (English only for now).
+"""River navigability for a whole basin from SWOT (English or French: vg.set_language).
 
     import virtualgauge as vg
     congo = vg.river_survey("congo")     # download and clean the SWOT levels of every reach in the Congo basin
@@ -11,7 +11,8 @@
     congo.reach("13273000011")           # one reach: its levels, range and index
     congo.ports()                        # the index through time at river ports
     congo.history()                      # how much of the network was at low or high water, month by month
-    congo.export()
+    congo.export()                       # CSV, GeoPackage (QGIS) and GeoJSON in outputs/
+    congo.download_geopackage()          # the GeoPackage to your computer (Colab: your Downloads folder)
 
 Navigability index of a reach, from its own record of SWOT levels since July 2023:
 
@@ -22,21 +23,25 @@ Data: SWOT L2 HR RiverSP reach product, Version D (NASA/CNES, PO.DAAC), through 
 """
 import gzip
 import hashlib
+import html as html_mod
 import io
 import json
 import math
 import os
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, fields, replace
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import requests
 
 from . import download, settings, store
-from .i18n import M, fmt_int, say, t
+from .i18n import Both, Day, M, _pair, fmt_int, say, t
 from .locations import _km, reach_index
+from .messages import MESSAGES
 from .processing import robust_spread, utc_naive
 from .results import Result, reason_label
 
@@ -56,7 +61,7 @@ BANDS = [(0, "nv_band_0", "#a8302c"), (20, "nv_band_1", "#f19a8c"), (40, "nv_ban
 NO_INDEX_C = "#dcdad3"
 
 REGIONS = {
-    "congo": dict(name="Congo basin", basin=132, main_start=13279900061, main_name="the Lualaba and the Congo",
+    "congo": dict(name=M("nv_region_congo"), basin=132, main_start=13279900061, main_name=M("nv_main_congo"),
                   ports=[  # (name, river, SWOT reach): the ready-made stations, plus Bumba and Ilebo
                       ("Kindu", "Lualaba", 13279900051), ("Kisangani", "Congo", 13279300031),
                       ("Bumba", "Congo", 13275700241), ("Mbandaka", "Congo", 13273000011),
@@ -543,10 +548,24 @@ def _date(d):
 
 
 def _day(ts):
-    if pd.isna(ts):
-        return "—"
-    ts = pd.Timestamp(ts)
-    return f"{ts.day} {ts:%B %Y}"                 # not %-d, which Windows does not know
+    """"16 November 2026" · "16 novembre 2026", in the language of each message ("—" when missing)"""
+    return Day(None if pd.isna(ts) else pd.Timestamp(ts))
+
+
+def _why(code):
+    """The reason a reach has no index, as a message"""
+    return M("nv_why_" + (str(code).replace(" ", "_") or "index_possible"))
+
+
+def _why_list(counts):
+    """"12 with no SWOT data, 40 too noisy …" in each language"""
+    parts = [(fmt_int(n), _pair("nv_why_" + str(k).replace(" ", "_"), {})) for k, n in counts.items()]
+    return Both(*(", ".join(f"{n} {p[i]}" for n, p in parts) for i in (0, 1)))
+
+
+def _columns(df, names):
+    """A function giving the table with its column names in the chosen language (.table keeps the English names)"""
+    return lambda: df.rename(columns={c: t("nv_col_" + k) for c, k in names.items()})
 
 
 def _needs_data(method):
@@ -637,6 +656,7 @@ class RiverSurvey:
         tab = self.table
         why = tab.why.replace("", "index possible")
         counts = why.value_counts().rename_axis("reach").rename("reaches").reset_index()
+        shown = counts.assign(reach=[t("nv_why_" + w.replace(" ", "_")) for w in counts.reach])
         good = tab[tab.n_good > 0]
         per_year = good.n_good / ((self.as_of - pd.Timestamp("2023-07-26")).days / 365.25)
         lines = [("nv_cov_line", dict(n=fmt_int(len(tab)), measured=fmt_int(int((tab.n_levels > 0).sum())),
@@ -646,7 +666,8 @@ class RiverSurvey:
                  ("nv_cov_width", dict(**_width_split(tab)))]
         return Result(("nv_h_coverage", {"name": self.name}), lines,
                       figure=lambda: navplots.fig_coverage(tab, self._network(), self.name),
-                      table=counts, values=dict(reaches=len(tab), measured=int((tab.n_levels > 0).sum())))
+                      table=counts, display_table=_columns(shown, {"reach": "why", "reaches": "reaches"}),
+                      values=dict(reaches=len(tab), measured=int((tab.n_levels > 0).sum())))
 
     @_needs_data
     def cleaning(self):
@@ -656,7 +677,7 @@ class RiverSurvey:
         kept = int((lv.reason == "kept").sum())
 
         def shown():
-            return pd.DataFrame({"reason": counts.reason.map(reason_label), "levels": counts["count"],
+            return pd.DataFrame({t("nv_col_reason"): counts.reason.map(reason_label), t("nv_col_levels"): counts["count"],
                                  "%": (100 * counts["count"] / max(len(lv), 1)).round(1)})
         p = self.params
         dark = M("nv_clean_dark", dark=round(100 * p.max_dark_frac)) if p.max_dark_frac < 1 else ""
@@ -689,6 +710,9 @@ class RiverSurvey:
         return Result(("nv_h_ranges", {"name": self.name}), lines,
                       figure=lambda: navplots.fig_ranges(tab, self._network(), self.name),
                       table=by_river, table_rows=15,
+                      display_table=_columns(by_river.rename_axis(t("nv_col_river")),
+                                             {"reaches": "reaches", "median_range_m": "median_range",
+                                              "largest_range_m": "largest_range"}),
                       values=dict(reaches=len(ok), median_range_m=float(ok.range_m.median()) if len(ok) else np.nan))
 
     @_needs_data
@@ -719,12 +743,12 @@ class RiverSurvey:
                     high=", ".join(f"{r} ({v:.0f})" for r, v in rivers["median"].tail(k)[::-1].items()))))
         why = df[df["index"].isna()].why.value_counts()
         if len(why):
-            lines.append(("nv_index_none", dict(n=fmt_int(int(why.sum())),
-                                                why=", ".join(f"{fmt_int(v)} {t('nv_why_' + k.replace(' ', '_'))}"
-                                                              for k, v in why.items()))))
+            lines.append(("nv_index_none", dict(n=fmt_int(int(why.sum())), why=_why_list(why))))
         return Result(("nv_h_index", {"name": self.name, "date": _day(d)}), lines,
                       figure=lambda: navplots.fig_index_map(df, self._network(), self.name, _day(d), self._ports()),
-                      table=bands, values=dict(date=f"{d:%Y-%m-%d}", reaches=len(has),
+                      table=bands, display_table=_columns(bands, {"band": "band", "reaches": "reaches",
+                                                                  "river km": "river_km", "% of river km": "pct_km"}),
+                      values=dict(date=f"{d:%Y-%m-%d}", reaches=len(has),
                                                median_index=float(has["index"].median()) if len(has) else np.nan,
                                                bands=dict(zip(bands.band, bands.reaches))))
 
@@ -754,7 +778,8 @@ class RiverSurvey:
         lv = self.levels[self.levels.reach_id == rid]
         lines = [("nv_reach_where", dict(river=row.river_name, lat=f"{row.lat:.3f}", lon=f"{row.lon:.3f}",
                                          width=fmt_int(row.width_m) if np.isfinite(row.width_m) else "—",
-                                         type=row.type_name))]
+                                         type=M(f"nv_type_{int(row.type)}") if f"nv_type_{int(row.type)}" in MESSAGES
+                                         else row.type_name))]
         if row.n_good:
             lines.append(("nv_reach_record", dict(good=row.n_good, total=row.n_levels, first=_day(row["first"]),
                                                   last=_day(row["last"]))))
@@ -763,9 +788,9 @@ class RiverSurvey:
                                                  noise=f"{row.noise_m:.2f}" if np.isfinite(row.noise_m) else "—")))
         if np.isfinite(row["index"]):
             lines.append(("nv_reach_index", dict(now=f"{row.now_m:.2f}", date=_day(row.now_date), index=f"{row['index']:.0f}",
-                                                 band=band_label(int(row.band)))))
+                                                 band=M(BANDS[int(row.band)][1]))))
         else:
-            lines.append(("nv_reach_no_index", dict(why=t("nv_why_" + row.why.replace(" ", "_")))))
+            lines.append(("nv_reach_no_index", dict(why=_why(row.why))))
         lines.append(("nv_reach_station", dict(reach=rid)))
         return Result(("nv_h_reach", {"reach": rid, "river": row.river_name}), lines,
                       figure=(lambda: navplots.fig_reach(lv, row, rid, d)) if len(lv) else None,
@@ -800,7 +825,10 @@ class RiverSurvey:
         table = pd.DataFrame(rows)
         return Result(("nv_h_ports", {"name": self.name}), [("nv_ports_line", dict(date=_day(d)))],
                       figure=(lambda: navplots.fig_ports(series, d)) if series else None,
-                      table=table, values=dict(zip(table.port, table["index"])))
+                      table=table, values=dict(zip(table.port, table["index"])),
+                      display_table=_columns(table, {"port": "port", "river": "river", "reach": "reach",
+                                                     "range (m)": "range", "latest level": "latest", "index": "index",
+                                                     "band": "band"}))
 
     @_needs_data
     def profile(self, date=None, start=None):
@@ -815,15 +843,17 @@ class RiverSurvey:
         path = path.join(now[["range_m", "low_m", "high_m", "now_m", "index", "band", "why"]], on="reach_id")
         path["band"] = path.band.fillna(-1).astype(int)
         path["why"] = path.why.fillna("ghost reach")
-        river = self.region.get("main_name", "the main river")
+        river = self.region.get("main_name", M("nv_main_default"))
         has = path[path["index"].notna()]
         lines = [("nv_profile_line", dict(river=river, n=len(path), km=fmt_int(round(path.dist_out_km.max())),
                                           with_index=len(has), date=_day(d)))]
         return Result(("nv_h_profile", {"river": river}), lines,
                       figure=lambda: navplots.fig_profile(path, self._ports(), river, _day(d)),
                       table=path[["reach_id", "river_name", "dist_out_km", "range_m", "index"]].round(1),
-                      display_table=lambda: path.assign(dist_out_km=path.dist_out_km.round().astype(int))[
+                      display_table=_columns(path.assign(dist_out_km=path.dist_out_km.round().astype(int))[
                           ["reach_id", "river_name", "dist_out_km", "range_m", "index"]].round(1),
+                          {"reach_id": "reach", "river_name": "river", "dist_out_km": "dist", "range_m": "range",
+                           "index": "index"}),
                       values=dict(reaches=len(path), with_index=len(has)))
 
     @_needs_data
@@ -848,16 +878,18 @@ class RiverSurvey:
         worst = low.idxmax() if low.notna().any() else None
         lines = [("nv_hist_line", dict(n=len(hist), days=self.params.max_age_days))]
         if worst is not None:
-            lines.append(("nv_hist_worst", dict(date=f"{worst:%B %Y}", pct=f"{low.max():.0f}",
+            lines.append(("nv_hist_worst", dict(date=Day(worst, month=True), pct=f"{low.max():.0f}",
                                                 now=f"{low.iloc[-1]:.0f}")))
         return Result(("nv_h_history", {"name": self.name}), lines,
                       figure=lambda: navplots.fig_history(hist, self.name), table=hist.round(0).tail(12),
+                      display_table=_columns(hist.round(0).tail(12), {"reaches": "reaches"}),
                       values=dict(months=len(hist)))
 
     @_needs_data
-    def export(self, date=None):
-        """Write the table (CSV) and the river lines with their index (GeoJSON, for QGIS) into outputs/"""
-        from . import navplots
+    def export(self, date=None, levels=False):
+        """Write into outputs/ the table (CSV), the rivers with their index (GeoPackage for QGIS, and GeoJSON) and
+        the settings (JSON). levels=True also puts every SWOT level into the GeoPackage (about 30 MB more)."""
+        from . import geopackage, navplots
         d = self.as_of if date is None else _date(date)
         df = self.to_dataframe(d)
         out = settings.out_dir()
@@ -868,15 +900,55 @@ class RiverSurvey:
                 "why"]
         f_csv = out / f"{stem}.csv"
         df[cols].round({"low_m": 3, "high_m": 3, "range_m": 3, "now_m": 3}).to_csv(f_csv, index=False)
-        f_geo = out / f"{stem}.geojson"
-        f_geo.write_text(json.dumps(navplots.index_geojson(df, self._network(), full=True)))
         meta = {"date": f"{d:%Y-%m-%d}", "index": "100 × (latest level − lowest level) / (highest − lowest)",
                 "source": "SWOT L2 HR RiverSP reach, Version D (NASA/CNES, PO.DAAC), via Hydrocron",
                 "params": asdict(self.params)}
+        f_gpkg = out / f"{stem}.gpkg"
+        layers = geopackage.write(f_gpkg, df, self._network(), self._ports(), BANDS, NO_INDEX_C,
+                                  levels=self.levels if levels else None,
+                                  about={"title": f"{self.name} — {t('nv_lab_index')} {d:%Y-%m-%d}",
+                                         **{k: v for k, v in meta.items() if k != "params"},
+                                         **{f"param_{k}": v for k, v in meta["params"].items()}})
+        f_geo = out / f"{stem}.geojson"
+        f_geo.write_text(json.dumps(navplots.index_geojson(df, self._network(), full=True)))
         f_meta = out / f"{stem}_metadata.json"
         f_meta.write_text(json.dumps(meta, indent=1))
-        lines = [("export_line", dict(path=str(f))) for f in (f_csv, f_geo, f_meta)]
-        return Result(("h_export", {}), lines, values=dict(csv=str(f_csv), geojson=str(f_geo), metadata=str(f_meta)))
+        lines = [("export_line", dict(path=str(f))) for f in (f_csv, f_gpkg, f_geo, f_meta)]
+        lines.append(("nv_export_qgis", dict(layers=", ".join(layers))))
+        return Result(("h_export", {}), lines, values=dict(csv=str(f_csv), gpkg=str(f_gpkg), geojson=str(f_geo),
+                                                           metadata=str(f_meta)))
+
+    @_needs_data
+    def download_geopackage(self, date=None, levels=False):
+        """Save the GeoPackage (rivers, ports and their index; levels=True: every SWOT level too) on your computer.
+        On Colab the browser downloads it; on your own computer it is already in outputs/ — click the link."""
+        f = Path(self.export(date, levels=levels).values["gpkg"])
+        size = f"{f.stat().st_size / 1e6:.1f}"
+        if _on_colab():
+            from google.colab import files
+            files.download(str(f))
+            lines = [("nv_dl_colab", dict(name=f.name, size=size))]
+            link = None
+        else:
+            lines = [("nv_dl_local", dict(path=str(f.resolve()), size=size))]
+            link = _link(f)
+        layers = "reaches, ports" + (", levels" if levels else "")
+        return Result(("nv_h_download", {}), lines + [("nv_export_qgis", dict(layers=layers))], extra_html=link,
+                      values=dict(gpkg=str(f)))
+
+
+def _on_colab():
+    return "google.colab" in sys.modules
+
+
+def _link(f):
+    """A download link to a file under the notebook's folder (Jupyter serves it), else nothing"""
+    rel = os.path.relpath(f.resolve(), Path.cwd())
+    if rel.startswith(".."):
+        return None
+    href = html_mod.escape(Path(rel).as_posix(), quote=True)
+    return (f'<a href="{href}" download="{html_mod.escape(f.name, quote=True)}" style="font-family:system-ui,sans-serif">'
+            f'⬇ {html_mod.escape(t("nv_dl_link", name=f.name))}</a>')
 
 
 def _width_split(tab):
@@ -904,7 +976,7 @@ def river_survey(region="congo", *, reach_ids=None, download=True, update_days=3
     params = replace(SurveyParams(), **settings_)
     key = region if reach_ids is None else "custom_" + hashlib.sha1(
         ",".join(sorted(str(int(r)) for r in reach_ids)).encode()).hexdigest()[:10]
-    title = name or (REGIONS[region]["name"] if reach_ids is None and region in REGIONS else t("nv_your_reaches"))
+    title = name or (REGIONS[region]["name"] if reach_ids is None and region in REGIONS else M("nv_your_reaches"))
     try:
         meta = region_reach_list(region, reach_ids)
     except ValueError as e:

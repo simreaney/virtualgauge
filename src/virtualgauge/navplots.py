@@ -1,4 +1,4 @@
-"""Figures and maps for river navigability (English only for now).
+"""Figures and maps for river navigability (English or French: vg.set_language).
 
 Index colours (navigation.BANDS): a diverging red ↔ blue scale with a neutral grey middle — red = low water
 (poor navigability), blue = high water (good). The two arms are matched in lightness. Reaches with no index are drawn
@@ -119,13 +119,14 @@ def _binned_map(tab, net, values, bins, labels, none_label, ttl):
 
 def fig_coverage(tab, net, name):
     n = tab.n_good.where(tab.n_good > 0)
-    return _binned_map(tab, net, n, [1, 50, 90, 110], ["1–49", "50–89", "90–109", "110 or more"],
+    return _binned_map(tab, net, n, [1, 50, 90, 110], ["1–49", "50–89", "90–109", t("nv_lab_or_more", n=110)],
                        t("nv_lab_none_measured"), ("nv_ttl_coverage", dict(name=name)))
 
 
 def fig_ranges(tab, net, name):
     r = tab.range_m.where(tab.why == "")
-    return _binned_map(tab, net, r, [0, 2, 4, 6], ["less than 2 m", "2–4 m", "4–6 m", "more than 6 m"],
+    return _binned_map(tab, net, r, [0, 2, 4, 6], [t("nv_lab_less_than", v="2 m"), "2–4 m", "4–6 m",
+                                                   t("nv_lab_more_than", v="6 m")],
                        t("nv_lab_no_range"), ("nv_ttl_ranges", dict(name=name)))
 
 
@@ -197,7 +198,7 @@ def fig_ports(series, date):
                 ax.plot(last.time, last["index"], marker="o", ms=9, mfc=band_colour(b), mec=COL["ink"], mew=1.1,
                         ls="none", zorder=3)
             now = f"{row['index']:.0f}" if np.isfinite(row["index"]) else "—"
-            ax.set_title(f"{name} — index {now}", fontsize=10)
+            ax.set_title(t("nv_ttl_port", port=name, index=now), fontsize=10)
             ax.set_ylim(-5, 105)
             ax.set_yticks([0, 50, 100])
             ax.grid(False)
@@ -306,28 +307,30 @@ def index_folium(df, net, name, day, ports):
     import folium
     from .maps import ESRI, ESRI_ATTR
     m = folium.Map(location=[float(df.lat.mean()), float(df.lon.mean())], zoom_start=5, tiles=None)
-    folium.TileLayer(tiles=LIGHT_TILES, attr=LIGHT_ATTR, name="Light grey map").add_to(m)
+    folium.TileLayer(tiles=LIGHT_TILES, attr=LIGHT_ATTR, name=t("nv_map_grey")).add_to(m)
     folium.TileLayer("OpenStreetMap", name="OpenStreetMap").add_to(m)
     folium.TileLayer(tiles=ESRI, attr=ESRI_ATTR, name=t("map_image")).add_to(m)
     m.fit_bounds([[float(df.lat.min()), float(df.lon.min())], [float(df.lat.max()), float(df.lon.max())]])
     gj = index_geojson(df.sort_values("band"), net)     # reaches with no index first, so they sit underneath
     fields = ["river", "reach_id", "index", "band", "latest", "range", "good_levels"]
-    aliases = ["river", "reach", "index", "band", "latest level", "lowest – highest (range)", "good SWOT levels"]
+    aliases = [t(k) for k in ("nv_col_river", "nv_col_reach", "nv_col_index", "nv_col_band", "nv_col_latest",
+                              "nv_col_range_popup", "nv_lab_good")]
     folium.GeoJson(gj, name=t("nv_map_layer"),
                    style_function=lambda f: {"color": f["properties"]["_c"], "weight": f["properties"]["_w"],
                                              "opacity": 0.95},
                    marker=folium.CircleMarker(radius=3, fill=True, fill_opacity=0.9, weight=0),
                    highlight_function=lambda f: {"weight": 6, "color": COL["ink"]},
-                   tooltip=folium.GeoJsonTooltip(fields=["river", "index"], aliases=["river", "index"]),
+                   tooltip=folium.GeoJsonTooltip(fields=["river", "index"], aliases=aliases[:1] + aliases[2:3]),
                    popup=folium.GeoJsonPopup(fields=fields, aliases=aliases)).add_to(m)
     fg = folium.FeatureGroup(name=t("nv_lab_ports"))
     for p in ports:
         r = df.loc[df.reach_id == p["reach_id"]].iloc[0]
         idx = "—" if r.band < 0 else f"{r['index']:.0f}"
+        word = t("nv_col_index")
         folium.CircleMarker([p["lat"], p["lon"]], radius=5, color=COL["bg"], weight=1.5, fill=True,
                             fill_color=COL["ink"], fill_opacity=1,
-                            tooltip=f"{p['name']} ({p['river']}): index {idx}",
-                            popup=folium.Popup(f"<b>{p['name']}</b> ({p['river']})<br>index {idx}<br>"
+                            tooltip=f"{p['name']} ({p['river']}): {word} {idx}",
+                            popup=folium.Popup(f"<b>{p['name']}</b> ({p['river']})<br>{word} {idx}<br>"
                                                f"<code>congo.reach(\"{p['reach_id']}\")</code>", max_width=300)).add_to(fg)
     fg.add_to(m)
     sw = "".join(f'<div style="white-space:nowrap"><span style="display:inline-block;width:22px;height:5px;'
