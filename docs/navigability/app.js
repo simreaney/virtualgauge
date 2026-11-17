@@ -1,49 +1,85 @@
 // Navigability index of the Congo basin: draws the pre-processed river network (data/congo.json, written by
 // tools/build_navigability_site.py), then asks Hydrocron for the SWOT levels measured since that snapshot.
-import { DAY, parseLevels, screen, judge, indexAt } from "./core.js";
+// In English or French (i18n.js); the index on the map can be saved as a GeoPackage for QGIS (gpkg.js).
+import { DAY, parseLevels, screen, judge, indexAt, unpack } from "./core.js";
+import { pickLanguage, saveLanguage, translator } from "./i18n.js";
+import { navigabilityLayers, writeGeoPackage } from "./gpkg.js";
 
 const WORKERS = 8;                 // requests to Hydrocron at the same time (as the Python package)
 const OVERLAP_DAYS = 10;           // re-read the last days before the snapshot: SWOT levels can arrive late
 const KEEP_DAYS = 75;              // never ask for more than this
 const FRESH_HOURS = 6;             // a reach checked less than this long ago is not asked again
 const FIELDS = "reach_id,time_str,wse,reach_q,xovr_cal_q,dark_frac";
-const WHY = {
-  "no SWOT data": "No SWOT data for this reach", "not downloaded": "No SWOT data for this reach",
-  "never measured": "SWOT has never measured this reach", "too few good levels": "Too few good levels for an index",
-  "record too short": "The record is shorter than a year", "range too small": "The range of levels is too small to trust",
-  "too noisy": "The levels are too noisy for an index", "no recent level": "No good level in the last 30 days",
-};
 
 const $ = (id) => document.getElementById(id);
-const int = new Intl.NumberFormat("en-GB");
-const dayFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
-const shortFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-const clockFmt = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit" });
-const day = (t) => dayFmt.format(new Date(t * 1000));
-const shortDay = (t) => shortFmt.format(new Date(t * 1000));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const endOfToday = () => Math.floor(Date.now() / 1000 / DAY) * DAY + DAY - 1;
+
+// the words and number formats of the chosen language
+let lang, t, int, metres, percent, dayFmt, shortFmt, clockFmt, attribution = "";
+function setLanguage(l) {
+  lang = l;
+  t = translator(l);
+  const locale = t("locale");
+  int = new Intl.NumberFormat(locale);
+  metres = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  percent = new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 });
+  dayFmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  shortFmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  clockFmt = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
+}
+const day = (s) => dayFmt.format(new Date(s * 1000));
+const shortDay = (s) => shortFmt.format(new Date(s * 1000));
+const m = (v) => `${metres.format(v)} m`;
+const pct = (v) => percent.format(v / 100);
+const riverName = (r) => (r.river === "—" ? t("unnamed") : r.river);
 
 let data, P, reaches, byId, map, lines, halo, selected = null, zoomScale = 1, colours = {};
 const now = endOfToday();
 
 // ---------------------------------------------------------------------------------------------- data
-function unpack(d) {
-  const r = d.reaches;
-  return r.id.map((id, i) => ({
-    i, id, river: d.rivers[r.river[i]], lon: r.lon[i], lat: r.lat[i], width: r.width[i], km: r.km[i],
-    why: d.why[r.why[i]], n: r.n[i], low: r.low[i], high: r.high[i], lowT: r.low_t[i], highT: r.high_t[i],
-    median: r.median[i], far: r.far[i], jump: r.jump[i], saved: r.recent[i], levels: r.recent[i], line: r.line[i],
-    live: false, now: null,
-  }));
-}
-
 /** Has the reach a level that was not in the snapshot? */
 const isNew = (r) => r.live && r.now.t != null && !r.saved.some((l) => l[0] === r.now.t);
 
 function rate(r) {
   r.now = r.why ? { index: null, band: -1, why: r.why } : indexAt(r.levels, r.low, r.high, now, P.max_age_days);
+}
+
+// ---------------------------------------------------------------------------------------------- words on the page
+/** The fixed words of the page (data-i18n: text, data-i18n-html: trusted markup, data-i18n-aria: label). */
+function words() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
+  document.querySelector('meta[name="description"]').content = t("description");
+  document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  if (!data) { document.title = t("title"); return; }
+  const name = data.name[lang];
+  $("date").textContent = `${name}, ${day(now)}`;
+  document.title = t("titleDated", { name, date: day(now) });
+  $("about-data").textContent = t("aboutData", {
+    first: day(Date.parse(data.first) / 1000), last: day(data.as_of_t), days: P.max_age_days,
+    n: int.format(reaches.filter((r) => !r.why).length), total: int.format(reaches.length) });
+  if (map) {
+    map.attributionControl.removeAttribution(attribution);
+    attribution = t("attribution");
+    map.attributionControl.addAttribution(attribution);
+  }
+}
+
+function switchLanguage(l) {
+  if (l === lang) return;
+  setLanguage(l);
+  saveLanguage(l);
+  const url = new URL(location.href);
+  if (url.searchParams.has("lang")) { url.searchParams.set("lang", l); history.replaceState(null, "", url); }
+  words();
+  if (!data) return;
+  summary();
+  reachPanel();
+  update.report();
 }
 
 // ---------------------------------------------------------------------------------------------- map
@@ -68,7 +104,8 @@ function drawMap(countries) {
   map = L.map("map", { preferCanvas: true, zoomControl: false, zoomSnap: 0.25, minZoom: 4, maxZoom: 13,
                        maxBounds: bounds.pad(0.6), renderer: L.canvas({ tolerance: 7, padding: 0.4 }) });
   map.attributionControl.setPrefix('<a href="https://leafletjs.com" rel="noopener">Leaflet</a>');
-  map.attributionControl.addAttribution("Levels: SWOT (NASA/CNES) via Hydrocron · rivers: SWORD · borders: Natural Earth");
+  attribution = t("attribution");
+  map.attributionControl.addAttribution(attribution);
   L.control.zoom({ position: "topright" }).addTo(map);
   L.control.scale({ position: "bottomright", imperial: false }).addTo(map);
   map.fitBounds(bounds, { padding: [24, 24] });
@@ -117,8 +154,8 @@ const scaleFor = (z) => Math.min(Math.max(1.22 ** (z - 5.5), 0.8), 3.2);
 
 function tip(r) {
   const n = r.now;
-  const value = n.band >= 0 ? `index <b>${Math.round(n.index)}</b>` : "no index";
-  return `<b>${esc(r.river === "—" ? "Unnamed river" : r.river)}</b> · ${value}`;
+  const value = n.band >= 0 ? t("tipIndex", { index: Math.round(n.index) }) : t("noIndex");
+  return `<b>${esc(riverName(r))}</b> · ${value}`;
 }
 
 function basemaps() {
@@ -131,7 +168,7 @@ function basemaps() {
   const buttons = document.querySelectorAll(".basemap button");
   buttons.forEach((b) => b.addEventListener("click", () => {
     buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    Object.values(tiles).forEach((t) => t.remove());
+    Object.values(tiles).forEach((layer) => layer.remove());
     const layer = tiles[b.dataset.base];
     if (layer) layer.addTo(map);
     $("map").classList.toggle("tiles", Boolean(layer));
@@ -163,18 +200,18 @@ function summary() {
   const mid = sorted.length >> 1;
   const median = sorted.length ? (sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2) : null;
   $("s-median").textContent = median == null ? "–" : Math.round(median);
-  $("s-low").textContent = `${Math.round(100 * (km[0] + km[1]) / total)}%`;
-  $("s-high").textContent = `${Math.round(100 * (km[3] + km[4]) / total)}%`;
+  $("s-low").textContent = pct(Math.round(100 * (km[0] + km[1]) / total));
+  $("s-high").textContent = pct(Math.round(100 * (km[3] + km[4]) / total));
 
   const share = $("share");
   if (!share.children.length) share.innerHTML = "<span></span>".repeat(5);
   [...share.children].forEach((el, b) => {
     el.style.cssText = `flex: ${km[b] / total} 1 0; background: var(--b${b})`;
-    el.title = `${data.bands[b].label}: ${Math.round(100 * km[b] / total)}% of river length`;
+    el.title = t("shareTitle", { band: data.bands[b].label[lang], pct: pct(Math.round(100 * km[b] / total)) });
   });
-  const rows = [4, 3, 2, 1, 0].map((b) => `<tr><td><span class="swatch" style="background:var(--b${b})"></span>${esc(data.bands[b].label)}</td>
-    <td class="num">${int.format(count[b])}</td><td class="num">${Math.round(100 * km[b] / total)}%</td></tr>`);
-  rows.push(`<tr class="none"><td><span class="swatch" style="background:var(--none)"></span>no index</td>
+  const rows = [4, 3, 2, 1, 0].map((b) => `<tr><td><span class="swatch" style="background:var(--b${b})"></span>${esc(data.bands[b].label[lang])}</td>
+    <td class="num">${int.format(count[b])}</td><td class="num">${pct(Math.round(100 * km[b] / total))}</td></tr>`);
+  rows.push(`<tr class="none"><td><span class="swatch" style="background:var(--none)"></span>${esc(data.no_index[lang])}</td>
     <td class="num">${int.format(reaches.length - has.length)}</td><td class="num"></td></tr>`);
   $("bands").tBodies[0].innerHTML = rows.join("");
 
@@ -193,36 +230,36 @@ function reachPanel() {
   if (!selected) return;
   const r = selected, n = r.now;
   const port = data.ports.find((p) => p.reach_id === r.id);
-  const name = r.river === "—" ? "Unnamed river" : r.river;
+  const name = riverName(r);
   const title = port ? `${port.name} <span class="soft">· ${esc(port.river)}</span>` : esc(name);
-  const m = (v) => `${v.toFixed(2)} m`;
-  let html = `<p class="reach-title">${title}</p><p class="reach-sub">SWOT reach ${r.id}${port && port.river !== name ? ` · ${esc(name)}` : ""}</p>`;
+  let html = `<p class="reach-title">${title}</p><p class="reach-sub">${t("reachSub", { id: r.id })}${port && port.river !== name ? ` · ${esc(name)}` : ""}</p>`;
   if (n.band >= 0) {
     html += `<div class="reach-index"><b>${Math.round(n.index)}</b>
-      <span class="chip"><i style="background:var(--b${n.band})"></i>${esc(data.bands[n.band].label.replace(/^[\d–]+ /, ""))}</span></div>`;
+      <span class="chip"><i style="background:var(--b${n.band})"></i>${esc(data.bands[n.band].label[lang].replace(/^[\d–]+ /, ""))}</span></div>`;
   } else {
-    html += `<p class="note">${esc(WHY[n.why] || n.why)}.</p>`;
+    html += `<p class="note">${esc(t(`why.${n.why}`, { days: P.max_age_days }))}.</p>`;
   }
   if (r.low != null && r.high != null) {
     const at = n.t != null ? Math.min(Math.max(100 * (n.wse - r.low) / (r.high - r.low), 0), 100) : null;
     html += `<div class="gauge"><div class="gauge-track">${[0, 1, 2, 3, 4].map((b) => `<span style="background:var(--b${b})"></span>`).join("")}
       ${n.band >= 0 ? `<i style="left:${at}%"></i>` : ""}</div>
-      <div class="gauge-ends"><span>${m(r.low)}<small>lowest · ${shortDay(r.lowT)}</small></span>
-      <span>${m(r.high)}<small>highest · ${shortDay(r.highT)}</small></span></div></div>`;
+      <div class="gauge-ends"><span>${m(r.low)}<small>${t("lowest")} · ${shortDay(r.lowT)}</small></span>
+      <span>${m(r.high)}<small>${t("highest")} · ${shortDay(r.highT)}</small></span></div></div>`;
   }
   const facts = [];
   if (n.t != null) {
     const age = Math.max(0, Math.floor(n.age));
-    facts.push(["Latest level", `${m(n.wse)} <span class="soft">· ${shortDay(n.t)}, ${age === 0 ? "today" : `${age} day${age === 1 ? "" : "s"} ago`}</span>`
-      + (isNew(r) ? '<span class="tag live">new</span>' : "")]);
+    const ago = age === 0 ? t("today") : age === 1 ? t("daysAgo1") : t("daysAgo", { n: age });
+    facts.push([t("latest"), `${m(n.wse)} <span class="soft">· ${shortDay(n.t)}, ${ago}</span>`
+      + (isNew(r) ? `<span class="tag live">${t("newTag")}</span>` : "")]);
   }
-  if (r.low != null && r.high != null) facts.push(["Range", `${m(r.high - r.low)} <span class="soft">between lowest and highest</span>`]);
-  if (r.n) facts.push(["Record", `${int.format(r.n)} good SWOT levels`]);
-  if (r.width) facts.push(["Width", `about ${int.format(r.width)} m`]);
+  if (r.low != null && r.high != null) facts.push([t("range"), `${m(r.high - r.low)} <span class="soft">${t("rangeNote")}</span>`]);
+  if (r.n) facts.push([t("record"), t("goodLevels", { n: int.format(r.n) })]);
+  if (r.width) facts.push([t("width"), t("about_m", { n: int.format(r.width) })]);
   html += `<dl class="facts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
-  if (n.band >= 0 && n.raw < 0) html += `<p class="note">This is the lowest level SWOT has recorded here: ${m(r.low - n.wse)} below the previous lowest.</p>`;
-  if (n.band >= 0 && n.raw > 100) html += `<p class="note">This is the highest level SWOT has recorded here: ${m(n.wse - r.high)} above the previous highest.</p>`;
-  if (!r.why && !r.live && update.running) html += `<p class="hint">Checking Hydrocron for a newer level…</p>`;
+  if (n.band >= 0 && n.raw < 0) html += `<p class="note">${t("newLowest", { m: m(r.low - n.wse) })}</p>`;
+  if (n.band >= 0 && n.raw > 100) html += `<p class="note">${t("newHighest", { m: m(n.wse - r.high) })}</p>`;
+  if (!r.why && !r.live && update.running) html += `<p class="hint">${t("checkingReach")}</p>`;
   $("reach-body").innerHTML = html;
 }
 
@@ -235,6 +272,51 @@ function select(r, fly = false) {
   if (!selected) return;
   update.first(selected);
   if (fly) map.flyTo([selected.lat, selected.lon], Math.max(map.getZoom(), 7.5), { duration: 0.8 });
+}
+
+// ---------------------------------------------------------------------------------------------- GeoPackage
+let sqlReady = null, stylesReady = null;
+
+/** sql.js (SQLite in WebAssembly, ~0.7 MB), loaded the first time a file is made */
+function loadSql() {
+  sqlReady ??= new Promise((ok, fail) => {
+    const s = document.createElement("script");
+    s.src = "vendor/sql.js/sql-wasm.js";
+    s.onload = () => window.initSqlJs({ locateFile: (f) => `vendor/sql.js/${f}` }).then(ok, fail);
+    s.onerror = () => fail(new Error("vendor/sql.js/sql-wasm.js"));
+    document.head.append(s);
+  });
+  return sqlReady;
+}
+
+async function download() {
+  const button = $("download"), note = $("download-note");
+  button.disabled = true;
+  note.hidden = false;
+  note.textContent = t("downloadBusy");
+  try {
+    stylesReady ??= getJSON("data/qgis.json");
+    const [SQL, styles] = await Promise.all([loadSql(), stylesReady]);
+    const bytes = writeGeoPackage(SQL, navigabilityLayers(data, reaches, t, lang, isNew),
+                                  [{ table: "reaches", qml: styles.reaches[lang] }, { table: "ports", qml: styles.ports }]);
+    const file = `navigability_${data.region}_${new Date(now * 1000).toISOString().slice(0, 10)}.gpkg`;
+    const url = URL.createObjectURL(new Blob([bytes], { type: "application/geopackage+sqlite3" }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: file });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    const left = reaches.filter((r) => !r.why && !r.live).length;
+    note.textContent = t("downloadDone", { file, size: t("mb", { n: (bytes.length / 1e6).toLocaleString(t("locale"), { maximumFractionDigits: 1 }) }) })
+      + (left ? ` ${t("downloadPartial", { left: int.format(left), date: day(data.as_of_t) })}` : "");
+  } catch (e) {
+    sqlReady = null;
+    stylesReady = null;
+    note.textContent = t("downloadFailed", { error: e.message || e });
+    console.error(e);
+  } finally {
+    button.disabled = false;
+  }
 }
 
 // ---------------------------------------------------------------------------------------------- live levels
@@ -265,7 +347,7 @@ const update = {
   },
 
   async fetch(r, signal) {
-    const iso = (t) => new Date(t * 1000).toISOString().slice(0, 19) + "Z";
+    const iso = (s) => new Date(s * 1000).toISOString().slice(0, 19) + "Z";
     const q = new URLSearchParams({ feature: "Reach", feature_id: r.id, output: "csv", start_time: iso(this.start()),
                                     end_time: iso(now), fields: FIELDS });
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -343,38 +425,43 @@ const update = {
       $("progress-bar").style.width = `${100 * this.done / Math.max(this.total, 1)}%`;
     };
     const changed = reaches.filter(isNew).length;
-    const newer = changed ? `${int.format(changed)} reach${changed === 1 ? " has" : "es have"} a newer level than the snapshot of ${snapshot}.`
-                               : `No level newer than the snapshot of ${snapshot} so far.`;
+    const newer = changed === 0 ? t("newerNone", { date: snapshot })
+      : changed === 1 ? t("newer1", { date: snapshot }) : t("newer", { n: int.format(changed), date: snapshot });
+    const counts = { done: int.format(this.done), total: int.format(this.total) };
+    const live = reaches.filter((r) => r.live).length;                  // reaches that did get an answer
     if (this.running) {
-      set("busy", `Checking SWOT for new levels: ${int.format(this.done)} of ${int.format(this.total)} reaches`, "Pause", () => this.stop(),
-          `${newer} The largest rivers are checked first.`);
+      set("busy", t("checking", counts), t("pause"), () => this.stop(), t("checkingNote", { newer }));
     } else if (this.strikes >= WORKERS) {
-      set("bad", "Hydrocron cannot be reached", "Try again", () => { this.queue.unshift(...this.failed); this.failed = []; this.strikes = 0; this.go(); },
-          `The map shows the levels saved on ${snapshot}${this.done ? `, updated for ${int.format(this.done)} reaches` : ""}.`);
+      set("bad", t("unreachable"), t("retry"), () => { this.queue.unshift(...this.failed); this.failed = []; this.strikes = 0; this.go(); },
+          live ? t("unreachableNoteSome", { date: snapshot, n: int.format(live) }) : t("unreachableNote", { date: snapshot }));
     } else if (left) {
-      set("", `Paused: ${int.format(this.done)} of ${int.format(this.total)} reaches checked`, "Continue", () => this.go(), newer);
+      set("", t("paused", counts), t("resume"), () => this.go(), newer);
     } else if (this.failed.length) {
-      set("bad", `${int.format(this.failed.length)} reach${this.failed.length === 1 ? "" : "es"} could not be checked`, "Try again",
+      set("bad", this.failed.length === 1 ? t("failed1") : t("failed", { n: int.format(this.failed.length) }), t("retry"),
           () => { this.queue = this.failed; this.failed = []; this.done = this.total - this.queue.length; this.go(); }, newer);
     } else {
-      set("ok", `Up to date: every reach checked at ${clockFmt.format(new Date())}`, "Check again", () => this.run(true), newer);
+      set("ok", t("upToDate", { time: clockFmt.format(new Date()) }), t("again"), () => this.run(true), newer);
     }
   },
 };
 
 // ---------------------------------------------------------------------------------------------- start
+async function getJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url}: ${res.status}`);
+  return res.json();
+}
+
 async function main() {
-  const get = async (url) => {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`${url}: ${res.status}`);
-    return res.json();
-  };
+  setLanguage(pickLanguage());
+  words();
+  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => switchLanguage(b.dataset.lang)));
   let countries;
   try {
-    [data, countries] = await Promise.all([get("data/congo.json"), get("data/countries.geojson")]);
+    [data, countries] = await Promise.all([getJSON("data/congo.json"), getJSON("data/countries.geojson")]);
   } catch (e) {
     $("status-dot").className = "dot bad";
-    $("status-text").textContent = "The river data could not be loaded. Reload the page to try again.";
+    $("status-text").textContent = t("loadFailed");
     console.error(e);
     return;
   }
@@ -384,21 +471,17 @@ async function main() {
   reaches.forEach(rate);
   readColours();
 
-  $("date").textContent = `${data.name}, ${day(now)}`;
-  document.title = `${data.name} navigability, ${day(now)}`;
   $("scale-bar").innerHTML = [0, 1, 2, 3, 4].map((b) => `<span style="background:var(--b${b})"></span>`).join("");
-  $("about-data").textContent = `The lowest and highest levels come from every good SWOT level between ${day(Date.parse(data.first) / 1000)} `
-    + `and ${day(data.as_of_t)} (${int.format(reaches.filter((r) => !r.why).length)} of ${int.format(reaches.length)} reaches have a record good enough for an index). `
-    + `Your browser then asks NASA's Hydrocron service for the levels measured since, and judges them with the same quality rules. `
-    + `A reach needs a good level from the last ${P.max_age_days} days to be coloured.`;
-
   drawMap(countries);
+  words();
   summary();
   $("ports").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-reach]");
     if (b) select(byId.get(b.dataset.reach), true);
   });
   $("reach-close").addEventListener("click", () => select(null));
+  $("download").addEventListener("click", download);
+  $("download").disabled = false;
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
     readColours();
     reaches.forEach((r) => r.layer.setStyle({ color: colourOf(r) }));

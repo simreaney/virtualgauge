@@ -21,7 +21,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 import virtualgauge as vg                                   # noqa: E402
 from virtualgauge import navigation, store                  # noqa: E402
-from virtualgauge.i18n import t                             # noqa: E402
+from virtualgauge import geopackage                         # noqa: E402
+from virtualgauge.i18n import _pair                         # noqa: E402
 
 SITE = ROOT / "docs" / "navigability"
 WHY = ["", "no SWOT data", "not downloaded", "never measured", "too few good levels", "record too short",
@@ -77,17 +78,37 @@ def build(survey):
         "line": [lines.get(r, []) for r in ids],
     }
     return {
-        "name": str(survey.name), "region": survey.key,
+        "name": _both(survey.name), "region": survey.key,
         "as_of": f"{survey.as_of:%Y-%m-%d}", "as_of_t": int(survey.as_of.timestamp()),
         "first": f"{kept.time.min():%Y-%m-%d}",
         "source": "SWOT L2 HR RiverSP reach, Version D (NASA/CNES, PO.DAAC), via Hydrocron",
         "hydrocron": vg.download.HYDROCRON,
         "params": {k: getattr(p, k) for k in ("max_reach_q", "max_xovr_q", "max_dark_frac", "jump_days", "max_age_days")},
-        "bands": [{"from": lo, "label": t(key), "colour": c} for lo, key, c in navigation.BANDS],
+        "bands": [{"from": lo, "label": _both_key(key), "colour": c} for lo, key, c in navigation.BANDS],
+        "no_index": _both_key("nv_no_index"), "no_index_colour": navigation.NO_INDEX_C,
         "why": WHY, "rivers": rivers,
         "ports": [{**port, "reach_id": str(port["reach_id"])} for port in survey._ports()],
         "reaches": reaches,
     }
+
+
+def _both_key(key):
+    """A message in English and French: {"en": …, "fr": …} (the page shows one, src/virtualgauge/messages.py has both)"""
+    return dict(zip(("en", "fr"), _pair(key, {})))
+
+
+def _both(text):
+    return dict(zip(("en", "fr"), text.pair() if hasattr(text, "pair") else (str(text), str(text))))
+
+
+def qgis_styles():
+    """The QGIS styles the page puts into its GeoPackage, as the package writes them (band names in each language)"""
+    reaches = {}
+    for lang in ("en", "fr"):
+        vg.set_language(lang)
+        reaches[lang] = geopackage.reaches_style(navigation.BANDS, navigation.NO_INDEX_C)
+    vg.set_language("en")
+    return {"geometry_column": geopackage.GEOM, "reaches": reaches, "ports": geopackage.ports_style()}
 
 
 def main(cache="cache", download=True):
@@ -102,6 +123,7 @@ def main(cache="cache", download=True):
     out = data / "congo.json"
     out.write_text(json.dumps(build(survey), separators=(",", ":"), allow_nan=False))
     shutil.copy2(store.bundle_dir() / "locations" / "congo_countries.geojson", data / "countries.geojson")
+    (data / "qgis.json").write_text(json.dumps(qgis_styles(), separators=(",", ":"), ensure_ascii=False))
     print(f"{out.relative_to(ROOT)}  {out.stat().st_size / 1e6:.2f} MB, levels to {survey.as_of:%Y-%m-%d}")
 
 
