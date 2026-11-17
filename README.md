@@ -117,15 +117,19 @@ with its lowest, highest and latest level, range, index and band), a layer `port
 open in QGIS already coloured by their index. `levels=True` adds a table of every SWOT level (about 30 MB more).
 
 **As a web page.** `docs/navigability/` is the same map as a static site (plain HTML, CSS and JavaScript, Leaflet
-included — no build step, no server code). It ships each reach's lowest and highest level, draws the map at once, then
+included — no build step, no server code), with a page for each basin: `index.html` the Congo and `amazon.html` the
+Amazon (all 16,957 SWOT reaches of the Amazon basin, from the Andes of Ecuador and Peru to the sea, with twelve river
+ports from Coca and Pucallpa to Santarém; `vg.river_survey("amazon")` gives the same in Python, after a download of
+about 45 minutes). It ships each reach's lowest and highest level, draws the map at once, then
 your browser asks Hydrocron for the SWOT levels measured since and updates the index, judging new levels with the same
 rules as the package (`tests/test_navigability_site.py` checks this). The page is in English or French — the browser's
 language, an EN/FR switch, or `?lang=fr` in the address — and its *Download* button saves the index on the map as a
 GeoPackage for QGIS, written in the browser with [sql.js](https://github.com/sql-js/sql.js) (included, loaded only
 then) and styled like the package's. To publish it on GitHub Pages: *Settings → Pages →
-Deploy from a branch →* `main`, folder `/docs`; the page is then at `https://<user>.github.io/virtualgauge/navigability/`.
-To try it on your computer: `python -m http.server -d docs`, then open <http://localhost:8000/navigability/>. Rebuild
-its data now and then with `python tools/build_navigability_site.py`, so the ranges include new record levels.
+Deploy from a branch →* `main`, folder `/docs`; the pages are then at `https://<user>.github.io/virtualgauge/navigability/`
+and `…/navigability/amazon.html`. To try them on your computer: `python -m http.server -d docs`, then open
+<http://localhost:8000/navigability/>. Rebuild their data now and then with `python tools/build_navigability_site.py`
+(both basins, about an hour; `… congo` or `… amazon` for one), so the ranges include new record levels.
 
 ## The `virtualgauge` package · Le package `virtualgauge`
 

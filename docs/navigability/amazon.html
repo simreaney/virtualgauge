@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-region="amazon">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amazon basin navigability — live from SWOT</title>
+<meta name="description" content="How navigable are the rivers of the Amazon basin today? A navigability index for 16,957 river reaches, updated in your browser from the latest SWOT satellite water levels.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231c5cab'/%3E%3Cpath d='M5 21c4-6 7-6 11 0s7 6 11 0' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M5 13c4-6 7-6 11 0s7 6 11 0' fill='none' stroke='%2386b6ef' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="Navigability summary" data-i18n-aria="side">
+    <header class="head">
+      <div class="head-top">
+        <p class="eyebrow" data-i18n="eyebrow">Amazon basin · SWOT satellite</p>
+        <div class="lang" role="group" aria-label="Language" data-i18n-aria="language">
+          <button data-lang="en" aria-pressed="true" lang="en" title="English">EN</button>
+          <button data-lang="fr" aria-pressed="false" lang="fr" title="Français">FR</button>
+        </div>
+      </div>
+      <h1 data-i18n="h1">Navigability index</h1>
+      <p class="date" id="date">&nbsp;</p>
+      <p class="lede" data-i18n="lede">0 = the lowest level SWOT has recorded on the reach since July 2023, 100 = the highest.</p>
+    </header>
+
+    <section class="status" id="status" aria-live="polite">
+      <div class="status-row">
+        <span class="dot" id="status-dot"></span>
+        <span class="status-text" id="status-text" data-i18n="loading">Loading the river network…</span>
+        <button class="link" id="status-action" hidden></button>
+      </div>
+      <div class="progress" id="progress" hidden><span id="progress-bar"></span></div>
+      <p class="status-note" id="status-note" hidden></p>
+    </section>
+
+    <section class="block" id="reach" aria-labelledby="h-reach" hidden>
+      <div class="block-head">
+        <h2 id="h-reach" data-i18n="selected">Selected reach</h2>
+        <button class="link" id="reach-close" data-i18n="clear">Clear</button>
+      </div>
+      <div id="reach-body"></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-basin">
+      <h2 id="h-basin" data-i18n="basinToday">The basin today</h2>
+      <div class="stats">
+        <div class="stat stat-main">
+          <span class="stat-value" id="s-median">–</span>
+          <span class="stat-label" data-i18n="medianIndex">median index</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="s-low">–</span>
+          <span class="stat-label" data-i18n-html="lowWater">of river length at low water <span class="soft">(below 40)</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="s-high">–</span>
+          <span class="stat-label" data-i18n-html="highWater">at high water <span class="soft">(above 60)</span></span>
+        </div>
+      </div>
+      <div class="share" id="share" role="img" aria-label="Share of river length in each band" data-i18n-aria="shareLabel"></div>
+      <table class="bands" id="bands">
+        <thead><tr><th scope="col" data-i18n="colIndex">Index</th><th scope="col" class="num" data-i18n="colReaches">Reaches</th><th scope="col" class="num" data-i18n="colLength">River length</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="block" aria-labelledby="h-ports">
+      <h2 id="h-ports" data-i18n="ports">River ports</h2>
+      <ul class="ports" id="ports"></ul>
+      <p class="hint" data-i18n="portsHint">Select a port, or any river on the map, for its levels.</p>
+    </section>
+
+    <section class="block" aria-labelledby="h-download">
+      <h2 id="h-download" data-i18n="download">Download</h2>
+      <button class="button" id="download" disabled>
+        <svg aria-hidden="true" viewBox="0 0 16 16" width="15" height="15"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="downloadButton">GeoPackage for QGIS</span>
+      </button>
+      <p class="hint" data-i18n="downloadHint">Every reach and port with the index shown on the map now, in one file.</p>
+      <p class="status-note" id="download-note" aria-live="polite" hidden></p>
+    </section>
+
+    <section class="block about" aria-labelledby="h-about">
+      <h2 id="h-about" data-i18n="about">How to read it</h2>
+      <p class="formula" data-i18n="formula">index = 100 × (latest level − lowest level) ÷ (highest level − lowest level)</p>
+      <p data-i18n="aboutText">Each reach is compared with its own record of water levels from the SWOT satellite. The index says where
+        the river stands between its lowest and highest recorded level. It is not a depth of water and does not
+        show whether a particular boat can pass.</p>
+      <p id="about-data"></p>
+      <p data-i18n-html="credits">Levels: SWOT L2 HR RiverSP reach product, Version D (NASA/CNES, PO.DAAC), through
+        <a href="https://podaac.github.io/hydrocron/" rel="noopener">Hydrocron</a>. River network: SWORD v17b.
+        Made with <a href="https://github.com/simreaney/virtualgauge" rel="noopener">virtualgauge</a>.</p>
+      <p data-i18n-html="otherBasin">The same map for the <a href="./">Congo basin</a>.</p>
+    </section>
+  </aside>
+
+  <main class="stage">
+    <div id="map" aria-label="Map of the navigability index of the Amazon basin" data-i18n-aria="mapLabel"></div>
+    <div class="basemap" role="group" aria-label="Background map" data-i18n-aria="basemap">
+      <button data-base="plain" aria-pressed="true" data-i18n="plain">Plain</button>
+      <button data-base="streets" aria-pressed="false" data-i18n="streets">Streets</button>
+      <button data-base="satellite" aria-pressed="false" data-i18n="satellite">Satellite</button>
+    </div>
+    <div class="scale" aria-hidden="true">
+      <div class="scale-bar" id="scale-bar"></div>
+      <div class="scale-ends"><span data-i18n="lowEnd">0 · low water</span><span data-i18n="highEnd">high water · 100</span></div>
+    </div>
+  </main>
+</div>
+<noscript><p class="noscript">This map needs JavaScript to draw the rivers and fetch the SWOT levels. · Cette carte a besoin de JavaScript pour dessiner les rivières et chercher les niveaux SWOT.</p></noscript>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

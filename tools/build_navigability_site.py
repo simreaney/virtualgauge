@@ -1,12 +1,15 @@
-"""Write the data file of the navigability web page (docs/navigability/), a static site for GitHub Pages.
+"""Write the data files of the navigability web pages (docs/navigability/), a static site for GitHub Pages.
 
-Usage: python tools/build_navigability_site.py [cache folder] [--no-download]     (default cache: ./cache)
+Usage: python tools/build_navigability_site.py [congo|amazon ...] [cache folder] [--no-download]
+       (default: every basin with a page; cache ./cache)
 
-The page shows the navigability index of every SWOT reach of the Congo basin. This tool does the slow part once:
-it downloads (or updates) the whole SWOT record, cleans it and writes, for every reach, its place on the map, the
-lowest and highest level recorded, and what the page needs to judge new levels with the same rules as the package
-(docs/navigability/data/congo.json, about 1 MB). The page then asks Hydrocron only for the levels since this
-snapshot, so it stays up to date without being rebuilt. Rebuild now and then, so the ranges include new extremes.
+Each page shows the navigability index of every SWOT reach of one basin: index.html the Congo, amazon.html the
+Amazon. This tool does the slow part once: it downloads (or updates) the whole SWOT record of the basin (about
+10 minutes for the Congo, 45 for the Amazon), cleans it and writes, for every reach, its place on the map, the lowest
+and highest level recorded, and what the page needs to judge new levels with the same rules as the package
+(docs/navigability/data/<basin>.json: about 1.5 MB for the Congo, 6 MB for the Amazon), with the basin's country
+outlines. The page then asks Hydrocron only for the levels since this snapshot, so it stays up to date without being
+rebuilt. Rebuild now and then, so the ranges include new extremes.
 """
 import json
 import shutil
@@ -111,22 +114,29 @@ def qgis_styles():
     return {"geometry_column": geopackage.GEOM, "reaches": reaches, "ports": geopackage.ports_style()}
 
 
-def main(cache="cache", download=True):
+PAGES = ("congo", "amazon")     # the basins with a page (each a key of navigation.REGIONS)
+
+
+def main(regions=PAGES, cache="cache", download=True):
     vg.configure(cache_dir=cache, offline=not download)
     vg.set_language("en")
-    survey = vg.river_survey("congo", download=download)
-    print(survey)
-    if survey.error:
-        raise SystemExit(survey.error)
     data = SITE / "data"
     data.mkdir(parents=True, exist_ok=True)
-    out = data / "congo.json"
-    out.write_text(json.dumps(build(survey), separators=(",", ":"), allow_nan=False))
-    shutil.copy2(store.bundle_dir() / "locations" / "congo_countries.geojson", data / "countries.geojson")
+    for region in regions:
+        survey = vg.river_survey(region, download=download)
+        print(survey)
+        if survey.error:
+            raise SystemExit(survey.error)
+        out = data / f"{region}.json"
+        out.write_text(json.dumps(build(survey), separators=(",", ":"), allow_nan=False))
+        outline = f"{region}_countries.geojson"
+        shutil.copy2(store.bundle_dir() / "locations" / outline, data / outline)
+        print(f"{out.relative_to(ROOT)}  {out.stat().st_size / 1e6:.2f} MB, levels to {survey.as_of:%Y-%m-%d}")
     (data / "qgis.json").write_text(json.dumps(qgis_styles(), separators=(",", ":"), ensure_ascii=False))
-    print(f"{out.relative_to(ROOT)}  {out.stat().st_size / 1e6:.2f} MB, levels to {survey.as_of:%Y-%m-%d}")
 
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    main(*args[:1], download="--no-download" not in sys.argv)
+    regions = [a for a in args if a in PAGES] or PAGES
+    folders = [a for a in args if a not in PAGES]
+    main(regions, *folders[:1], download="--no-download" not in sys.argv)

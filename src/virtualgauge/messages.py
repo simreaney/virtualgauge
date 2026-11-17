@@ -407,6 +407,8 @@ MESSAGES = {
                   "Langue : français (la langue de cet ordinateur). Pour l'anglais, mettez \"en\" au lieu de \"auto\" et relancez les cellules."),
     "nv_region_congo": ("Congo basin", "Bassin du Congo"),
     "nv_main_congo": ("the Lualaba and the Congo", "du Lualaba et du Congo"),          # after "Along" · après « Le long »
+    "nv_region_amazon": ("Amazon basin", "Bassin de l'Amazone"),
+    "nv_main_amazon": ("the Ucayali and the Amazon", "de l'Ucayali et de l'Amazone"),
     "nv_main_default": ("the main river", "du cours principal"),
     # download · téléchargement
     "nv_downloading": ("Downloading the SWOT record of {n} reaches from Hydrocron, {workers} at a time (about {min} min; {saved} reaches saved recently are not downloaded again). If it stops, run the cell again: it continues where it stopped.",

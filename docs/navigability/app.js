@@ -1,5 +1,6 @@
-// Navigability index of the Congo basin: draws the pre-processed river network (data/congo.json, written by
+// Navigability index of a river basin: draws the pre-processed river network (data/<region>.json, written by
 // tools/build_navigability_site.py), then asks Hydrocron for the SWOT levels measured since that snapshot.
+// The basin is the page's <html data-region="…">: index.html is the Congo, amazon.html the Amazon.
 // In English or French (i18n.js); the index on the map can be saved as a GeoPackage for QGIS (gpkg.js).
 import { DAY, parseLevels, screen, judge, indexAt, unpack } from "./core.js";
 import { pickLanguage, saveLanguage, translator } from "./i18n.js";
@@ -10,6 +11,7 @@ const OVERLAP_DAYS = 10;           // re-read the last days before the snapshot:
 const KEEP_DAYS = 75;              // never ask for more than this
 const FRESH_HOURS = 6;             // a reach checked less than this long ago is not asked again
 const FIELDS = "reach_id,time_str,wse,reach_q,xovr_cal_q,dark_frac";
+const REGION = document.documentElement.dataset.region || "congo";
 
 const $ = (id) => document.getElementById(id);
 // Every text from the data (river and port names, reach IDs) goes through esc() before it is put into HTML
@@ -21,7 +23,7 @@ const endOfToday = () => Math.floor(Date.now() / 1000 / DAY) * DAY + DAY - 1;
 let lang, t, int, metres, percent, dayFmt, shortFmt, clockFmt, attribution = "";
 function setLanguage(l) {
   lang = l;
-  t = translator(l);
+  t = translator(l, REGION);
   const locale = t("locale");
   int = new Intl.NumberFormat(locale);
   metres = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -142,13 +144,36 @@ function drawMap(countries) {
 
   map.createPane("ports").style.zIndex = 450;
   const svg = L.svg({ pane: "ports" });
-  for (const p of data.ports) {
+  const ports = data.ports.map((p) =>
     L.circleMarker([p.lat, p.lon], { pane: "ports", renderer: svg, radius: 4.5, className: "port", fillOpacity: 1 })
       .bindTooltip(esc(p.name), { permanent: true, direction: "right", offset: [6, -1], className: "port-label" })   // Leaflet sets it as HTML
       .on("click", (e) => { L.DomEvent.stopPropagation(e); select(byId.get(p.reach_id), true); })
-      .addTo(map);
-  }
+      .addTo(map));
+  placeNames(ports);
+  map.on("zoomend", () => placeNames(ports));
   basemaps(countries);
+}
+
+/** Each port's name to the right of it, or else to the left, above or below, where it covers no other name or port.
+ *  Where it would cover one on every side, the name is hidden until the map is zoomed in (the port can still be
+ *  selected). Ports earlier in the list first. */
+const SIDES = { right: [6, -1], left: [-6, -1], top: [0, -4], bottom: [0, 4] };
+function placeNames(ports) {
+  const clash = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+  const dots = ports.map((m) => m.getElement().getBoundingClientRect());
+  const taken = [];
+  ports.forEach((m, i) => {
+    const label = m.getTooltip();
+    let box = null;
+    for (const [side, offset] of Object.entries(SIDES)) {
+      Object.assign(label.options, { direction: side, offset });
+      label.update();
+      const b = label.getElement().getBoundingClientRect();
+      if (!taken.some((o) => clash(b, o)) && !dots.some((d, j) => j !== i && clash(b, d))) { box = b; break; }
+    }
+    if (box) taken.push(box);
+    label.getElement().style.visibility = box ? "" : "hidden";
+  });
 }
 
 const scaleFor = (z) => Math.min(Math.max(1.22 ** (z - 5.5), 0.8), 3.2);
@@ -323,12 +348,13 @@ async function download() {
 // ---------------------------------------------------------------------------------------------- live levels
 const update = {
   running: false, queue: [], done: 0, total: 0, failed: [], abort: null, cache: {}, dirty: false, strikes: 0,
-  key: () => `vg-navigability:${data.region}:${data.as_of_t}`,
+  key: () => `vg-navigability:${data.region}:${data.as_of_t}`,      // one per basin and snapshot
   start: () => Math.floor(Math.max(data.as_of_t - OVERLAP_DAYS * DAY, now - KEEP_DAYS * DAY) / DAY) * DAY,
 
   load() {
     try {
-      for (const k of Object.keys(localStorage)) if (k.startsWith("vg-navigability:") && k !== this.key()) localStorage.removeItem(k);
+      const mine = `vg-navigability:${data.region}:`;                 // an older snapshot of this basin (not the others)
+      for (const k of Object.keys(localStorage)) if (k.startsWith(mine) && k !== this.key()) localStorage.removeItem(k);
       this.cache = JSON.parse(localStorage.getItem(this.key())) || {};
     } catch { this.cache = {}; }
   },
@@ -459,7 +485,7 @@ async function main() {
   document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => switchLanguage(b.dataset.lang)));
   let countries;
   try {
-    [data, countries] = await Promise.all([getJSON("data/congo.json"), getJSON("data/countries.geojson")]);
+    [data, countries] = await Promise.all([getJSON(`data/${REGION}.json`), getJSON(`data/${REGION}_countries.geojson`)]);
   } catch (e) {
     $("status-dot").className = "dot bad";
     $("status-text").textContent = t("loadFailed");

@@ -181,6 +181,17 @@ def test_quality_flags_and_duplicates():
         assert reason_label(code) != code or code == "kept"
 
 
+def test_every_region_names_reaches_of_its_basin():
+    """The ports and the start of the main river of each basin (Congo, Amazon) are SWORD reaches of that basin."""
+    idx = vg.locations.reach_index().set_index("reach_id")
+    for key, region in nv.REGIONS.items():
+        assert f"nv_region_{key}" in MESSAGES and f"nv_main_{key}" in MESSAGES
+        for name, _, rid in region["ports"]:
+            assert rid // 10**8 == region["basin"] and idx.type[rid] != 6, (key, name)
+        assert region["main_start"] // 10**8 == region["basin"]
+        assert len({p[0] for p in region["ports"]}) == len(region["ports"])
+
+
 def test_bands_and_messages():
     assert nv.band_of([0, 19.9, 20, 55, 80, 100, np.nan]).tolist() == [0, 0, 1, 2, 4, 4, -1]
     for _, key, _ in nv.BANDS:
